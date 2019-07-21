@@ -1,6 +1,6 @@
 import { Lo } from "./lo";;
 import { HttpClient } from "aurelia-fetch-client";
-import { injectCourseUrl } from "./utils";
+import {allLos, allVideoLos, injectCourseUrl} from "./utils";
 import {Topic} from "./topic";
 
 export class Course {
@@ -8,6 +8,8 @@ export class Course {
   standardLos: Lo[];
   url: string;
   topicIndex = new Map<string,Topic>();
+  videos = new Map<string, Lo>();
+  talks = new Map<string, Lo>();
 
   constructor(private http: HttpClient, url:string) {
     this.url = url;
@@ -26,6 +28,14 @@ export class Course {
       this.topicIndex.set(lo.id, topic);
     }
     this.standardLos = this.lo.los;
+    const talkLos = allLos('talk', this.lo.los);
+    talkLos.forEach(lo => {
+      this.talks.set(`${lo.route}`, lo);
+    });
+    const videoLos = allVideoLos(this.lo.los);
+    videoLos.forEach(lo => {
+      this.videos.set(`${lo.video}`, lo);
+    });
   }
 
   async fetchCourse() {
