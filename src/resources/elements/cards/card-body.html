@@ -1,0 +1,28 @@
+<template bindable="lo">
+  <require from="../iconography/icon"></require>
+
+  <div uk-grid>
+    <div class="uk-width-expand@m">
+      <div class="card-title"> ${lo.title}</div>
+    </div>
+    <div class="uk-width-1-4@m">
+      <icon type="${lo.type}" size="2x"></icon>
+    </div>
+  </div>
+
+  <div class="uk-card-footer">
+  <div if.bind="lo.img">
+    <div class="uk-card-body">
+      <img src="${lo.img}">
+    </div>
+  </div>
+  </div>
+  <div class="uk-card-footer">
+    <div class="card-body" innerhtml="${lo.summary}"></div>
+  </div>
+  <div show.bind="lo.video" class="uk-card-footer">
+    <a href="${lo.video}">
+      <icon type="video" size="3x"></icon>
+    </a>
+  </div>
+</template>

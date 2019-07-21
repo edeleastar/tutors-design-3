@@ -1,0 +1,18 @@
+<template>
+  <require from="../cards/title-card.html"></require>
+  <require from="../cards/title-card-small.html"></require>
+  <require from="../iconography/icon"></require>
+
+  <div class="uk-flex uk-flex-center uk-flex-middle uk-text-center uk-container-expand uk-padding-small" uk-grid>
+    <div class="uk-width-1-2@m  uk-card uk-card-default uk-padding-small uk-visible@m">
+      <title-card maintitle="${navigatorProperties.title}" subtitle="${navigatorProperties.subtitle}" img="${navigatorProperties.img}" version="${version}"></title-card>
+    </div>
+    <div class="uk-width-1-2@m  uk-card uk-card-default uk-text-center uk-padding-remove uk-hidden@m">
+      <title-card-small maintitle="${navigatorProperties.title}" subtitle="${navigatorProperties.subtitle}" icon="${navigatorProperties.icon}"
+                        colour="${navigatorProperties.iconColour}" version=${version}"></title-card-small>
+    </div>
+    <a id="parent" href="${navigatorProperties.parentLink}" title="${navigatorProperties.parentIconTip}" pos="bottom" uk-tooltip>
+      <icon type="${navigatorProperties.parentIcon}" size="4x"></icon>
+    </a>
+  </div>
+</template>

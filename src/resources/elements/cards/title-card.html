@@ -1,0 +1,30 @@
+<template bindable="maintitle, subtitle, img, version">
+
+  <require from="../iconography/icon"></require>
+
+  <div uk-grid>
+    <div class="uk-width-1-5@m">
+      <img src="${img}" width="60">
+    </div>
+    <div class="uk-width-expand@m uk-text-left">
+      <div class="course-title"> ${maintitle}</div>
+      <div class="uk-text-muted uk-text-small">
+        ${subtitle}
+      </div>
+    </div>
+    <div class="uk-width-1-6@m">
+      <div class="uk-card uk-card-small uk-card-hover uk-text-center uk-padding-remove">
+        <a target=”_blank” href="https://github.com/edeleastar/tutors-au">
+          <div>
+            <icon type="tutors" size="2x"></icon>
+          </div>
+          <div class="uk-width-expand@m uk-text-left">
+            <div class="uk-text-muted uk-text-center" style="font-size:xx-small">
+              Tutors ${version}
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</template>
