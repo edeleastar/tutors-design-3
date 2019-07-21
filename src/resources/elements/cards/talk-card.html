@@ -1,0 +1,22 @@
+<template bindable="lo">
+  <require from="../iconography/icon"></require>
+
+  <div class="uk-card uk-card-default uk-box-shadow-xlarge uk-animation-scale-up">
+    <div class="uk-card-header">
+      <div uk-grid>
+        <div class="uk-width-expand@m">
+          <div class="card-title"> ${lo.title} <a href="${lo.pdf}" target="_blank">  <icon type="pdf" size="lg"></icon></a></div>
+        </div>
+        <div>
+          <icon type="${lo.type}" size="2x"></icon>
+        </div>
+      </div>
+    </div>
+    <div class="uk-card-body  uk-padding-remove">
+<!--      <input type="hidden" class="inputforfocus">-->
+<!--      <div id="pdf-placeholder"></div>-->
+      <input type="hidden" class="inputforfocus">
+      <embed id="pdfembed" src="${lo.pdf}?#toolbar=1&navpanes=1&scrollbar=1" type="application/pdf" width="100%" height="800px"></embed>
+    </div>
+  </div>
+</template>
