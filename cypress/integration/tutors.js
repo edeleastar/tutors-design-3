@@ -25,6 +25,6 @@ describe("User page", () => {
       cy.wait(100);
       cy.carddeck(topic.los, "card-deck card");
       cy.home();
-    }ß
+    }
   });
 });
