@@ -1,0 +1,10 @@
+<template bindable="los">
+  <require from="../cards/video-card"></require>
+
+  <div class="uk-child-width-1-2@s uk-flex uk-flex-center" uk-grid>
+    <div repeat.for="lo of los">
+      <video-card lo.one-way="lo"></video-card>
+    </div>
+  </div>
+</template>
+

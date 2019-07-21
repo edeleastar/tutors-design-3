@@ -1,0 +1,8 @@
+<template bindable="talks">
+  <require from="../cards/talk-card.html"></require>
+
+  <div repeat.for="talk of talks">
+    <talk-card lo.bind="talk"></talk-card>
+    <br>
+  </div>
+</template>
