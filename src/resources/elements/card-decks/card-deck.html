@@ -1,0 +1,11 @@
+<template bindable="los">
+  <require from="../cards/card.html"></require>
+
+  <div class="uk-child-width-1-4@s uk-flex uk-flex-center" uk-grid uk-height-match="target: .uk-card">
+    <div repeat.for="lo of los">
+      <div class="uk-card">
+        <card lo.one-way="lo"></card>
+      </div>
+    </div>
+  </div>
+</template>

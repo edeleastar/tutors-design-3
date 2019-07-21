@@ -1,0 +1,16 @@
+<template bindable="lo">
+  <require from="./card-body.html"></require>
+
+  <div if.bind="lo.properties.disable && lo.properties.disable == true">
+    <div class="uk-card uk-card-default uk-card-small uk-text-center uk-text-baseline uk-animation-scale-up uk-padding-small">
+      <card-body lo.one-way="lo"></card-body>
+    </div>
+  </div>
+  <div else>
+    <div class="uk-card uk-card-default uk-card-small uk-card-hover uk-text-center uk-text-baseline uk-animation-scale-up uk-padding-small">
+      <a href="${lo.route}">
+        <card-body lo.one-way="lo"></card-body>
+      </a>
+    </div>
+  </div>
+</template>
