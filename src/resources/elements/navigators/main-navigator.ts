@@ -13,5 +13,7 @@ export class MainNavigator {
   @bindable
   navigatorProperties: NavigatorProperties;
 
+  version = `${readerVersion} (${this.courseRepo.course.lo.version})`
+
   constructor(private courseRepo: CourseRepo) {}
 }
