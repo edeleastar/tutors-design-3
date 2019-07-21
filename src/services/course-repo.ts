@@ -3,7 +3,7 @@ import { Course } from "./course";
 import { autoinject } from "aurelia-framework";
 import { NavigatorProperties } from "../resources/elements/iconography/styles";
 import * as path from "path";
-import { lastSegment } from "./utils";
+import { findCourseUrls, lastSegment } from "./utils";
 
 @autoinject
 export class CourseRepo {
@@ -34,5 +34,12 @@ export class CourseRepo {
   async fetchTopic(url: string) {
     await this.fetchCourse(path.dirname(url));
     return this.course.topicIndex.get(lastSegment(url));
+  }
+
+  async fetchCourseFromTalk(url: string) {
+    console.log(url);
+    const urls = findCourseUrls(url);
+    await this.fetchCourse(urls[0]);
+    return this.course;
   }
 }

@@ -11,7 +11,9 @@ export class App {
     config.options.root = '/';
     config.map ([
       { route: 'course/*courseurl', moduleId: PLATFORM.moduleName('./components/course/course-view'), name: 'course',  title: 'Module' },
-      { route: 'topic/*topicurl', moduleId: PLATFORM.moduleName('./components/topic/topic-view'),   name: 'topic',   title: 'Topic' }
+      { route: 'topic/*topicurl', moduleId: PLATFORM.moduleName('./components/topic/topic-view'),   name: 'topic',   title: 'Topic' },
+      { route: 'video/*courseUrl/:videoid', moduleId: PLATFORM.moduleName('./components/video/video-view'),   name: 'video',   title: 'Video' },
+      { route: 'talk/*courseUrl/:talkid',  moduleId: PLATFORM.moduleName('./components/talk/talk-view'),     name: 'talk',    title: 'Talk' },
     ]);
   }
 }
