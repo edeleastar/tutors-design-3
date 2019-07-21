@@ -18,6 +18,7 @@ export class App {
       { route: 'labs/*courseurl',           moduleId: PLATFORM.moduleName('./components/wall/wall-view'),     name: 'lab',     title: 'Labs' },
       { route: 'archives/*courseurl',       moduleId: PLATFORM.moduleName('./components/wall/wall-view'),     name: 'archive', title: 'Archives' },
       { route: 'githubs/*courseurl',        moduleId: PLATFORM.moduleName('./components/wall/wall-view'),     name: 'github',  title: 'Repos' },
+      { route: 'videos/*courseurl',         moduleId: PLATFORM.moduleName('./components/wall/wall-view'),     name: 'video',   title: 'Videos' }
     ]);
   }
 }
