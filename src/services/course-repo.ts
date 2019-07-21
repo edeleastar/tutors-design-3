@@ -42,4 +42,9 @@ export class CourseRepo {
     await this.fetchCourse(urls[0]);
     return this.course;
   }
+
+  async fetchWall(url: string, type: string) {
+    await this.fetchCourse(url);
+    return this.course.walls.get(type);
+  }
 }
