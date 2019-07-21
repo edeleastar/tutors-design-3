@@ -1,11 +1,13 @@
 import { Lo } from "./lo";;
 import { HttpClient } from "aurelia-fetch-client";
 import { injectCourseUrl } from "./utils";
+import {Topic} from "./topic";
 
 export class Course {
   lo: Lo;
   standardLos: Lo[];
   url: string;
+  topicIndex = new Map<string,Topic>();
 
   constructor(private http: HttpClient, url:string) {
     this.url = url;
@@ -19,6 +21,10 @@ export class Course {
   }
 
   populate() {
+    for (let lo of this.lo.los) {
+      const topic = new Topic(lo, this.url);
+      this.topicIndex.set(lo.id, topic);
+    }
     this.standardLos = this.lo.los;
   }
 

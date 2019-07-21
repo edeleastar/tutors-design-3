@@ -1,5 +1,6 @@
 export default {
   debug: true,
   testing: false,
-  pushState: true
+  pushState: true,
+  urlPrefix: ''
 };
