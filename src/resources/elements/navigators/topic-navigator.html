@@ -1,0 +1,22 @@
+<template bindable="topic">
+  <require from="../iconography/icon"></require>
+
+  <div repeat.for="lo of topic.toc">
+    <ul class="uk-nav">
+      <a class="item" href="${lo.route}">
+        <icon type="${lo.type}"></icon>
+        ${lo.title} </a>
+      <ul class="uk-nav-sub">
+        <div if.bind="lo.type != 'lab'">
+          <div repeat.for="lo of lo.los">
+            <a class="item" href="${lo.route}">
+              <icon type="${lo.type}" size="lg"></icon>
+              ${lo.title} </a> <a show.bind="lo.video && lo.type!='panelvideo'" href="${lo.video}">
+            <icon type="video" size="lg"></icon>
+          </a>
+          </div>
+        </div>
+      </ul>
+    </ul>
+  </div>
+</template>
