@@ -1,0 +1,14 @@
+<template>
+  <require from="../iconography/icon"></require>
+
+  <div id="lab-navigator" uk-offcanvas="mode: push; overlay: true">
+    <div class="uk-offcanvas-bar">
+      <button class="uk-offcanvas-close" type="button" uk-close></button>
+      <div repeat.for="lo of los">
+        <a class="item" href="${lo.route}">
+          <icon type="${lo.type}" size="fa-lg"></icon>
+          ${lo.title} </a>
+      </div>
+    </div>
+  </div>
+</template>
