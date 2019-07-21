@@ -27,3 +27,20 @@ export function lastSegment(url: string) {
   var lastSegment = parts.pop() || parts.pop();
   return lastSegment;
 }
+
+export function getSortedUnits(los: Lo[]) {
+  const allUnits = los.filter(lo => lo.type == "unit");
+  for (let unit of allUnits) {
+    const panelVideos = unit.los.filter(lo => lo.type == "panelvideo");
+    const panelTalks = unit.los.filter(lo => lo.type == "paneltalk");
+    const standardLos = unit.los.filter(
+      lo => lo.type !== "unit" && lo.type !== "panelvideo" && lo.type !== "paneltalk"
+    );
+    const sortedLos: Lo[] = [];
+    sortedLos.push(...panelVideos);
+    sortedLos.push(...panelTalks);
+    sortedLos.push(...standardLos);
+    unit.los = sortedLos;
+  }
+  return allUnits;
+}
