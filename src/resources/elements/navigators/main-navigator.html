@@ -2,6 +2,7 @@
   <require from="../cards/title-card.html"></require>
   <require from="../cards/title-card-small.html"></require>
   <require from="../iconography/icon"></require>
+  <require from="../iconography/icon-nav-bar.html"></require>
 
   <div class="uk-flex uk-flex-center uk-flex-middle uk-text-center uk-container-expand uk-padding-small" uk-grid>
     <div class="uk-width-1-2@m  uk-card uk-card-default uk-padding-small uk-visible@m">
@@ -14,5 +15,6 @@
     <a id="parent" href="${navigatorProperties.parentLink}" title="${navigatorProperties.parentIconTip}" pos="bottom" uk-tooltip>
       <icon type="${navigatorProperties.parentIcon}" size="4x"></icon>
     </a>
+    <icon-nav-bar nav.one-way="companions"></icon-nav-bar>
   </div>
 </template>
