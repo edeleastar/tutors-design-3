@@ -1,27 +1,31 @@
-# `tutors-design`
+tutors-design
+=====
 
-This project is bootstrapped by [aurelia-cli](https://github.com/aurelia/cli).
+A reader for the tutors-ts static site generator:
 
-For more information, go to https://aurelia.io/docs/cli/webpack
+- <https://github.com/edeleastar/tutors-ts>
+- <https://github.com/edeleastar/tutors-js>
 
-## Run dev app
+The reader is an [Aurelia](https://aurelia.io/) application, which consumes JSON output from [tutors-ts](https://github.com/edeleastar/tutors-ts), rendering a
+ more a interactive version of the site. 
+ 
+The reader is intended for educational content, some representative examples:
+ 
+ - <https://tutors-design.netlify.com/course/wit-hdip-comp-sci-2018-ent-web.netlify.com>
+ - <https://tutors-design.netlify.com/course/wit-comp-sci-2019-web-dev.netlify.com>
+ - <https://tutors-design.netlify.com/course/wit-hdip-comp-sci-2019-programming.netlify.com>
+ - <https://tutors-design.netlify.com/course/tutors-starter.netlify.com>
+ - <https://tutors-design.netlify.com/course/wit-hdip-comp-sci-2019-ict-skills-1.netlify.com/>
+ - <https://tutors-design.netlify.com/course/wit-hdip-comp-sci-2019.netlify.com>
+ 
+ The application identifies the published course from the url, recovers the json version 
+ of the static site and then renders using Aurelia.
+ 
+ This is still experimental - with onoing work on both the JSON format, the rendering architecture and 
+ e2e testing approaches.
+ 
+ Eamonn de leastar (edeleastar@wit.ie)
 
-Run `au run`, then open `http://localhost:8080`
+## License
 
-To open browser automatically, do `au run --open`.
-
-To change dev server port, do `au run --port 8888`.
-
-To enable Webpack Bundle Analyzer, do `au run --analyze`.
-
-To enable hot module reload, do `au run --hmr`.
-
-## Build for production
-
-Run `au build --env prod`.
-
-## Unit tests
-
-Run `au test` (or `au jest`).
-
-To run in watch mode, `au test --watch` or `au jest --watch`.
+[MIT](https://github.com/atom/atom/blob/master/LICENSE.md)
