@@ -1,6 +1,6 @@
 import { Lo } from "./lo";
 import { HttpClient } from "aurelia-fetch-client";
-import { allLos, allVideoLos, injectCourseUrl } from "./utils";
+import {allLos, allVideoLos, fixRoutes, injectCourseUrl} from "./utils";
 import { Topic } from "./topic";
 
 export class Course {
@@ -10,6 +10,7 @@ export class Course {
   topicIndex = new Map<string, Topic>();
   videos = new Map<string, Lo>();
   talks = new Map<string, Lo>();
+  labIndex = new Map<string, Lo>();
   walls = new Map<string, Lo[]>();
 
   constructor(private http: HttpClient, url: string) {
@@ -42,7 +43,15 @@ export class Course {
     if (videoLos.length > 0) {
       this.walls.set("video", videoLos);
     }
-    this.addWall("lab");
+    const labLos = allLos("lab", this.lo.los);
+    labLos.forEach(lo => {
+      fixRoutes(lo);
+      this.labIndex.set(lo.route, lo);
+    });
+    if (labLos.length > 0) {
+      this.walls.set("lab", labLos);
+    }
+
     this.addWall("github");
     this.addWall("archive");
   }
