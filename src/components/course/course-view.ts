@@ -11,6 +11,7 @@ export class CourseView {
 
   async activate(params) {
     this.course = await this.courseRepo.fetchCourse(params.courseurl);
+    this.navigatorProperties.init(this.course);
   }
 
   determineActivationStrategy() {

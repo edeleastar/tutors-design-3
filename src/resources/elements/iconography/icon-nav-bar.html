@@ -1,0 +1,13 @@
+<template bindable="nav">
+  <require from="./icon"></require>
+
+  <div class="uk-card uk-card-default uk-padding-small">
+    <ul class="uk-iconnav">
+      <div repeat.for="icon of nav">
+        <li>
+          <a id="${icon.icon}" href="${icon.link}" title="${icon.tip}" pos="bottom" uk-tooltip target="_blank"> <icon type="${icon.icon}" size="2x"></icon> </a>
+        </li>
+      </div>
+    </ul>
+  </div>
+</template>

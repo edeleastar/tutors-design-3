@@ -26,6 +26,7 @@ export const iconColours = {
 export interface IconNav {
   link: string;
   icon: string;
+  tip: string;
 }
 
 export class NavigatorProperties {
