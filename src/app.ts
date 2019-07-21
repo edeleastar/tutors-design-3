@@ -14,6 +14,10 @@ export class App {
       { route: 'topic/*topicurl', moduleId: PLATFORM.moduleName('./components/topic/topic-view'),   name: 'topic',   title: 'Topic' },
       { route: 'video/*courseUrl/:videoid', moduleId: PLATFORM.moduleName('./components/video/video-view'),   name: 'video',   title: 'Video' },
       { route: 'talk/*courseUrl/:talkid',  moduleId: PLATFORM.moduleName('./components/talk/talk-view'),     name: 'talk',    title: 'Talk' },
+      { route: 'talks/*courseurl',          moduleId: PLATFORM.moduleName('./components/wall/wall-view'),     name: 'talk',    title: 'Talks' },
+      { route: 'labs/*courseurl',           moduleId: PLATFORM.moduleName('./components/wall/wall-view'),     name: 'lab',     title: 'Labs' },
+      { route: 'archives/*courseurl',       moduleId: PLATFORM.moduleName('./components/wall/wall-view'),     name: 'archive', title: 'Archives' },
+      { route: 'githubs/*courseurl',        moduleId: PLATFORM.moduleName('./components/wall/wall-view'),     name: 'github',  title: 'Repos' },
     ]);
   }
 }
