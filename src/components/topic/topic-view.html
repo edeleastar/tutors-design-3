@@ -1,0 +1,12 @@
+<template>
+
+  <require from="../../resources/elements/navigators/main-navigator"></require>
+  <require from="../../resources/elements/card-decks/card-deck.html"></require>
+
+  <side-navigator></side-navigator>
+
+  <main-navigator navigator-properties.one-way="navigatorProperties"></main-navigator>
+  <div class="uk-container uk-padding-small">
+    <card-deck if.bind="topic.standardLos.length>0" los.one-way="topic.standardLos"></card-deck>
+  </div>
+</template>
