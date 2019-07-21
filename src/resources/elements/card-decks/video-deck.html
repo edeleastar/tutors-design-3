@@ -1,0 +1,7 @@
+<template bindable="videos">
+  <require from="../cards/video-card"></require>
+  <div repeat.for="video of videos">
+    <video-card lo.bind="video"></video-card>
+    <br>
+  </div>
+</template>
