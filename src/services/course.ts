@@ -5,6 +5,7 @@ import { Topic } from "./topic";
 
 export class Course {
   lo: Lo;
+  topics: Topic[] = [];
   standardLos: Lo[];
   url: string;
   topicIndex = new Map<string, Topic>();
@@ -27,6 +28,7 @@ export class Course {
   populate() {
     for (let lo of this.lo.los) {
       const topic = new Topic(lo, this.url);
+      this.topics.push(topic);
       this.topicIndex.set(lo.id, topic);
     }
     this.standardLos = this.lo.los;
