@@ -1,0 +1,29 @@
+<template>
+  <require from="../../resources/elements/navigators/main-navigator"></require>
+  <require from="../../resources/value-converters/filter"></require>
+  <require from="../../resources/value-converters/highlight"></require>
+  <require from="../../resources/value-converters/search-bold"></require>
+  <require from="../../resources/elements/navigators/side-navigator"></require>
+
+  <side-navigator></side-navigator>
+  <main-navigator navigator-properties.one-way="navigatorProperties"></main-navigator>
+  
+  <div class="uk-container uk-padding-small">
+    <fieldset class="uk-fieldset">
+      <div class="uk-margin">
+        <input 
+          class="uk-input" 
+          type="text" 
+          placeholder="Enter search terms..." 
+          change.delegate="searchTermChanged()"
+          value.bind="searchTerm">
+      </div>
+      <div class="ui divided list">
+        <div class="item" repeat.for="search_string of search_strings | filter:searchTerm">
+          <div innerhtml.bind="search_string | searchBold:searchTerm | highlight"></div><br>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+</template>
+

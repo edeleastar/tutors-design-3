@@ -2,5 +2,6 @@ export default {
   debug: false,
   testing: false,
   pushState: true,
-  urlPrefix: ''
+  urlPrefix: '',
+  search: 80
 };
