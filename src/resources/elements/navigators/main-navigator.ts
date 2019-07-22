@@ -15,11 +15,14 @@ export class MainNavigator {
 
   companions: IconNav[] = [];
   walls: IconNav[] = [];
-  version = `${readerVersion} (${this.courseRepo.course.lo.version})`;
+  version = `${readerVersion}`;
 
   constructor(private courseRepo: CourseRepo) {
-    this.createCompanionBar(this.courseRepo.course.lo.properties);
-    this.createWallBar();
+    if (this.courseRepo.course) {
+      this.createCompanionBar(this.courseRepo.course.lo.properties);
+      this.createWallBar();
+      this.version = this.version + `(${this.courseRepo.course.lo.version})`;
+    }
   }
 
   createCompanionBar(properties: Properties) {
