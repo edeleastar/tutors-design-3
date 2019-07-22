@@ -1,4 +1,3 @@
-import { MarkdownParser } from './markdown-parser';
 import { Lo } from "./lo";
 import environment from 'environment';
 
@@ -13,7 +12,6 @@ const removeMd = require('remove-markdown');
  * @param searchTerm The term whose presence is searched for.
  */
 export function flattenedLos(los: Lo[], searchTerm: string) : string[] {
-  let markdownParser = new MarkdownParser();
   let flatLos = flattenNestedLosArrays(los);
   let result: string[] = [];
   flatLos.forEach(lo => {
@@ -48,13 +46,6 @@ function flatten(arr: Lo[], result = []) {
  */
 export function isValid(str: string) {
  return str != undefined && /\S/.test(str) == true;
-}
-
-function removeFirstLastDirectories(the_url: string) {
-  let the_arr = the_url.split("/");
-  the_arr.pop();
-  the_arr.shift();
-  return the_arr.join("/");
 }
 
 /**
