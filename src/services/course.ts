@@ -1,12 +1,14 @@
 import { Lo } from "./lo";
 import { HttpClient } from "aurelia-fetch-client";
-import {allLos, allVideoLos, fixRoutes, injectCourseUrl} from "./utils";
+import {allLos, allVideoLos, fixRoutes, getSortedUnits, injectCourseUrl} from "./utils";
 import { Topic } from "./topic";
 
 export class Course {
   lo: Lo;
   topics: Topic[] = [];
+  units: Lo[];
   standardLos: Lo[];
+  allLos : Lo[];
   url: string;
   topicIndex = new Map<string, Topic>();
   videos = new Map<string, Lo>();
@@ -56,10 +58,15 @@ export class Course {
 
     this.addWall("github");
     this.addWall("archive");
+
+    this.units = getSortedUnits(this.lo.los);
+    this.standardLos = this.lo.los.filter(lo => lo.type !== "unit" && lo.type !== "panelvideo" && lo.type !== "paneltalk");
   }
 
   async fetchCourse() {
     this.lo = await this.fetch(this.url);
+    this.allLos = this.lo.los;
+    this.lo.los = this.lo.los.filter(lo => lo.hide != true);
     this.populate();
   }
 
@@ -68,5 +75,10 @@ export class Course {
     if (los.length > 0) {
       this.walls.set(type, los);
     }
+  }
+
+  showAllLos() {
+    this.lo.los = this.allLos;
+    this.populate();
   }
 }
