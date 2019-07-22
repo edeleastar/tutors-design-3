@@ -4,6 +4,7 @@ import { autoinject } from "aurelia-framework";
 import { NavigatorProperties } from "../resources/elements/iconography/styles";
 import * as path from "path";
 import { findCourseUrls, lastSegment } from "./utils";
+import environment from "../environment";
 
 @autoinject
 export class CourseRepo {
@@ -46,5 +47,18 @@ export class CourseRepo {
   async fetchWall(url: string, type: string) {
     await this.fetchCourse(url);
     return this.course.walls.get(type);
+  }
+
+  async fetchLab(url: string) {
+    const urls = findCourseUrls(url);
+    await this.fetchCourse(urls[0]);
+    const topic = await this.fetchTopic(urls[1]);
+    let labprefix = "#lab/";
+    if (environment.pushState) {
+      labprefix = "lab/";
+    }
+    const lab = this.course.labIndex.get(labprefix + url);
+    lab.parent = topic;
+    return lab;
   }
 }

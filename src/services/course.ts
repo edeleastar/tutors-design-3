@@ -1,15 +1,19 @@
 import { Lo } from "./lo";
 import { HttpClient } from "aurelia-fetch-client";
-import { allLos, allVideoLos, injectCourseUrl } from "./utils";
+import {allLos, allVideoLos, fixRoutes, getSortedUnits, injectCourseUrl} from "./utils";
 import { Topic } from "./topic";
 
 export class Course {
   lo: Lo;
+  topics: Topic[] = [];
+  units: Lo[];
   standardLos: Lo[];
+  allLos : Lo[];
   url: string;
   topicIndex = new Map<string, Topic>();
   videos = new Map<string, Lo>();
   talks = new Map<string, Lo>();
+  labIndex = new Map<string, Lo>();
   walls = new Map<string, Lo[]>();
 
   constructor(private http: HttpClient, url: string) {
@@ -26,6 +30,7 @@ export class Course {
   populate() {
     for (let lo of this.lo.los) {
       const topic = new Topic(lo, this.url);
+      this.topics.push(topic);
       this.topicIndex.set(lo.id, topic);
     }
     this.standardLos = this.lo.los;
@@ -42,13 +47,26 @@ export class Course {
     if (videoLos.length > 0) {
       this.walls.set("video", videoLos);
     }
-    this.addWall("lab");
+    const labLos = allLos("lab", this.lo.los);
+    labLos.forEach(lo => {
+      fixRoutes(lo);
+      this.labIndex.set(lo.route, lo);
+    });
+    if (labLos.length > 0) {
+      this.walls.set("lab", labLos);
+    }
+
     this.addWall("github");
     this.addWall("archive");
+
+    this.units = getSortedUnits(this.lo.los);
+    this.standardLos = this.lo.los.filter(lo => lo.type !== "unit" && lo.type !== "panelvideo" && lo.type !== "paneltalk");
   }
 
   async fetchCourse() {
     this.lo = await this.fetch(this.url);
+    this.allLos = this.lo.los;
+    this.lo.los = this.lo.los.filter(lo => lo.hide != true);
     this.populate();
   }
 
@@ -57,5 +75,10 @@ export class Course {
     if (los.length > 0) {
       this.walls.set(type, los);
     }
+  }
+
+  showAllLos() {
+    this.lo.los = this.allLos;
+    this.populate();
   }
 }

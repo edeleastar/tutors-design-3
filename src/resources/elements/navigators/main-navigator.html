@@ -3,8 +3,10 @@
   <require from="../cards/title-card-small.html"></require>
   <require from="../iconography/icon"></require>
   <require from="../iconography/icon-nav-bar.html"></require>
+  <require from="./toc-btn.html"></require>
 
   <div class="uk-flex uk-flex-center uk-flex-middle uk-text-center uk-container-expand uk-padding-small" uk-grid>
+    <toc-btn></toc-btn>
     <div class="uk-width-1-2@m  uk-card uk-card-default uk-padding-small uk-visible@m">
       <title-card maintitle="${navigatorProperties.title}" subtitle="${navigatorProperties.subtitle}" img="${navigatorProperties.img}" version="${version}"></title-card>
     </div>
@@ -12,10 +14,18 @@
       <title-card-small maintitle="${navigatorProperties.title}" subtitle="${navigatorProperties.subtitle}" icon="${navigatorProperties.icon}"
                         colour="${navigatorProperties.iconColour}" version=${version}"></title-card-small>
     </div>
-    <a id="parent" href="${navigatorProperties.parentLink}" title="${navigatorProperties.parentIconTip}" pos="bottom" uk-tooltip>
-      <icon type="${navigatorProperties.parentIcon}" size="4x"></icon>
-    </a>
-    <icon-nav-bar nav.one-way="companions"></icon-nav-bar>
-    <icon-nav-bar nav.one-way="walls"></icon-nav-bar>
+
+    <div if.bind="navigatorProperties.parentLink">
+      <a id="parent" href="#${navigatorProperties.parentLink}" title="${navigatorProperties.parentIconTip}" pos="bottom" uk-tooltip>
+        <icon type="${navigatorProperties.parentIcon}" size="4x"></icon>
+      </a>
+    </div>
+    <div if.bind="companions.length>0">
+      <icon-nav-bar nav.one-way="companions"></icon-nav-bar>
+    </div>
+    <div if.bind="walls.length>0">
+      <icon-nav-bar nav.one-way="walls"></icon-nav-bar>
+    </div>
+
   </div>
 </template>
