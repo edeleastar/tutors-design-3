@@ -16,12 +16,14 @@ export class MainNavigator {
   companions: IconNav[] = [];
   walls: IconNav[] = [];
   version = `${readerVersion}`;
+  searchroute = '';
 
   constructor(private courseRepo: CourseRepo) {
     if (this.courseRepo.course) {
       this.createCompanionBar(this.courseRepo.course.lo.properties);
       this.createWallBar();
       this.version = this.version + `(${this.courseRepo.course.lo.version})`;
+      this.searchroute = `${environment.urlPrefix}search/${this.courseRepo.courseUrl}`;
     }
   }
 
