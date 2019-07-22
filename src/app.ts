@@ -10,6 +10,7 @@ export class App {
     config.options.pushState = environment.pushState;
     config.options.root = '/';
     config.map ([
+      { route: '',                          moduleId: PLATFORM.moduleName('./components/main/main-view'),     name: 'start',   title: 'Module' },
       { route: 'course/*courseurl',         moduleId: PLATFORM.moduleName('./components/course/course-view'), name: 'course',  title: 'Module' },
       { route: 'topic/*topicurl',           moduleId: PLATFORM.moduleName('./components/topic/topic-view'),   name: 'topic',   title: 'Topic' },
       { route: 'lab/*laburl/:step?',        moduleId: PLATFORM.moduleName('./components/lab/lab-view'),       name: 'lab',     title: 'Lab' },
