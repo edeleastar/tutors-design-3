@@ -11,8 +11,7 @@ interface Properties {
 
 @autoinject
 export class MainNavigator {
-  @bindable
-  navigatorProperties: NavigatorProperties;
+  @bindable navigatorProperties: NavigatorProperties;
 
   companions: IconNav[] = [];
   walls: IconNav[] = [];
@@ -24,9 +23,12 @@ export class MainNavigator {
   }
 
   createCompanionBar(properties: Properties) {
-    if (properties.slack) this.companions.push({ link: properties["slack"], icon: "slack", tip: "to slack channel for this module" });
-    if (properties.moodle) this.companions.push({ link: properties["moodle"], icon: "moodle", tip: "to moodle module for this module" });
-    if (properties.youtube) this.companions.push({ link: properties["youtube"], icon: "youtube", tip: "to youtube channel for this module" });
+    if (properties.slack)
+      this.companions.push({ link: properties["slack"], icon: "slack", tip: "to slack channel for this module" });
+    if (properties.moodle)
+      this.companions.push({ link: properties["moodle"], icon: "moodle", tip: "to moodle module for this module" });
+    if (properties.youtube)
+      this.companions.push({ link: properties["youtube"], icon: "youtube", tip: "to youtube channel for this module" });
   }
 
   createWallBar() {
@@ -42,5 +44,4 @@ export class MainNavigator {
       tip: `all ${type}'s in this module`
     };
   }
-
 }
