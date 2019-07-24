@@ -18,11 +18,11 @@
           change.delegate="searchTermChanged()"
           value.bind="searchTerm">
       </div>
-      <div class="ui divided list">
-        <div class="item" repeat.for="search_string of search_strings | filter:searchTerm">
-          <div innerhtml.bind="search_string | searchBold:searchTerm | highlight"></div><br>
+      <dl>
+        <div repeat.for="search_string of search_strings | filter:searchTerm">
+          <dt innerhtml.bind="search_string | searchBold:searchTerm | highlight"></dt><br>
         </div>
-      </div>
+      </dt>
     </fieldset>
   </div>
 </template>
