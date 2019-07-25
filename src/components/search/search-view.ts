@@ -51,7 +51,7 @@ export class SearchView {
     }
     href = href.replace(/(searchTerm=)[^\&]+/, "$1" + this.searchTerm);
     window.location.href = href;
-    window.location.reload();
+    //window.location.reload();
   }
 
   /**
