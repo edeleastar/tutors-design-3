@@ -1,3 +1,4 @@
+import { SearchBoldValueConverter } from './../../resources/value-converters/search-bold';
 import { CourseRepo } from "../../services/course-repo";
 import { NavigatorProperties } from "../../resources/elements/iconography/styles";
 import { autoinject } from "aurelia-framework";
@@ -10,48 +11,65 @@ import { allLos } from "../../services/utils";
 export class SearchView {
   course: Course;
   search_strings: string[] = [];
-  searchTerm: string = "";
+  public searchTerm: string = "";
+  params: any;
 
-  constructor(private courseRepo: CourseRepo, private navigatorProperties: NavigatorProperties) {}
+  constructor(private courseRepo: CourseRepo, 
+              private navigatorProperties: NavigatorProperties) {}
 
-  async activate(params) {
+  public get searchTermInView() {
+    return this.searchTerm;
+  }
+
+  public set searchTermInView(val) {
+    this.searchTerm = val;
+    this.searchTermInViewChanged();
+  }
+
+  public searchTermInViewChanged() {
+    this.updateUrl(this.searchTerm);
+  }
+
+  async activate(params: any, ) {
+    this.params = params;
+    this.searchTerm = params['searchTerm'] != undefined ? params['searchTerm'] : "";
+    this.updateUrl(this.searchTerm);
     this.course = await this.courseRepo.fetchCourse(params.courseurl);
-
     this.navigatorProperties.title = this.course.lo.title;
     this.navigatorProperties.subtitle = "Search...";
     this.navigatorProperties.parentLink = `${environment.urlPrefix}/course/${this.courseRepo.courseUrl}`;
     this.navigatorProperties.parentIcon = "moduleHome";
     this.navigatorProperties.parentIconTip = "To module home ...";
 
-    this.setSearchTerm();
     this.setSearchStrings();
   }
 
   /**
-   * The searchTerm is initially obtained from the http url query string should it exist.
-   * TODO: Fix required - if the default searchTerm empty string is used a non-fatal error occurs.
+   * Live update the http url query string
    */
-  setSearchTerm() {
-    const href = window.location.href;
-    const x = href.lastIndexOf("=");
-    let value = x != -1 ? href.slice(x + 1) : "";
-    this.searchTerm = value.replace(/%20/g, " ");
+  updateUrl(addToQueryString: string) {
+    let href = window.location.href;
+    const indx = href.lastIndexOf("=");
+
+    if(addToQueryString === '' || href[indx + 1] == '' || href[indx + 1] == undefined) {
+      href = this.removeQueryString(href);
+    }
+
+    // No prior query string,therefore create and populate if addToQueryString valid.
+    else if (indx == -1 && addToQueryString) {
+      href += "?searchTerm=" + addToQueryString;
+    }
+
+    // Replace completely the existing query string assuming addToQueryString valid.
+    else if (addToQueryString) {
+      href = href.replace(/(searchTerm=)[^\&]+/, "$1" + addToQueryString);
+    }
+
+    window.location.href = href;
   }
 
-  /**
-   * Live update the http url query string
-   * If the searchTerm key:value pair does not exist, create the key.
-   * Then add a value or replace an existing value with that obtained from the search page dialog.
-   */
-  searchTermChanged() {
-    let href = window.location.href;
-    const x = href.lastIndexOf("=");
-    if (x == -1) {
-      href += "?searchTerm=''";
-    }
-    href = href.replace(/(searchTerm=)[^\&]+/, "$1" + this.searchTerm);
-    window.location.href = href;
-    //window.location.reload();
+  private removeQueryString(href: string) : string {
+    return href.substring(0, href.indexOf('?'));
   }
 
   /**
