@@ -1,7 +1,8 @@
 import { CourseRepo } from "../../services/course-repo";
 import { Course } from "../../services/course";
-import { NavigatorProperties } from "../../resources/elements/iconography/styles";
 import { autoinject } from "aurelia-framework";
+import { AuthService } from "../../services/auth-service";
+import {NavigatorProperties} from "../../resources/elements/navigators/navigator-properties";
 
 @autoinject
 export class CourseView {
@@ -9,14 +10,22 @@ export class CourseView {
   myKeypressCallback: any;
   pinBuffer = "";
   ignorePin = "1234";
+  show = false;
 
-  constructor(private courseRepo: CourseRepo, private navigatorProperties: NavigatorProperties) {
+  constructor(
+    private courseRepo: CourseRepo,
+    private navigatorProperties: NavigatorProperties,
+    private authService: AuthService
+  ) {
     this.myKeypressCallback = this.keypressInput.bind(this);
   }
 
   async activate(params) {
     this.course = await this.courseRepo.fetchCourse(params.courseurl);
-    this.navigatorProperties.init(this.course);
+
+    this.show = this.authService.checkAuth(this.course, "course");
+
+    this.navigatorProperties.init(this.course.lo);
     window.addEventListener("keypress", this.myKeypressCallback, false);
     if (this.course.lo.properties.ignorepin) {
       this.ignorePin = "" + this.course.lo.properties.ignorepin;
