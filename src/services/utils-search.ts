@@ -1,4 +1,3 @@
-import { MarkdownParser } from './markdown-parser';
 import { Lo } from "./lo";
 import environment from 'environment';
 
@@ -13,28 +12,27 @@ const removeMd = require('remove-markdown');
  * @param searchTerm The term whose presence is searched for.
  */
 export function flattenedLos(los: Lo[], searchTerm: string) : string[] {
-  let markdownParser = new MarkdownParser();
   let flatLos = flattenNestedLosArrays(los);
   let result: string[] = [];
-  flatLos.forEach(lo => {
-    let text = removeMd(lo.contentMd);
+  flatLos.forEach(obj => {
+    let text = removeMd(obj.lab.contentMd);
     let content = clippedContent(text, searchTerm, extraChars);
-    result.push(`<a href="${lo.route}"> ${lo.shortTitle}</a>  ${content}`); 
+    result.push(`<a href="${obj.lab.route}">${obj.topicTitle}${obj.lab.title} ${obj.lab.shortTitle}</a>  ${content}`); 
   });
   return result;
 }
 
 function flattenNestedLosArrays(los: Lo[]) {
-  return flatten(los);
+  return flatten(los,"");
 }
 
-function flatten(arr: Lo[], result = []) {
+function flatten(arr: Lo[], topicTitle: string, result = []) {
   for (let i = 0, length = arr.length; i < length; i++) {
     const value = arr[i];
     if (Array.isArray(value.los)) {
-      flatten(value.los, result);
+      flatten(value.los, arr[i].parent.lo.title, result);
     } else {
-      result.push(value);
+      result.push({"lab":value, "topicTitle":topicTitle});
     }
   }
   return result;
@@ -48,13 +46,6 @@ function flatten(arr: Lo[], result = []) {
  */
 export function isValid(str: string) {
  return str != undefined && /\S/.test(str) == true;
-}
-
-function removeFirstLastDirectories(the_url: string) {
-  let the_arr = the_url.split("/");
-  the_arr.pop();
-  the_arr.shift();
-  return the_arr.join("/");
 }
 
 /**
