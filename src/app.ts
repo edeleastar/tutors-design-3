@@ -22,6 +22,8 @@ export class App {
       { route: 'githubs/*courseurl',        moduleId: PLATFORM.moduleName('./components/wall/wall-view'),     name: 'github',  title: 'Repos' },
       { route: 'videos/*courseurl',         moduleId: PLATFORM.moduleName('./components/wall/wall-view'),     name: 'video',   title: 'Videos' },
       { route: 'search/*courseurl',         moduleId: PLATFORM.moduleName('./components/search/search-view'), name: 'search',  title: 'Search' },
+      { route: 'authorize',                 moduleId: PLATFORM.moduleName('./components/auth/authorize'),     name: 'authorize' },
+      { route: 'logout',                    moduleId: PLATFORM.moduleName('./components/auth/logout'),        name: 'logout',  }
     ]);
   }
 }
