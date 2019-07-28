@@ -35,22 +35,28 @@ export class SearchView {
   /**
    * Live update the http url query string
    */
-  updateUrl(addToQueryString: string) {
+  updateUrl(queryString: string) {
     let href = window.location.href;
     const indx = href.lastIndexOf("=");
 
-    if(addToQueryString === '' || href[indx + 1] == '' || href[indx + 1] == undefined) {
+    //.com
+    if(!queryString && indx == -1) {
+      return;
+    }
+
+    // Valid queryString & no prior query string therefore create and populate.
+    if (queryString && indx == -1) {
+      href += "?searchTerm=" + queryString;
+    } 
+
+    //.com?searchTerm=
+    else if(!queryString && indx != -1) {
       href = this.removeQueryString(href);
     }
 
-    // No prior query string,therefore create and populate if addToQueryString valid.
-    else if (indx == -1 && addToQueryString) {
-      href += "?searchTerm=" + addToQueryString;
-    }
-
-    // Replace completely the existing query string assuming addToQueryString valid.
-    else if (addToQueryString) {
-      href = href.replace(/(searchTerm=)[^\&]+/, "$1" + addToQueryString);
+    // Replace completely the existing query string assuming queryString valid.
+    else if (queryString) {
+      href = href.replace(/(searchTerm=)[^\&]+/, "$1" + queryString);
     }
 
     window.location.href = href;
@@ -68,5 +74,5 @@ export class SearchView {
     const labs = allLos("lab", this.course.lo.los);
     this.search_strings = flattenedLos(labs, this.searchTerm);
   }
-  
+
 }
