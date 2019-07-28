@@ -24,8 +24,8 @@ export class AuthService {
   auth0 = new WebAuth({
     domain: environment.auth0.domain,
     clientID: environment.auth0.clientId,
-    redirectUri: "http://localhost:8080/authorize",
-    //redirectUri: "https://tutors-design-dev.netlify.com/callback",
+    //redirectUri: "http://localhost:8080/authorize",
+    redirectUri: "https://tutors-design-dev.netlify.com/authorize",
     audience: `https://${environment.auth0.domain}/userinfo`,
     responseType: "token id_token",
     scope: "openid"
