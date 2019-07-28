@@ -1,8 +1,9 @@
 import { autoinject } from "aurelia-framework";
 import { CourseRepo } from "../../../services/course-repo";
-import { IconNav, NavigatorProperties } from "../iconography/styles";
 import { bindable } from "aurelia-framework";
 import environment from "../../../environment";
+import { NavigatorProperties } from "./navigator-properties";
+import { IconNav } from "../iconography/styles";
 const readerVersion = require("../../../../package.json").version;
 
 interface Properties {
@@ -16,7 +17,8 @@ export class MainNavigator {
   companions: IconNav[] = [];
   walls: IconNav[] = [];
   version = `${readerVersion}`;
-  searchroute = '';
+  searchroute = "";
+  logoutroute = "/logout";
 
   constructor(private courseRepo: CourseRepo) {
     if (this.courseRepo.course) {

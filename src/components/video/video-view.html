@@ -4,16 +4,18 @@
   <require from="../../resources/elements/cards/topic-navigator-card.html"></require>
   <require from="../../resources/elements/navigators/side-navigator"></require>
 
-  <side-navigator></side-navigator>
-  <main-navigator navigator-properties.one-way="navigatorProperties"></main-navigator>
+  <div if.bind="show">
+    <side-navigator></side-navigator>
+    <main-navigator navigator-properties.one-way="navigatorProperties"></main-navigator>
 
-  <div class="uk-container-expand uk-margin-medium-left uk-margin-medium-right">
-    <div uk-grid uk-flex uk-flex-center>
-      <div class="uk-width-expand@m">
-        <video-card showHeader.one-way="showHeader" lo.one-way="lo"></video-card>
-      </div>
-      <div class="uk-width-1-5@m uk-flex uk-grid">
-        <topic-navigator-card topic.one-way="lo.parent"></topic-navigator-card>
+    <div class="uk-container-expand uk-margin-medium-left uk-margin-medium-right">
+      <div uk-grid uk-flex uk-flex-center>
+        <div class="uk-width-expand@m">
+          <video-card showHeader.one-way="showHeader" lo.one-way="lo"></video-card>
+        </div>
+        <div class="uk-width-1-5@m uk-flex uk-grid">
+          <topic-navigator-card topic.one-way="lo.parent"></topic-navigator-card>
+        </div>
       </div>
     </div>
   </div>

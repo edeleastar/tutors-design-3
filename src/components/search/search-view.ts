@@ -1,10 +1,11 @@
 import { CourseRepo } from "../../services/course-repo";
-import { NavigatorProperties } from "../../resources/elements/iconography/styles";
+
 import { autoinject } from "aurelia-framework";
 import { Course } from "../../services/course";
 import environment from "../../environment";
 import { flattenedLos } from "../../services/utils-search";
 import { allLos } from "../../services/utils";
+import {NavigatorProperties} from "../../resources/elements/navigators/navigator-properties";
 
 @autoinject
 export class SearchView {

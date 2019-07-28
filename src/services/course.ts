@@ -1,6 +1,6 @@
 import { Lo } from "./lo";
 import { HttpClient } from "aurelia-fetch-client";
-import {allLos, allVideoLos, fixRoutes, getSortedUnits, injectCourseUrl} from "./utils";
+import { allLos, allVideoLos, fixRoutes, getSortedUnits, injectCourseUrl } from "./utils";
 import { Topic } from "./topic";
 
 export class Course {
@@ -8,8 +8,9 @@ export class Course {
   topics: Topic[] = [];
   units: Lo[];
   standardLos: Lo[];
-  allLos : Lo[];
+  allLos: Lo[];
   url: string;
+  authLevel = 0;
   topicIndex = new Map<string, Topic>();
   videos = new Map<string, Lo>();
   talks = new Map<string, Lo>();
@@ -24,6 +25,8 @@ export class Course {
     const response = await this.http.fetch("https://" + url + "/tutors.json");
     const lo = await response.json();
     injectCourseUrl(lo, url);
+    if (lo.properties.hasOwnProperty("auth")) this.authLevel = lo.properties.auth;
+    this.lo = lo;
     return lo;
   }
 
@@ -42,7 +45,7 @@ export class Course {
     videoLos.forEach(lo => {
       this.videos.set(`${lo.video}`, lo);
     });
-    
+
     this.addWall("talk");
     if (videoLos.length > 0) {
       this.walls.set("video", videoLos);
@@ -60,7 +63,9 @@ export class Course {
     this.addWall("archive");
 
     this.units = getSortedUnits(this.lo.los);
-    this.standardLos = this.lo.los.filter(lo => lo.type !== "unit" && lo.type !== "panelvideo" && lo.type !== "paneltalk");
+    this.standardLos = this.lo.los.filter(
+      lo => lo.type !== "unit" && lo.type !== "panelvideo" && lo.type !== "paneltalk"
+    );
   }
 
   async fetchCourse() {

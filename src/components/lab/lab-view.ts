@@ -3,6 +3,7 @@ import { MarkdownParser } from "../../services/markdown-parser";
 import environment from "../../environment";
 import { autoinject } from "aurelia-framework";
 import { Lo } from "../../services/lo";
+import { AuthService } from "../../services/auth-service";
 const path = require("path");
 
 @autoinject
@@ -12,8 +13,13 @@ export class LabView {
   url = "";
   currentChapter: Lo;
   navbarHtml = "";
+  show = false;
 
-  constructor(private courseRepo: CourseRepo, private markdownParser: MarkdownParser) {}
+  constructor(
+    private courseRepo: CourseRepo,
+    private markdownParser: MarkdownParser,
+    private authService: AuthService
+  ) {}
 
   refreshav() {
     this.navbarHtml = "";
@@ -28,6 +34,8 @@ export class LabView {
   }
 
   async activate(params) {
+    this.show = this.authService.checkAuth(this.courseRepo.course, "lab");
+
     const lastSegment = params.laburl.substr(params.laburl.lastIndexOf("/") + 1);
     let chapter: Lo = null;
     if (lastSegment.startsWith("book")) {
