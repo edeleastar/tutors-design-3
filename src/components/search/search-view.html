@@ -6,8 +6,8 @@
   <require from="../../resources/elements/navigators/side-navigator"></require>
 
   <side-navigator></side-navigator>
-  <main-navigator navigator-properties.one-way="navigatorProperties"></main-navigator>
-
+  <main-navigator navigator-properties.to-view="navigatorProperties"></main-navigator>
+  
   <div class="uk-container uk-padding-small">
     <fieldset class="uk-fieldset">
 
@@ -19,11 +19,11 @@
                value.bind="searchTermInView">
       </form>
 
-<!--      <dt>-->
-<!--        <div repeat.for="search_string of search_strings | filter:searchTerm">-->
-<!--          <dt innerhtml.bind="search_string | searchBold:searchTerm | highlight"></dt><br>-->
-<!--        </div>-->
-<!--        </dt>-->
+      <dl>
+        <div repeat.for="search_string of search_strings | filter:searchTerm">
+          <dt innerhtml.bind="search_string | searchBold:searchTerm | highlight"></dt><br>
+        </div>
+      </dt>
     </fieldset>
   </div>
 </template>
