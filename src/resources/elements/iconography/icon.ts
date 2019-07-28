@@ -15,19 +15,17 @@ import {
   faBookmark,
   faChalkboardTeacher,
   faSearch,
-  faFilePdf
+  faFilePdf,
+  faSignOutAlt
 } from "@fortawesome/free-solid-svg-icons";
 
 import { faYoutube, faSlack, faGithub, faYoutubeSquare } from "@fortawesome/free-brands-svg-icons";
 import { faAddressCard } from "@fortawesome/free-regular-svg-icons/faAddressCard";
 
 export class Icon {
-  @bindable
-  type: string;
-  @bindable
-  size: string;
-  @bindable
-  colour: string;
+  @bindable type: string;
+  @bindable size: string;
+  @bindable colour: string;
 
   FaIcons = {
     course: faBook,
@@ -51,7 +49,8 @@ export class Icon {
     unit: faBookmark,
     tutors: faChalkboardTeacher,
     search: faSearch,
-    pdf: faFilePdf
+    pdf: faFilePdf,
+    logout : faSignOutAlt
   };
 
   icon(type: string) {
