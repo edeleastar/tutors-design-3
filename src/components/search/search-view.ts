@@ -41,7 +41,6 @@ export class SearchView {
     if(!queryString) 
     {
       delete this.params['searchTerm'];
-      return;
     }
     this.params.searchTerm=queryString;
     this.router.navigateToRoute(
