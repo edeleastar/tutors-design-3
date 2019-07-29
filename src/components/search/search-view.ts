@@ -49,6 +49,7 @@ export class SearchView {
   /**
    * Live update the http url query string
    */
+<<<<<<< HEAD
   // updateUrl(queryString: string) {
   //   let href = window.location.href;
   //   const indx = href.lastIndexOf("=");
@@ -67,6 +68,31 @@ export class SearchView {
   //   else if(!queryString && indx != -1) {
   //     href = this.removeQueryString(href);
   //   }
+=======
+  updateUrl(queryString: string) {
+    let href = window.location.href;
+    const indx = href.lastIndexOf("=");
+
+    //.com
+    if(!queryString && indx == -1) {
+      return;
+    }
+
+    // Valid queryString & no prior query string therefore create and populate.
+    if (queryString && indx == -1) {
+      href += "?searchTerm=" + queryString;
+    } 
+
+    //.com?searchTerm=
+    else if(!queryString && indx != -1) {
+      href = this.removeQueryString(href);
+    }
+
+    // Replace completely the existing query string assuming queryString valid.
+    else if (queryString) {
+      href = href.replace(/(searchTerm=)[^\&]+/, "$1" + queryString);
+    }
+>>>>>>> c8e0fbb21629f12676024dee5afcc8032e042ce7
 
   //   // Replace completely the existing query string assuming queryString valid.
   //   else if (queryString) {
