@@ -1,9 +1,16 @@
 import { PLATFORM } from 'aurelia-pal';
 import { Router, RouterConfiguration } from 'aurelia-router';
 import environment from './environment';
+import { autoinject } from "aurelia-framework";
+import {CourseRepo} from "./services/course-repo";
+import {NavigatorProperties} from "./resources/elements/navigators/navigator-properties";
+import {AuthService} from "./services/auth-service";
 
+@autoinject
 export class App {
   title = 'Tutors';
+
+  constructor(private navigatorProperties: NavigatorProperties) {}
 
   configureRouter(config: RouterConfiguration, router: Router) {
     config.title = 'Tutors';
