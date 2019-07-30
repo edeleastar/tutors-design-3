@@ -3,10 +3,8 @@
   <require from="../../resources/elements/card-decks/unit-deck.html"></require>
   <require from="../../resources/elements/card-decks/video-deck.html"></require>
   <require from="../../resources/elements/card-decks/panel-talk-deck.html"></require>
-  <require from="../../resources/elements/navigators/side-navigator"></require>
 
   <div if.bind="show">
-    <side-navigator></side-navigator>
     <div class="uk-container uk-padding-small">
       <video-deck if.bind="topic.panelVideos.length>0" videos.one-way="topic.panelVideos"></video-deck>
       <panel-talk-deck if.bind="topic.panelTalks.length>0" talks.one-way="topic.panelTalks"></panel-talk-deck>

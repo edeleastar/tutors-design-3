@@ -14,14 +14,19 @@ export class BaseView {
   authService: AuthService;
   router: Router;
 
-  constructor(courseRepo: CourseRepo, navigatorProperties: NavigatorProperties, authService: AuthService, router: Router) {
+  constructor(
+    courseRepo: CourseRepo,
+    navigatorProperties: NavigatorProperties,
+    authService: AuthService,
+    router: Router
+  ) {
     this.courseRepo = courseRepo;
     this.navigatorProperties = navigatorProperties;
     this.authService = authService;
     this.router = router;
   }
 
-  async init(type:string, lo : Lo = null) {
+  async init(type: string, lo: Lo = null) {
     this.show = this.authService.checkAuth(this.courseRepo.course, type);
     if (lo) this.navigatorProperties.init(lo);
   }
