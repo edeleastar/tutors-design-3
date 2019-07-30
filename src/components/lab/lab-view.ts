@@ -1,11 +1,9 @@
 import { MarkdownParser } from "../../services/markdown-parser";
 import environment from "../../environment";
-import { autoinject } from "aurelia-framework";
 import { Lo } from "../../services/lo";
 import { BaseView } from "../base/base-view";
 const path = require("path");
 
-@autoinject
 export class LabView extends BaseView {
   lab: Lo;
   content = "";
@@ -27,8 +25,6 @@ export class LabView extends BaseView {
   }
 
   async activate(params, route) {
-    this.show = this.authService.checkAuth(this.courseRepo.course, "lab");
-
     const lastSegment = params.laburl.substr(params.laburl.lastIndexOf("/") + 1);
     let chapter: Lo = null;
     if (lastSegment.startsWith("book")) {

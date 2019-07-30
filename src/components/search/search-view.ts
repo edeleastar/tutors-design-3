@@ -1,11 +1,9 @@
-import { CourseRepo } from "../../services/course-repo";
 import { autoinject } from "aurelia-framework";
 import { Course } from "../../services/course";
 import { flattenedLos } from "../../services/utils-search";
 import { allLos } from "../../services/utils";
-import { Router } from "aurelia-router";
-import {BaseView} from "../base/base-view";
 import environment from "../../environment";
+import { BaseView } from "../base/base-view";
 
 @autoinject
 export class SearchView extends BaseView {
@@ -30,9 +28,9 @@ export class SearchView extends BaseView {
     //this.updateUrl(this.searchTerm);
   }
 
-  async activate(params: any ) {
+  async activate(params: any) {
     this.params = params;
-    this.searchTerm = params['searchTerm'] != undefined ? params['searchTerm'] : "";
+    this.searchTerm = params["searchTerm"] != undefined ? params["searchTerm"] : "";
     //this.updateUrl(this.searchTerm);
     this.updateUrl2(this.searchTerm);
     this.course = await this.courseRepo.fetchCourse(params.courseurl);
@@ -48,18 +46,12 @@ export class SearchView extends BaseView {
   }
 
   updateUrl2(queryString: string) {
-    if(!queryString)
-    {
-      delete this.params['searchTerm'];
+    if (!queryString) {
+      delete this.params["searchTerm"];
+    } else {
+      this.params.searchTerm = queryString;
     }
-    else {
-      this.params.searchTerm=queryString;
-    }
-    this.router.navigateToRoute(
-      "search",
-      this.params,
-      { trigger: false, replace: true }
-    );
+    this.router.navigateToRoute("search", this.params, { trigger: false, replace: true });
   }
   /**
    * Live update the http url query string
@@ -91,8 +83,8 @@ export class SearchView extends BaseView {
   //   window.location.href = href;
   // }
 
-  private removeQueryString(href: string) : string {
-    return href.substring(0, href.indexOf('?'));
+  private removeQueryString(href: string): string {
+    return href.substring(0, href.indexOf("?"));
   }
 
   /**
@@ -103,5 +95,4 @@ export class SearchView extends BaseView {
     const labs = allLos("lab", this.course.lo.los);
     this.search_strings = flattenedLos(labs, this.searchTerm);
   }
-
 }
