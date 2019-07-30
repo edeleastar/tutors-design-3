@@ -30,4 +30,8 @@ export class CourseView extends BaseView {
       this.courseRepo.course.showAllLos();
     }
   }
+
+  determineActivationStrategy() {
+    return "replace";
+  }
 }

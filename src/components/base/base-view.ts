@@ -29,8 +29,4 @@ export class BaseView {
   async clearNavigator() {
     this.navigatorProperties.clear();
   }
-
-  determineActivationStrategy() {
-    return "replace";
-  }
 }
