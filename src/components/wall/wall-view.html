@@ -2,11 +2,8 @@
   <require from="../../resources/elements/navigators/main-navigator"></require>
   <require from="../../resources/elements/card-decks/card-deck.html"></require>
   <require from="../../resources/elements/card-decks/video-deck-double.html"></require>
-  <require from="../../resources/elements/navigators/side-navigator"></require>
 
   <div if.bind="show">
-    <side-navigator></side-navigator>
-
     <div class="uk-container uk-padding-small">
       <div if.bind="name != 'video'">
         <card-deck los.one-way="los"></card-deck>
