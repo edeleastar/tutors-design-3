@@ -10,7 +10,7 @@ import {AuthService} from "./services/auth-service";
 export class App {
   title = 'Tutors';
 
-  constructor(private navigatorProperties: NavigatorProperties) {}
+  constructor(private navigatorProperties: NavigatorProperties, private courseRepo : CourseRepo) {}
 
   configureRouter(config: RouterConfiguration, router: Router) {
     config.title = 'Tutors';
