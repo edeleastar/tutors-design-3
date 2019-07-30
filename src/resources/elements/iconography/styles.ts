@@ -1,5 +1,3 @@
-import { Course } from "../../../services/course";
-
 export const iconColours = {
   course: "#009688",
   topic: "#009688",
@@ -27,28 +25,4 @@ export interface IconNav {
   link: string;
   icon: string;
   tip: string;
-}
-
-export class NavigatorProperties {
-  title: string;
-  subtitle: string;
-  icon: string;
-  iconColour: string;
-  img: string;
-  parentLink: string;
-  parentIcon: string;
-  parentIconColour: string;
-  parentIconTip: string;
-
-  init(course: Course) {
-    this.title = course.lo.title;
-    this.subtitle = course.lo.properties.credits;
-    this.icon = course.lo.properties.icon;
-    this.img = course.lo.img;
-    this.iconColour = course.lo.properties.faColour;
-    this.parentLink = course.lo.properties.parent;
-    this.parentIcon = "programHome";
-    this.parentIconTip = "To programme home...";
-    this.parentIconColour = "";
-  }
 }

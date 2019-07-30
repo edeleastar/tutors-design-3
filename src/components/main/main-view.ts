@@ -1,11 +1,10 @@
-import {NavigatorProperties} from "../../resources/elements/iconography/styles";
+import { autoinject } from "aurelia-framework";
+import { BaseView } from "../base/base-view";
 
-export class MainView {
-
-  navigatorProperties = new NavigatorProperties()
-  constructor() {
-    this.navigatorProperties.title = "Tutors Tuition System"
-    this.navigatorProperties.subtitle = "Eamonn de Leastar, WIT Computing"
+@autoinject
+export class MainView extends BaseView {
+  async activate(params, route) {
+    this.navigatorProperties.title = "Tutors Tuition System";
+    this.navigatorProperties.subtitle = "Eamonn de Leastar, WIT Computing";
   }
-
 }

@@ -1,19 +1,16 @@
-import { CourseRepo } from "../../services/course-repo";
 import { MarkdownParser } from "../../services/markdown-parser";
 import environment from "../../environment";
-import { autoinject } from "aurelia-framework";
 import { Lo } from "../../services/lo";
+import { BaseView } from "../base/base-view";
 const path = require("path");
 
-@autoinject
-export class LabView {
+export class LabView extends BaseView {
   lab: Lo;
   content = "";
   url = "";
   currentChapter: Lo;
   navbarHtml = "";
-
-  constructor(private courseRepo: CourseRepo, private markdownParser: MarkdownParser) {}
+  markdownParser = new MarkdownParser();
 
   refreshav() {
     this.navbarHtml = "";
@@ -27,13 +24,12 @@ export class LabView {
     });
   }
 
-  async activate(params) {
+  async activate(params, route) {
     const lastSegment = params.laburl.substr(params.laburl.lastIndexOf("/") + 1);
     let chapter: Lo = null;
     if (lastSegment.startsWith("book")) {
       this.url = params.laburl;
       this.lab = await this.courseRepo.fetchLab(this.url);
-      console.log("lab retrieved");
       this.currentChapter = this.lab.los[0];
     } else {
       this.url = path.dirname(params.laburl);
@@ -43,5 +39,6 @@ export class LabView {
 
     this.refreshav();
     this.content = this.markdownParser.parse(this.currentChapter.contentMd, this.url);
+    super.init("lab", this.lab);
   }
 }

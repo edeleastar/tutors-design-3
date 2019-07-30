@@ -1,9 +1,16 @@
 import { PLATFORM } from 'aurelia-pal';
 import { Router, RouterConfiguration } from 'aurelia-router';
 import environment from './environment';
+import { autoinject } from "aurelia-framework";
+import {CourseRepo} from "./services/course-repo";
+import {NavigatorProperties} from "./resources/elements/navigators/navigator-properties";
+import {AuthService} from "./services/auth-service";
 
+@autoinject
 export class App {
   title = 'Tutors';
+
+  constructor(private navigatorProperties: NavigatorProperties) {}
 
   configureRouter(config: RouterConfiguration, router: Router) {
     config.title = 'Tutors';
@@ -22,6 +29,8 @@ export class App {
       { route: 'githubs/*courseurl',        moduleId: PLATFORM.moduleName('./components/wall/wall-view'),     name: 'github',  title: 'Repos' },
       { route: 'videos/*courseurl',         moduleId: PLATFORM.moduleName('./components/wall/wall-view'),     name: 'video',   title: 'Videos' },
       { route: 'search/*courseurl',         moduleId: PLATFORM.moduleName('./components/search/search-view'), name: 'search',  title: 'Search' },
+      { route: 'authorize',                 moduleId: PLATFORM.moduleName('./components/auth/authorize'),     name: 'authorize' },
+      { route: 'logout',                    moduleId: PLATFORM.moduleName('./components/auth/logout'),        name: 'logout',  }
     ]);
   }
 }
