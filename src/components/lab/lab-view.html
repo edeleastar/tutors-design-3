@@ -2,18 +2,20 @@
 
   <require from="./lab-view.css"></require>
   <require from="../../resources/elements/navigators/lab-navigator"></require>
+  <require from="../../resources/elements/navigators/side-navigator"></require>
 
   <div if.bind="show">
-    <lab-navigator></lab-navigator>
+<!--    <lab-navigator></lab-navigator>-->
+    <side-navigator></side-navigator>
     <div uk-sticky>
       <nav class="uk-navbar">
-        <div class="uk-navbar-left">
-          <ul class="uk-subnav uk-background-secondary uk-subnav-pill">
-            <li><a href="#lab-navigator" uk-icon="icon: menu" , uk-toggle title="Switch Lab" pos="bottom" uk-tooltip></a></li>
-            <li class="uk-active"><a href="${lab.parent.lo.route}" uk-icon="icon: chevron-up" uk-toggle title="Parent Topic" pos="bottom" uk-tooltip>
-              ${lab.parent.lo.title} </a></li>
-          </ul>
-        </div>
+<!--        <div class="uk-navbar-left">-->
+<!--          <ul class="uk-subnav uk-background-secondary uk-subnav-pill">-->
+<!--            <li><a href="#lab-navigator" uk-icon="icon: menu" , uk-toggle title="Switch Lab" pos="bottom" uk-tooltip></a></li>-->
+<!--            <li class="uk-active"><a href="${lab.parent.lo.route}" uk-icon="icon: chevron-up" uk-toggle title="Parent Topic" pos="bottom" uk-tooltip>-->
+<!--              ${lab.parent.lo.title} </a></li>-->
+<!--          </ul>-->
+<!--        </div>-->
         <div class="uk-navbar-right">
           <ul class="uk-subnav uk-background-secondary uk-subnav-pill" innerhtml="${navbarHtml}"></ul>
         </div>

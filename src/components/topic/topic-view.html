@@ -1,6 +1,4 @@
 <template>
-
-  <require from="../../resources/elements/navigators/main-navigator"></require>
   <require from="../../resources/elements/card-decks/card-deck.html"></require>
   <require from="../../resources/elements/card-decks/unit-deck.html"></require>
   <require from="../../resources/elements/card-decks/video-deck.html"></require>
@@ -9,7 +7,6 @@
 
   <div if.bind="show">
     <side-navigator></side-navigator>
-    <main-navigator navigator-properties.one-way="navigatorProperties"></main-navigator>
     <div class="uk-container uk-padding-small">
       <video-deck if.bind="topic.panelVideos.length>0" videos.one-way="topic.panelVideos"></video-deck>
       <panel-talk-deck if.bind="topic.panelTalks.length>0" talks.one-way="topic.panelTalks"></panel-talk-deck>
