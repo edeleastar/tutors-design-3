@@ -1,8 +1,8 @@
 import { Lo } from "./lo";
-import environment from 'environment';
+import environment from "environment";
 
 const extraChars: number = +`${environment.search}`;
-const removeMd = require('remove-markdown');
+const removeMd = require("remove-markdown");
 /**
  * Searches an array of nested Lo arrays for presence of searchTerm.
  * When a string containing the searchTerm is found it is converted to text.
@@ -11,19 +11,19 @@ const removeMd = require('remove-markdown');
  * @param los The nested arrays of Lo objects.
  * @param searchTerm The term whose presence is searched for.
  */
-export function flattenedLos(los: Lo[], searchTerm: string) : string[] {
+export function flattenedLos(los: Lo[], searchTerm: string): string[] {
   let flatLos = flattenNestedLosArrays(los);
   let result: string[] = [];
   flatLos.forEach(obj => {
     let text = removeMd(obj.lab.contentMd);
     let content = clippedContent(text, searchTerm, extraChars);
-    result.push(`<a href="${obj.lab.route}">${obj.topicTitle}${obj.lab.title} ${obj.lab.shortTitle}</a>  ${content}`); 
+    result.push(`<a href="${obj.lab.route}">${obj.topicTitle}${obj.lab.title} ${obj.lab.shortTitle}</a>  ${content}`);
   });
   return result;
 }
 
 function flattenNestedLosArrays(los: Lo[]) {
-  return flatten(los,"");
+  return flatten(los, "");
 }
 
 function flatten(arr: Lo[], topicTitle: string, result = []) {
@@ -32,33 +32,36 @@ function flatten(arr: Lo[], topicTitle: string, result = []) {
     if (Array.isArray(value.los)) {
       flatten(value.los, arr[i].parent.lo.title, result);
     } else {
-      result.push({"lab":value, "topicTitle":topicTitle});
+      result.push({ lab: value, topicTitle: topicTitle });
     }
   }
   return result;
 }
 
 /**
- * Validate a string: is valid if it is not undefined and 
+ * Validate a string: is valid if it is not undefined and
  * does not comprise only whitespace else it is invalid.
  * @param str A string being validated.
  * @returns true if valid else false.
  */
 export function isValid(str: string) {
- return str != undefined && /\S/.test(str) == true;
+  return str != undefined && /\S/.test(str) == true;
 }
 
 /**
- * Constructs a substring of targetString comprising searchTerm and 
+ * Constructs a substring of targetString comprising searchTerm and
  * extraChars on either side of searchTerm.
  * A precondition is that searchTerm is a substring of targetString.
- * @param targetString 
- * @param searchTerm 
- * @param extraChars 
+ * @param targetString
+ * @param searchTerm
+ * @param extraChars
  */
 function clippedContent(targetString: string, searchTerm: string, extraChars: number) {
-	let index = targetString.indexOf(searchTerm);
-	let startIndex = index - extraChars > 0 ? index - extraChars : 0;
-	let endIndex = index + searchTerm.length + extraChars <= targetString.length ? index + searchTerm.length + extraChars : targetString.length;
-	return targetString.slice(startIndex, endIndex);
+  let index = targetString.indexOf(searchTerm);
+  let startIndex = index - extraChars > 0 ? index - extraChars : 0;
+  let endIndex =
+    index + searchTerm.length + extraChars <= targetString.length
+      ? index + searchTerm.length + extraChars
+      : targetString.length;
+  return targetString.slice(startIndex, endIndex);
 }

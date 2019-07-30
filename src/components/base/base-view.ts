@@ -3,19 +3,22 @@ import { NavigatorProperties } from "../../resources/elements/navigators/navigat
 import { AuthService } from "../../services/auth-service";
 import { inject } from "aurelia-framework";
 import { Lo } from "../../services/lo";
+import { Router } from "aurelia-router";
 
-@inject(CourseRepo, NavigatorProperties, AuthService)
+@inject(CourseRepo, NavigatorProperties, AuthService, Router)
 export class BaseView {
   show = false;
 
   courseRepo: CourseRepo;
   navigatorProperties: NavigatorProperties;
   authService: AuthService;
+  router: Router;
 
-  constructor(courseRepo: CourseRepo, navigatorProperties: NavigatorProperties, authService: AuthService) {
+  constructor(courseRepo: CourseRepo, navigatorProperties: NavigatorProperties, authService: AuthService, router: Router) {
     this.courseRepo = courseRepo;
     this.navigatorProperties = navigatorProperties;
     this.authService = authService;
+    this.router = router;
   }
 
   async init(type:string, lo : Lo = null) {
