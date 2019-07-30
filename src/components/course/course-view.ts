@@ -31,7 +31,8 @@ export class CourseView extends BaseView {
     }
   }
 
-  determineActivationStrategy() {
-    return "replace";
-  }
+  // determineActivationStrategy() {
+  //   //return "replace";
+  //   return "invoke-lifecycle"
+  // }
 }
