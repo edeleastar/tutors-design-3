@@ -6,7 +6,6 @@ import { Lo } from "./lo";
 import environment from "../environment";
 
 export class AnalyticsService {
-
   courseBaseName = "";
   userName = "";
 
