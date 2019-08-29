@@ -8,6 +8,7 @@ import environment from "../environment";
 @autoinject
 export class CourseRepo {
   course: Course;
+  courses = new Map<string, Course>();
   courseUrl = "";
 
   constructor(private http: HttpClient) {}
@@ -15,12 +16,16 @@ export class CourseRepo {
   async getCourse(url) {
     if (!this.course || this.course.url !== url) {
       this.courseUrl = url;
-      this.course = new Course(this.http, url);
-      try {
-        await this.course.fetchCourse();
-      } catch (e) {
-        this.courseUrl = "";
-        this.course = null;
+      this.course = this.courses.get(url);
+      if (!this.course) {
+        this.course = new Course(this.http, url);
+        try {
+          await this.course.fetchCourse();
+          this.courses.set(url, this.course);
+        } catch (e) {
+          this.courseUrl = "";
+          this.course = null;
+        }
       }
     }
   }
