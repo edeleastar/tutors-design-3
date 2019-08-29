@@ -8,14 +8,18 @@ import environment from "../environment";
 export class AnalyticsService {
   courseBaseName = "";
   userName = "";
+  analytics = 0;
 
   init(courseRepo: CourseRepo) {
-    try {
-      firebase.initializeApp(environment.firebase);
-      this.courseBaseName = courseRepo.course.url.substr(0, courseRepo.course.url.indexOf("."));
-      this.courseBaseName = slugify(this.courseBaseName);
-    } catch (e) {
-      console.log(e);
+    this.analytics = courseRepo.course.analytics;
+    if (this.analytics) {
+      try {
+        firebase.initializeApp(environment.firebase);
+        this.courseBaseName = courseRepo.course.url.substr(0, courseRepo.course.url.indexOf("."));
+        this.courseBaseName = slugify(this.courseBaseName);
+      } catch (e) {
+        console.log(e);
+      }
     }
   }
 
@@ -33,13 +37,15 @@ export class AnalyticsService {
   }
 
   incrementValue(key: string) {
-    var ref = firebase.database().ref(`${this.courseBaseName}/${key}/count`);
-    ref.transaction(function(value) {
-      return (value || 0) + 1;
-    });
-    var ref = firebase.database().ref(`${this.courseBaseName}/${key}/last`);
-    ref.transaction(function(value) {
-      return new Date().toString();
-    });
+    if (this.analytics) {
+      var ref = firebase.database().ref(`${this.courseBaseName}/${key}/count`);
+      ref.transaction(function(value) {
+        return (value || 0) + 1;
+      });
+      var ref = firebase.database().ref(`${this.courseBaseName}/${key}/last`);
+      ref.transaction(function(value) {
+        return new Date().toString();
+      });
+    }
   }
 }
