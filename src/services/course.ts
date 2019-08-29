@@ -11,6 +11,7 @@ export class Course {
   allLos: Lo[];
   url: string;
   authLevel = 0;
+  analytics = 0;
   topicIndex = new Map<string, Topic>();
   videos = new Map<string, Lo>();
   talks = new Map<string, Lo>();
@@ -26,6 +27,7 @@ export class Course {
     const lo = await response.json();
     injectCourseUrl(lo, url);
     if (lo.properties.hasOwnProperty("auth")) this.authLevel = lo.properties.auth;
+    if (lo.properties.hasOwnProperty("analytics")) this.analytics = lo.properties.analytics;
     this.lo = lo;
     return lo;
   }

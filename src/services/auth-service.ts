@@ -4,6 +4,7 @@ import { Router } from "aurelia-router";
 import { EventEmitter } from "events";
 import { Course } from "./course";
 import environment from "../environment";
+import {AnalyticsService} from "./analytics-service";
 
 const authLevels = {
   course: 4,
@@ -24,14 +25,13 @@ export class AuthService {
   auth0 = new WebAuth({
     domain: environment.auth0.domain,
     clientID: environment.auth0.clientId,
-    //redirectUri: "http://localhost:8080/authorize",
-    redirectUri: "https://tutors-design-dev.netlify.com/authorize",
+    redirectUri: environment.auth0.redirectUri,
     audience: `https://${environment.auth0.domain}/userinfo`,
     responseType: "token id_token",
     scope: "openid"
   });
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private analyticsService: AnalyticsService) {
     this.authNotifier.setMaxListeners(21);
   }
 
@@ -54,10 +54,12 @@ export class AuthService {
   handleAuthentication(): void {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
+        let self = this;
         this.auth0.client.userInfo(authResult.accessToken, function(err, user) {
           if (err) {
             console.log("Error loading the Profile", err);
           }
+          self.analyticsService.login(user);
         });
 
         this.setSession(authResult);

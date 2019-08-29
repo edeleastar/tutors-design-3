@@ -6,6 +6,12 @@ export default {
   search: 80,
   auth0: {
     clientId: 'AUTH0KEY',
-    domain: 'AUTH0DOMAIN'
+    domain: 'AUTH0DOMAIN',
+    redirectUri: 'APPURI'
+  },
+  firebase: {
+    apiKey: "FIREBASEKEY",
+    databaseURL: "FIREBASEDBURL",
+    projectId: "FIREBASEPROJECTID"
   }
 };
