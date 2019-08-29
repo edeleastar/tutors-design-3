@@ -4,6 +4,7 @@ import { Router } from "aurelia-router";
 import { EventEmitter } from "events";
 import { Course } from "./course";
 import environment from "../environment";
+import {AnalyticsService} from "./analytics-service";
 
 const authLevels = {
   course: 4,
@@ -30,7 +31,7 @@ export class AuthService {
     scope: "openid"
   });
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private analyticsService: AnalyticsService) {
     this.authNotifier.setMaxListeners(21);
   }
 
@@ -53,10 +54,12 @@ export class AuthService {
   handleAuthentication(): void {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
+        let self = this;
         this.auth0.client.userInfo(authResult.accessToken, function(err, user) {
           if (err) {
             console.log("Error loading the Profile", err);
           }
+          self.analyticsService.login(user);
         });
 
         this.setSession(authResult);
