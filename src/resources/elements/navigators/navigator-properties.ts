@@ -30,7 +30,7 @@ export class NavigatorProperties {
   init(lo: Lo) {
     this.title = lo.title;
     this.img = lo.img;
-    this.version = `${readerVersion}(${this.courseRepo.course.lo.version})`;
+    this.version = `${readerVersion} (${this.courseRepo.course.lo.version})`;
     if (lo.type == "course") {
       this.subtitle = this.courseRepo.course.lo.properties.credits;
       this.parentLink = this.courseRepo.course.lo.properties.parent;
