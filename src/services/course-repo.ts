@@ -4,23 +4,31 @@ import { autoinject } from "aurelia-framework";
 import * as path from "path";
 import { findCourseUrls, lastSegment } from "./utils";
 import environment from "../environment";
+import {AnalyticsService} from "./analytics-service";
 
 @autoinject
 export class CourseRepo {
   course: Course;
+  courses = new Map<string, Course>();
   courseUrl = "";
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private analyticsService: AnalyticsService) {
+  }
 
   async getCourse(url) {
     if (!this.course || this.course.url !== url) {
       this.courseUrl = url;
-      this.course = new Course(this.http, url);
-      try {
-        await this.course.fetchCourse();
-      } catch (e) {
-        this.courseUrl = "";
-        this.course = null;
+      this.course = this.courses.get(url);
+      if (!this.course) {
+        this.course = new Course(this.http, url);
+        try {
+          await this.course.fetchCourse();
+          this.analyticsService.init(this);
+          this.courses.set(url, this.course);
+        } catch (e) {
+          this.courseUrl = "";
+          this.course = null;
+        }
       }
     }
   }
