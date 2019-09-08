@@ -4,7 +4,6 @@ import { autoinject } from "aurelia-framework";
 import * as path from "path";
 import { findCourseUrls, lastSegment } from "./utils";
 import environment from "../environment";
-import {AnalyticsService} from "./analytics-service";
 
 @autoinject
 export class CourseRepo {
@@ -12,8 +11,7 @@ export class CourseRepo {
   courses = new Map<string, Course>();
   courseUrl = "";
 
-  constructor(private http: HttpClient, private analyticsService: AnalyticsService) {
-  }
+  constructor(private http: HttpClient) {}
 
   async getCourse(url) {
     if (!this.course || this.course.url !== url) {
@@ -23,7 +21,6 @@ export class CourseRepo {
         this.course = new Course(this.http, url);
         try {
           await this.course.fetchCourse();
-          this.analyticsService.init(this);
           this.courses.set(url, this.course);
         } catch (e) {
           this.courseUrl = "";
