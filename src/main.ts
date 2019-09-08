@@ -15,7 +15,7 @@ export function configure(aurelia: Aurelia) {
   }
 
   aurelia.use.plugin(PLATFORM.moduleName('aurelia-google-analytics'), config => {
-    config.init('UA-49354439-1');
+    config.init('UA-147419187-1');
     config.attach({
       logging: {
         // Set to `true` to have some log messages appear in the browser console.
