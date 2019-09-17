@@ -13,4 +13,8 @@ export class VideoView extends BaseView {
     this.lo = this.courseRepo.course.videos.get(ref);
     super.init("talk", this.lo);
   }
+
+  determineActivationStrategy() {
+    return "replace";
+  }
 }
