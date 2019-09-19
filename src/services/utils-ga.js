@@ -1,4 +1,5 @@
-export function init(id) {
+
+export function initGa(id) {
   const script = document.createElement("script");
   script.text =
     "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){" +

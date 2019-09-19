@@ -7,15 +7,15 @@ import environment from "../environment";
 import { Course } from "./course";
 import {analyicsPage, analyicsPageTitle} from "./utils";
 
-const init = require("./google").init;
-const track = require("./google.js").track;
+const initGa = require("./utils-ga.js").initGa;
+const track = require("./utils-ga.js").track;
 
 export class AnalyticsService {
   courseBaseName = "";
 
   constructor() {
     firebase.initializeApp(environment.firebase);
-    init("UA-147419187-2");
+    initGa("UA-147419187-2");
   }
 
   login(user) {
