@@ -121,3 +121,16 @@ export function analyicsPageTitle(course: Course, lo: Lo) {
   console.log(title);
   return title;
 }
+
+export function fireBasePageTitle(course: Course, lo: Lo) {
+  const courseBaseName = course.url.substr(0, course.url.indexOf("."));
+  let title = `${courseBaseName}/${course.lo.title}/`;
+  if (lo.parent) {
+    title += `${lo.parent.lo.title}/${lo.title}`;
+  } else {
+    title += ` ${lo.title}`;
+  }
+  console.log(title);
+  return title;
+}
+
