@@ -5,12 +5,17 @@ var slugify = require("slugify");
 import { Lo } from "./lo";
 import environment from "../environment";
 import { Course } from "./course";
+import { analyicsPage, analyicsPageTitle, fireBasePageTitle } from "./utils";
+
+const initGa = require("./utils-ga.js").initGa;
+const track = require("./utils-ga.js").track;
 
 export class AnalyticsService {
   courseBaseName = "";
 
   constructor() {
     firebase.initializeApp(environment.firebase);
+    initGa(environment.ga);
   }
 
   login(user) {
@@ -19,21 +24,20 @@ export class AnalyticsService {
     // this.incrementValue(`usage/login/${this.userName}`);
   }
 
-  log(course: Course, lo: Lo) {
+  log(path: string, course: Course, lo: Lo) {
     this.courseBaseName = course.url.substr(0, course.url.indexOf("."));
     this.courseBaseName = slugify(this.courseBaseName);
-    this.incrementValue(`usage/${lo.type}/${slugify(lo.title)}`);
-    // if (this.userName) {
-    //   this.incrementValue(`users/${this.userName}/${lo.type}/${slugify(lo.title)}`);
-    // }
+    const title = analyicsPageTitle(course, lo);
+    track(path, title);
+    this.incrementValue(fireBasePageTitle(course, lo));
   }
 
   incrementValue(key: string) {
-    var ref = firebase.database().ref(`${this.courseBaseName}/${key}/count`);
+    var ref = firebase.database().ref(`${key}/count`);
     ref.transaction(function(value) {
       return (value || 0) + 1;
     });
-    var ref = firebase.database().ref(`${this.courseBaseName}/${key}/last`);
+    var ref = firebase.database().ref(`${key}/last`);
     ref.transaction(function(value) {
       return new Date().toString();
     });
