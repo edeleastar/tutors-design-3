@@ -34,7 +34,9 @@ export class BaseView {
     this.show = this.authService.checkAuth(this.courseRepo.course, type);
     if (lo) {
       this.navigatorProperties.init(lo);
-      this.anaylticsService.log(this.courseRepo.course, lo);
+      this.anaylticsService.log(this.router.currentInstruction.fragment, this.courseRepo.course, lo);
+      this.router.title = lo.title;
+      this.router.updateTitle();
     }
   }
 
