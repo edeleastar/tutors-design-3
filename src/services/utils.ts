@@ -1,6 +1,8 @@
 import { Lo } from "./lo";
 import environment from "../environment";
 import * as path from "path";
+import { Course } from "./course";
+import slugify from "slugify";
 
 export function injectCourseUrl(lo: Lo, url) {
   if (lo.route) lo.route = lo.route.replace("{{COURSEURL}}", url);
@@ -101,4 +103,21 @@ export function allVideoLos(los: Lo[]) {
     allLos = allLos.concat(findVideoLos(topic.los));
   }
   return allLos;
+}
+
+export function analyicsPage(course: Course, lo: Lo) {
+  console.log(course.url);
+  return course.url;
+}
+
+export function analyicsPageTitle(course: Course, lo: Lo) {
+  const courseBaseName = course.url.substr(0, course.url.indexOf("."));
+  let title = `${courseBaseName}: ${course.lo.title}`;
+  if (lo.parent) {
+    title += `${lo.parent.lo.title} : ${lo.title}`;
+  } else {
+    title += ` ${lo.title}`;
+  }
+  console.log(title);
+  return title;
 }
