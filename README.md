@@ -1,7 +1,11 @@
 tutors-design
 =====
 
-A reader for the tutors-ts static site generator:
+A reader for the tutors-ts static site generator. Discussed in detail here:
+
+- <https://aurelia.io/blog/2019/09/03/case-study-tutors>
+
+Part of a group of this small group of projects:
 
 - <https://github.com/edeleastar/tutors-ts>
 - <https://github.com/edeleastar/tutors-js>
