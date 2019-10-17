@@ -9,13 +9,17 @@ import { analyicsPage, analyicsPageTitle, fireBasePageTitle } from "./utils";
 
 const initGa = require("./utils-ga.js").initGa;
 const track = require("./utils-ga.js").track;
+const initGTag = require("./utils-ga.js").initGTag;
+const trackEvent = require("./utils-ga.js").trackEvent;
+const trackTag = require("./utils-ga.js").trackTag;
 
 export class AnalyticsService {
   courseBaseName = "";
 
   constructor() {
     firebase.initializeApp(environment.firebase);
-    initGa(environment.ga);
+    //initGa(environment.ga);
+    initGTag (environment.ga);
   }
 
   login(user) {
@@ -28,7 +32,9 @@ export class AnalyticsService {
     this.courseBaseName = course.url.substr(0, course.url.indexOf("."));
     this.courseBaseName = slugify(this.courseBaseName);
     const title = analyicsPageTitle(course, lo);
-    track(path, title);
+    //track(path, title);
+    trackTag(environment.ga, path, title);
+    trackEvent(environment.ga, this.courseBaseName, path, lo)
     this.incrementValue(fireBasePageTitle(course, lo));
   }
 

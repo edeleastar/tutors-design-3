@@ -1,4 +1,3 @@
-
 export function initGa(id) {
   const script = document.createElement("script");
   script.text =
@@ -10,7 +9,7 @@ export function initGa(id) {
 
   window.ga =
     window.ga ||
-    function() {
+    function () {
       (ga.q = ga.q || []).push(arguments);
     };
   ga.l = +new Date();
@@ -23,4 +22,49 @@ export function track(pageValue, titleValue) {
     title: titleValue
   });
   ga("send", "pageview");
+}
+
+export function initGTag(id) {
+  const script = document.createElement("script");
+  script.async = true;
+  script.src = "https://www.googletagmanager.com/gtag/js?id=" + id;
+  document.querySelector("body").appendChild(script);
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+
+  gtag('js', new Date());
+
+  gtag('config', id);
+ // gtag('config', id, { 'send_page_view': false });
+}
+
+export function trackTag(id, pageValue, titleValue) {
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+
+  gtag('config', id, {
+    'page_title': titleValue,
+    'page_path': pageValue
+  });
+}
+
+export function trackEvent(id, course, path, lo) {
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+
+  gtag('event', lo.type, {
+ //   'send_to': ga,
+    'event_category': course,
+    'event_action': path,
+    'event_label': lo.title
+  });
 }
