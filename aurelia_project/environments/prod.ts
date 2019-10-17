@@ -13,5 +13,6 @@ export default {
     apiKey: "FIREBASEKEY",
     databaseURL: "FIREBASEDBURL",
     projectId: "FIREBASEPROJECTID"
-  }
+  },
+  ga : "GA_MEASUREMENT_ID"
 };
