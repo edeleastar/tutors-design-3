@@ -7,6 +7,8 @@ import environment from "../environment";
 import { Course } from "./course";
 import { analyicsPage, analyicsPageTitle, fireBasePageTitle } from "./utils";
 
+const CryptoJS = require("crypto-js");
+
 const initGa = require("./utils-ga.js").initGa;
 const track = require("./utils-ga.js").track;
 const initGTag = require("./utils-ga.js").initGTag;
@@ -15,6 +17,8 @@ const trackTag = require("./utils-ga.js").trackTag;
 
 export class AnalyticsService {
   courseBaseName = "";
+  user = "";
+  userEncrypted = "";
 
   constructor() {
     firebase.initializeApp(environment.firebase);
@@ -23,6 +27,12 @@ export class AnalyticsService {
   }
 
   login(user) {
+    this.user = user.email;
+    this.userEncrypted = CryptoJS.AES.encrypt(user.email, "Cggtp2sZDRVRqFRV3JZj60jvf9m2dDq9").toString();
+
+    //const test = CryptoJS.AES.decrypt(this.userEncrypted, "Cggtp2sZDRVRqFRV3JZj60jvf9m2dDq9");
+    //const original = test.toString(CryptoJS.enc.Utf8)
+
     // this.userName = slugify(user.name);
     // this.incrementValue(`users/${this.userName}/login`);
     // this.incrementValue(`usage/login/${this.userName}`);
