@@ -11,7 +11,8 @@ export class VideoView extends BaseView {
     await this.courseRepo.fetchCourseFromTalk(params.courseUrl);
     const ref = `${environment.urlPrefix}video/${params.courseUrl}/${params.videoid}`;
     this.lo = this.courseRepo.course.videos.get(ref);
-    super.init("talk", this.lo);
+   // super.init("talk", this.lo);
+    super.init(`video/${params.courseUrl}/${params.videoid}`, this.lo);
   }
 
   determineActivationStrategy() {

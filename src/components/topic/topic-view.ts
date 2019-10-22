@@ -6,6 +6,6 @@ export class TopicView extends BaseView {
 
   async activate(params, route) {
     this.topic = await this.courseRepo.fetchTopic(params.topicurl);
-    super.init("topic", this.topic.lo);
+    super.init(`topic/${params.topicurl}`, this.topic.lo);
   }
 }

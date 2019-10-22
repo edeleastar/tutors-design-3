@@ -11,7 +11,7 @@ export class WallView extends BaseView {
     const course = this.courseRepo.course;
     this.name = route.name;
 
-    super.init("wall");
+    super.init(`${route.name}s/${params.courseurl}`);
 
     this.navigatorProperties.title = `All ${route.name}'s in ${course.lo.title}`;
     this.navigatorProperties.subtitle = course.lo.properties.credits;
