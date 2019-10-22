@@ -30,11 +30,15 @@ export class BaseView {
     this.anaylticsService = analyticsService;
   }
 
-  async init(type: string, lo: Lo = null) {
+  async init(path: string, lo: Lo = null) {
+    let type = 'course';
+    if (lo) {
+      type = lo.type
+    }
     this.show = this.authService.checkAuth(this.courseRepo.course, type);
     if (lo) {
       this.navigatorProperties.init(lo);
-      this.anaylticsService.log(this.router.currentInstruction.fragment, this.courseRepo.course, lo);
+      this.anaylticsService.log(path, this.courseRepo.course, lo);
       this.router.title = lo.title;
       this.router.updateTitle();
     }

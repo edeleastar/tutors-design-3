@@ -11,7 +11,7 @@ export class CourseView extends BaseView {
     this.myKeypressCallback = this.keypressInput.bind(this);
     await this.courseRepo.fetchCourse(params.courseurl);
     this.course = this.courseRepo.course;
-    super.init("course", this.course.lo);
+    super.init(`course/${params.courseurl}`, this.course.lo);
 
     window.addEventListener("keypress", this.myKeypressCallback, false);
     if (this.courseRepo.course.lo.properties.ignorepin) {
