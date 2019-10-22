@@ -75,7 +75,7 @@ export class AuthService {
   }
 
   login() {
-    this.auth0.authorize({ prompt: "login", scope: "openid profile" });
+    this.auth0.authorize({ prompt: "login", scope: "openid profile email" });
   }
 
   setSession(authResult) {

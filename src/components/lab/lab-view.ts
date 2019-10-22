@@ -39,6 +39,6 @@ export class LabView extends BaseView {
 
     this.refreshav();
     this.content = this.markdownParser.parse(this.currentChapter.contentMd, this.url);
-    super.init("lab", this.lab);
+    super.init(`lab/${params.laburl}`, this.lab);
   }
 }

@@ -39,7 +39,7 @@ export class SearchView extends BaseView {
     this.course = await this.courseRepo.fetchCourse(params.courseurl);
     this.setSearchStrings();
 
-    super.init("wall");
+    super.init(`search/${params.courseurl}`);
 
     this.navigatorProperties.title = "Search...";
     this.navigatorProperties.subtitle = this.course.lo.title;

@@ -11,6 +11,6 @@ export class TalkView extends BaseView {
     await this.courseRepo.fetchCourseFromTalk(params.courseUrl);
     const ref = `${environment.urlPrefix}talk/${params.courseUrl}/${params.talkid}`;
     this.lo = this.courseRepo.course.talks.get(ref);
-    super.init("talk", this.lo);
+    super.init(`talk/${params.courseUrl}/${params.talkid}`, this.lo);
   }
 }
