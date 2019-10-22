@@ -1,7 +1,7 @@
-import { Lo } from "./lo";
+import {Lo} from "./lo";
 import environment from "../environment";
 import * as path from "path";
-import { Course } from "./course";
+import {Course} from "./course";
 import slugify from "slugify";
 
 export function injectCourseUrl(lo: Lo, url) {
@@ -110,27 +110,23 @@ export function analyicsPage(course: Course, lo: Lo) {
   return course.url;
 }
 
-export function analyicsPageTitle(course: Course, lo: Lo) {
-  const courseBaseName = course.url.substr(0, course.url.indexOf("."));
-  let title = `${courseBaseName} : ${course.lo.title} : `;
+export function analyicsPageTitle(courseId: string, course: Course, lo: Lo) {
+  let title = `${courseId} : ${course.lo.title} : `;
   if (lo.parent) {
     title += `${lo.parent.lo.title} : ${lo.title}`;
   } else {
     title += ` ${lo.title}`;
   }
-  console.log(title);
   return title;
 }
 
-export function fireBasePageTitle(course: Course, lo: Lo) {
-  const courseBaseName = course.url.substr(0, course.url.indexOf("."));
-  let title = `${courseBaseName}/${course.lo.title}/`;
-  if (lo.parent) {
-    title += `${lo.parent.lo.title}/${lo.title}`;
-  } else {
-    title += ` ${lo.title}`;
+export function firebaseKey(courseId: string, courseUrl, path: string, userId: string, lo: Lo) {
+  let node = "";
+  if (lo.type !== "course") {
+    node = path.replace(courseUrl, "");
+    node = node.substr(node.indexOf("//") + 2, node.length);
   }
-  console.log(title);
-  return title;
+  let key = `${courseId}/${userId}/${node}`;
+  key = key.replace('.', '~')
+  return key;
 }
-
