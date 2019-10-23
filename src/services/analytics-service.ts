@@ -16,10 +16,12 @@ export class AnalyticsService {
   userName = "";
   userEmail = "";
   userEncrypted = "";
+  db = null;
 
   constructor() {
-    firebase.initializeApp(environment.firebase);
     initGTag(environment.ga);
+    firebase.initializeApp(environment.firebase);
+    firebase.database().goOffline();
   }
 
   login(user) {
@@ -42,6 +44,7 @@ export class AnalyticsService {
   }
 
   incrementValue(key: string, title: string) {
+    firebase.database().goOnline()
     let ref = firebase.database().ref(`${key}/count`);
     ref.transaction(function(value) {
       return (value || 0) + 1;
@@ -54,5 +57,7 @@ export class AnalyticsService {
     ref.transaction(function(value) {
       return title;
     });
+    const db = firebase.database().ref();
+    firebase.database().goOnline()
   }
 }
