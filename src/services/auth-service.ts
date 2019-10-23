@@ -46,6 +46,10 @@ export class AuthService {
         status = false;
         this.login();
         localStorage.setItem("course_url", course.url);
+      } else {
+        const userName = localStorage.getItem("userName");
+        const userEmail = localStorage.getItem("userEmail");
+        this.analyticsService.login({name:userName, email:userEmail});
       }
     }
     return status;
@@ -60,6 +64,8 @@ export class AuthService {
             console.log("Error loading the Profile", err);
           }
           self.analyticsService.login(user);
+          localStorage.setItem("userName", user.name)
+          localStorage.setItem("userEmail", user.email)
         });
 
         this.setSession(authResult);
@@ -90,6 +96,8 @@ export class AuthService {
     localStorage.removeItem("access_token");
     localStorage.removeItem("id_token");
     localStorage.removeItem("expires_at");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userEmail");
     this.router.navigate("home");
     this.authNotifier.emit("authChange", false);
   }
