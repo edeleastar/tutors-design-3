@@ -6,4 +6,5 @@ export class Authorize {
   constructor(private auth: AuthService) {
     auth.handleAuthentication();
   }
+  async activate(params, route) {}
 }
