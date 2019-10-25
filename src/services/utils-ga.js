@@ -38,33 +38,50 @@ export function initGTag(id) {
   gtag('js', new Date());
 
   gtag('config', id);
- // gtag('config', id, { 'send_page_view': false });
+  // gtag('config', id, { 'send_page_view': false });
 }
 
-export function trackTag(id, pageValue, titleValue) {
+
+export function trackTag(id, pageValue, titleValue, userId) {
   window.dataLayer = window.dataLayer || [];
 
   function gtag() {
     dataLayer.push(arguments);
   }
 
-  gtag('config', id, {
-    'page_title': titleValue,
-    'page_path': pageValue
-  });
+  if (userId == "") {
+    gtag('config', id, {
+      'page_title': titleValue,
+      'page_path': pageValue
+    });
+  } else {
+    gtag('config', id, {
+      'page_title': titleValue,
+      'page_path': pageValue,
+      'user_id': userId
+    });
+  }
 }
 
-export function trackEvent(id, course, path, lo) {
+export function trackEvent(id, course, path, lo, userId) {
   window.dataLayer = window.dataLayer || [];
 
   function gtag() {
     dataLayer.push(arguments);
   }
 
-  gtag('event', lo.type, {
- //   'send_to': ga,
-    'event_category': course,
-    'event_action': path,
-    'event_label': lo.title
-  });
+  if (userId == "") {
+    gtag('event', lo.type, {
+      'event_category': course,
+      'event_action': path,
+      'event_label': lo.title
+    });
+  } else {
+    gtag('event', lo.type, {
+      'event_category': course,
+      'event_action': path,
+      'event_label': lo.title,
+      'user_id': userId
+    });
+  }
 }

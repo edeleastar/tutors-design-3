@@ -1,8 +1,8 @@
-import {Lo} from "./lo";
+import { Lo } from "./lo";
 import environment from "../environment";
 import * as path from "path";
-import {Course} from "./course";
-import slugify from "slugify";
+import { Course } from "./course";
+var CryptoJS = require("crypto-js");
 
 export function injectCourseUrl(lo: Lo, url) {
   if (lo.route) lo.route = lo.route.replace("{{COURSEURL}}", url);
@@ -127,6 +127,20 @@ export function firebaseKey(courseId: string, courseUrl, path: string, userId: s
     node = node.substr(node.indexOf("//") + 2, node.length);
   }
   let key = `${courseId}/${userId}/${node}`;
-  key = key.replace('.', '~')
+  key = key.replace(".", "~");
   return key;
+}
+
+var key = CryptoJS.enc.Hex.parse("000102030405060708090a0b0c0d0e0f");
+var iv = CryptoJS.enc.Hex.parse("101112131415161718191a1b1c1d1e1f");
+
+export function encrypt (str: string) : string {
+  const ciphertext = CryptoJS.AES.encrypt(str, key, { iv: iv });
+  const value = ciphertext.toString();
+  return value;
+}
+export function decrypt (str: string) : string {
+  const raw = CryptoJS.AES.decrypt(str, key, {iv: iv});
+  const value = raw.toString(CryptoJS.enc.Utf8);
+  return value;
 }
