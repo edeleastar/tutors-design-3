@@ -4,7 +4,8 @@ import { Router } from "aurelia-router";
 import { EventEmitter } from "events";
 import { Course } from "./course";
 import environment from "../environment";
-import {AnalyticsService} from "./analytics-service";
+import { AnalyticsService } from "./analytics-service";
+import { decrypt, encrypt } from "./utils";
 
 const authLevels = {
   course: 4,
@@ -44,12 +45,13 @@ export class AuthService {
     if (this.isProtected(course, loType)) {
       if (!this.isAuthenticated()) {
         status = false;
-        this.login();
         localStorage.setItem("course_url", course.url);
+        this.login();
       } else {
-        const userName = localStorage.getItem("userName");
-        const userEmail = localStorage.getItem("userEmail");
-        this.analyticsService.login({name:userName, email:userEmail});
+        const id = localStorage.getItem("id");
+        const email = decrypt(id);
+        const name = decrypt(localStorage.getItem("info"));
+        this.analyticsService.login(name, email, id);
       }
     }
     return status;
@@ -63,9 +65,11 @@ export class AuthService {
           if (err) {
             console.log("Error loading the Profile", err);
           }
-          self.analyticsService.login(user);
-          localStorage.setItem("userName", user.name)
-          localStorage.setItem("userEmail", user.email)
+          const id = encrypt(user.email);
+          const info = encrypt(user.name);
+          localStorage.setItem("id", id);
+          localStorage.setItem("info", info);
+          self.analyticsService.login(user.name, user.email, id);
         });
 
         this.setSession(authResult);
@@ -96,9 +100,8 @@ export class AuthService {
     localStorage.removeItem("access_token");
     localStorage.removeItem("id_token");
     localStorage.removeItem("expires_at");
-    localStorage.removeItem("userName");
-    localStorage.removeItem("userEmail");
-    this.router.navigate("home");
+    localStorage.removeItem("id");
+    localStorage.removeItem("info");
     this.authNotifier.emit("authChange", false);
   }
 
