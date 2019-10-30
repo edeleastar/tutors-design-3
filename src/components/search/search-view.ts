@@ -48,6 +48,9 @@ export class SearchView extends BaseView {
     this.updateUrl(this.searchTerm);
     super.init(`search/${params.courseurl}`);
 
+    // This test caters for situation where a non-empty search string is copied to a browser's
+    // navigation bar, this requiring immdiate action on invocation of the 
+    // search module.
     if (this.searchTerm) {
       this.setSearchStrings();
     }
