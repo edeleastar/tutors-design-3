@@ -72,9 +72,8 @@ export function isValid(str: string) {
  * @return arStrings An array of augmented substrings.
  */
 function augmentedSubstrings(targetString: string, searchTerm: string, extraChars: number) {
-  let arIndx = []; // The targetString indices of the first character of each occurrence of the substring.
-  let arStrings = []; // The output: the set of discovered and augmented substrigs.
-  indicesOf(targetString, searchTerm, arIndx); // populate arIndx
+  let arStrings = []; // The output: the set of discovered and augmented substrings.
+  let arIndx = indicesOf(targetString, searchTerm);
   for (let i = 0; i < arIndx.length; i += 1) {
     let index = arIndx[i];
     let startIndex = index - extraChars > 0 ? index - extraChars : 0;
@@ -98,24 +97,26 @@ function augmentedSubstrings(targetString: string, searchTerm: string, extraChar
  * @author: jfitzgerald 
  * @paam str The target or specified string within which the existence of substrings is sought.
  * @param substr The substring being sought. Zero or more occurrences may exist.
- * @param arIndex The number array of substring indices.
+ * @param arIndex An array of substring start indices.
  * @return arIndx An array of the indices of positions of first character of substring. If no substring is 
  *         found then arIndx will be empty.
  */
-
-function indicesOf(str: string, substr: string, arIndx: number[]) {
-
-  let n = str.indexOf(substr);
-  if (n != -1) {
-    let prev_n = n;
-    if (arIndx.length) {
-      n += arIndx[arIndx.length - 1] + substr.length;
-    }
-    arIndx.push(n);
-    indicesOf(str.slice(prev_n + substr.length), substr, arIndx);
+function indicesOf(str : string, substr : string) : number[] {
+  let arIndx: number[] = [];
+  function indicesOf(str : string, substr : string, arIndx: number[]) : number[] {
+    let n = str.indexOf(substr);
+    if(n != -1) {
+        let prev_n = n;
+      if (arIndx.length) {
+        n += arIndx[arIndx.length -1] + substr.length;
+      }
+      arIndx.push(n);
+      indicesOf(str.slice(prev_n + substr.length), substr, arIndx);
+      } 
+      else {
+        return arIndx;
+      }
   }
-  else {
-    return arIndx;
-  }
+  indicesOf(str, substr, arIndx);
+  return arIndx;
 }
-
