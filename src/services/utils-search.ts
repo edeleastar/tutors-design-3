@@ -74,7 +74,7 @@ export function isValid(str: string) {
 function augmentedSubstrings(targetString: string, searchTerm: string, extraChars: number) {
   let arIndx = []; // The targetString indices of the first character of each occurrence of the substring.
   let arStrings = []; // The output: the set of discovered and augmented substrigs.
-  arSubstringIndices(targetString, searchTerm, arIndx); // populate arIndx
+  indicesOf(targetString, searchTerm, arIndx); // populate arIndx
   for (let i = 0; i < arIndx.length; i += 1) {
     let index = arIndx[i];
     let startIndex = index - extraChars > 0 ? index - extraChars : 0;
@@ -88,15 +88,22 @@ function augmentedSubstrings(targetString: string, searchTerm: string, extraChar
 }
 
 /**
- *  Recursively locate the start indices of a recurring substring within a string.
+ * This method , indicesOf, uses the Javascript indexOf method.
+ * indexOf is invoked recursively to locate the start indices of an optionally recurring substring within a string.
+ * The method is valid even if the specified substring is not present.
+ * Since indexOf is case sensitive then it follows that indicesOf is case sensitive.
  *  Example: str = syeasy and hard synchronized syncsy'
  *  Substring: 'sy'
  *  Output: [0, 4, 16, 29, 33]
- *  
- *  @return arIndx An array of the indices of positions of first character of substring.
+ * @author: jfitzgerald 
+ * @paam str The target or specified string within which the existence of substrings is sought.
+ * @param substr The substring being sought. Zero or more occurrences may exist.
+ * @param arIndex The number array of substring indices.
+ * @return arIndx An array of the indices of positions of first character of substring. If no substring is 
+ *         found then arIndx will be empty.
  */
 
-function arSubstringIndices(str: string, substr: string, arIndx: number[]) {
+function indicesOf(str: string, substr: string, arIndx: number[]) {
 
   let n = str.indexOf(substr);
   if (n != -1) {
@@ -105,7 +112,7 @@ function arSubstringIndices(str: string, substr: string, arIndx: number[]) {
       n += arIndx[arIndx.length - 1] + substr.length;
     }
     arIndx.push(n);
-    arSubstringIndices(str.slice(prev_n + substr.length), substr, arIndx);
+    indicesOf(str.slice(prev_n + substr.length), substr, arIndx);
   }
   else {
     return arIndx;
