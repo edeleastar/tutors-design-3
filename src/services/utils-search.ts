@@ -23,7 +23,7 @@ export function flattenedLos(los: Lo[], searchTerm: string): string[] {
       result.push(`<a href="${obj.lab.route}">${obj.topicTitle}${obj.lab.title} ${obj.lab.shortTitle}</a>  ${content}`);
     }
   });
-  return result;
+  return result.slice(0,100);
 }
 
 function flattenNestedLosArrays(los: Lo[]) {
