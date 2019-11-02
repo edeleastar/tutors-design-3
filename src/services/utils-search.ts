@@ -1,7 +1,8 @@
 import { Lo } from "./lo";
 import environment from "environment";
 
-const extraChars: number = +`${environment.search}`;
+const extraChars: number = +`${environment.searchTermExtraChars}`;
+const maxNumberHits: number = +`${environment.searchMaxNumberHits}`;
 const removeMd = require("remove-markdown");
 /**
  * Searches an array of nested Lo arrays for presence of searchTerm.
@@ -23,7 +24,7 @@ export function flattenedLos(los: Lo[], searchTerm: string): string[] {
       result.push(`<a href="${obj.lab.route}">${obj.topicTitle}${obj.lab.title} ${obj.lab.shortTitle}</a>  ${content}`);
     }
   });
-  return result.slice(0,100);
+  return result.slice(0,maxNumberHits);
 }
 
 function flattenNestedLosArrays(los: Lo[]) {
