@@ -95,7 +95,7 @@ function augmentedSubstrings(targetString: string, searchTerm: string, extraChar
  *  Substring: 'sy'
  *  Output: [0, 4, 16, 29, 33]
  * @author: jfitzgerald 
- * @paam str The target or specified string within which the existence of substrings is sought.
+ * @param str The target or specified string within which the existence of substrings is sought.
  * @param substr The substring being sought. Zero or more occurrences may exist.
  * @param arIndex An array of substring start indices.
  * @return arIndx An array of the indices of positions of first character of substring. If no substring is 
