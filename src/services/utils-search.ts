@@ -89,33 +89,33 @@ function augmentedSubstrings(targetString: string, searchTerm: string, extraChar
 /**
  * This method , indicesOf, uses the Javascript indexOf method.
  * indexOf is invoked recursively to locate the start indices of an optionally recurring substring within a string.
- * The method is valid even if the specified substring is not present.
+ * The method is valid even if the specified substring is empty.
  * Since indexOf is case sensitive then it follows that indicesOf is case sensitive.
  *  Example: str = syeasy and hard synchronized syncsy'
  *  Substring: 'sy'
  *  Output: [0, 4, 16, 29, 33]
  * @author: jfitzgerald 
- * @param str The target or specified string within which the existence of substrings is sought.
- * @param substr The substring being sought. Zero or more occurrences may exist.
+ * @param str The target or specified string within which the first indices of each substring is sought.
+ * @param substr The substring(s) whose indices are being determined.
  * @param arIndex An array of substring start indices.
- * @return arIndx An array of the indices of positions of first character of substring. If no substring is 
- *         found then arIndx will be empty.
+ * @return arIndx An array of the indices of positions of first character of each substring. If no mon-empty substring is 
+ *         present then arIndx will be empty.
  */
 function indicesOf(str : string, substr : string) : number[] {
   let arIndx: number[] = [];
   function indicesOf(str : string, substr : string, arIndx: number[]) : number[] {
     let n = str.indexOf(substr);
     if(n != -1) {
-        let prev_n = n;
+      let prev_n = n;
       if (arIndx.length) {
         n += arIndx[arIndx.length -1] + substr.length;
       }
       arIndx.push(n);
       indicesOf(str.slice(prev_n + substr.length), substr, arIndx);
-      } 
-      else {
-        return arIndx;
-      }
+    } 
+    else {
+      return arIndx;
+    }
   }
   indicesOf(str, substr, arIndx);
   return arIndx;
