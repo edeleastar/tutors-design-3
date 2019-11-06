@@ -114,7 +114,7 @@ function indicesOf(str : string, substr : string) : number[] {
       indicesOf(str.slice(prev_n + substr.length), substr, arIndx);
     } 
     else {
-      return arIndx;
+      return;
     }
   }
   indicesOf(str, substr, arIndx);
