@@ -30,22 +30,30 @@ export class SearchView extends BaseView {
 
   public searchTermInViewChanged() {
     this.updateUrl(this.searchTerm);
+    if (this.searchTerm) {
+      this.setSearchStrings();
+    }
   }
 
   async activate(params: any) {
     this.params = params;
-    this.searchTerm = params["searchTerm"] != undefined ? params["searchTerm"] : "";
-    this.updateUrl(this.searchTerm);
     this.course = await this.courseRepo.fetchCourse(params.courseurl);
-    this.setSearchStrings();
-
-    super.init(`search/${params.courseurl}`);
-
     this.navigatorProperties.title = "Search...";
     this.navigatorProperties.subtitle = this.course.lo.title;
     this.navigatorProperties.parentLink = `${environment.urlPrefix}/course/${this.courseRepo.courseUrl}`;
     this.navigatorProperties.parentIcon = "moduleHome";
     this.navigatorProperties.parentIconTip = "To module home ...";
+
+    this.searchTerm = params["searchTerm"] != undefined ? params["searchTerm"] : "";
+    this.updateUrl(this.searchTerm);
+    super.init(`search/${params.courseurl}`);
+
+    // This test caters for situation where a non-empty search string is copied to a browser's
+    // navigation bar, this requiring immdiate action on invocation of the 
+    // search module.
+    if (this.searchTerm) {
+      this.setSearchStrings();
+    }
   }
 
   /**
