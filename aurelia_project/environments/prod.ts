@@ -3,8 +3,6 @@ export default {
   testing: true,
   pushState: true,
   urlPrefix: '',
-  searchTermExtraChars: 80,
-  searchMaxNumberHits: 100,
   auth0: {
     clientId: 'AUTH0KEY',
     domain: 'AUTH0DOMAIN',

@@ -1,8 +1,11 @@
 import { Lo } from "./lo";
-import environment from "environment";
+// import environment from "environment";
+// const extraChars: number = +`${environment.searchTermExtraChars}`;
+// const maxNumberHits: number = +`${environment.searchMaxNumberHits}`;
 
-const extraChars: number = +`${environment.searchTermExtraChars}`;
-const maxNumberHits: number = +`${environment.searchMaxNumberHits}`;
+const extraChars: number = 80;
+const maxNumberHits: number = 100;
+
 const removeMd = require("remove-markdown");
 /**
  * Searches an array of nested Lo arrays for presence of searchTerm.
