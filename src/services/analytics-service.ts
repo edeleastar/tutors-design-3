@@ -18,7 +18,7 @@ export class AnalyticsService {
   constructor() {
     initGTag(environment.ga);
     firebase.initializeApp(environment.firebase);
-    firebase.database().goOffline();
+    //firebase.database().goOffline();
   }
 
   login(name: string, email: string, id: string) {
@@ -42,7 +42,7 @@ export class AnalyticsService {
   }
 
   incrementValue(key: string, title: string) {
-    firebase.database().goOnline();
+    //firebase.database().goOnline();
     let ref = firebase.database().ref(`${key}/count`);
     ref.transaction(function(value) {
       return (value || 0) + 1;
@@ -56,6 +56,6 @@ export class AnalyticsService {
       return title;
     });
     const db = firebase.database().ref();
-    firebase.database().goOnline();
+    //firebase.database().goOnline();
   }
 }
