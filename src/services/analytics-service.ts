@@ -18,13 +18,16 @@ export class AnalyticsService {
   constructor() {
     initGTag(environment.ga);
     firebase.initializeApp(environment.firebase);
-    //firebase.database().goOffline();
   }
 
   login(name: string, email: string, id: string) {
-    this.userName = name;
-    this.userEmail = email;
-    this.userId = id;
+    if (this.userEmail !== email) {
+      this.userName = name;
+      this.userEmail = email;
+      this.userId = id;
+      this.incrementValue(`${this.courseBaseName}/${this.userId}`, email);
+      this.updateStr(`${this.courseBaseName}/${this.userId}/name`, name);
+    }
   }
 
   log(path: string, course: Course, lo: Lo) {
@@ -35,27 +38,28 @@ export class AnalyticsService {
     trackEvent(environment.ga, this.courseBaseName, path, lo, this.userId);
 
     if (this.userEmail) {
-      let name = `${this.userName} (${this.userEmail})`
-      const key = firebaseKey(this.courseBaseName, course.url, path, name, lo);
+      let name = `${this.userName} (${this.userEmail})`;
+      const key = firebaseKey(this.courseBaseName, course.url, path, this.userId, lo);
       this.incrementValue(key, lo.title);
     }
   }
 
   incrementValue(key: string, title: string) {
-    //firebase.database().goOnline();
-    let ref = firebase.database().ref(`${key}/count`);
-    ref.transaction(function(value) {
-      return (value || 0) + 1;
+    this.updateCount(`${key}/count`);
+    this.updateStr (`${key}/last`, new Date().toString())
+    this.updateStr (`${key}/title`, title);
+  }
+
+  updateCount(key: string) {
+    let ref = firebase.database().ref(key);
+    ref.transaction(function(count) {
+      return (count || 0) + 1;
     });
-    ref = firebase.database().ref(`${key}/last`);
+  }
+  updateStr(key: string, str: string) {
+    let ref = firebase.database().ref(key);
     ref.transaction(function(value) {
-      return new Date().toString();
+      return str;
     });
-    ref = firebase.database().ref(`${key}/title`);
-    ref.transaction(function(value) {
-      return title;
-    });
-    const db = firebase.database().ref();
-    //firebase.database().goOnline();
   }
 }
