@@ -3,7 +3,7 @@ import "firebase/database";
 import { Lo } from "./lo";
 import environment from "../environment";
 import { Course } from "./course";
-import { analyicsPageTitle, firebaseKey } from "./utils";
+import { analyicsPageTitle } from "./utils";
 
 const initGTag = require("./utils-ga.js").initGTag;
 const trackEvent = require("./utils-ga.js").trackEvent;
@@ -11,22 +11,23 @@ const trackTag = require("./utils-ga.js").trackTag;
 
 export class AnalyticsService {
   courseBaseName = "";
-  userName = "";
   userEmail = "";
   userId = "";
+  firebaseRoot = "";
 
   constructor() {
     initGTag(environment.ga);
     firebase.initializeApp(environment.firebase);
   }
 
-  login(name: string, email: string, id: string) {
+  login(name: string, email: string, id: string, url: string) {
     if (this.userEmail !== email) {
-      this.userName = name;
+      this.courseBaseName = url.substr(0, url.indexOf("."));
       this.userEmail = email;
       this.userId = id;
-      this.incrementValue(`${this.courseBaseName}/${this.userId}`, email);
-      this.updateStr(`${this.courseBaseName}/${this.userId}/name`, name);
+      const userFirebaseId = id.replace(/[`#$.\[\]\/]/gi, "*");
+      this.firebaseRoot = `${this.courseBaseName}/${userFirebaseId}`;
+      this.reportLogin(name, email, id);
     }
   }
 
@@ -38,16 +39,29 @@ export class AnalyticsService {
     trackEvent(environment.ga, this.courseBaseName, path, lo, this.userId);
 
     if (this.userEmail) {
-      let name = `${this.userName} (${this.userEmail})`;
-      const key = firebaseKey(this.courseBaseName, course.url, path, this.userId, lo);
+      let node = "";
+      if (lo.type !== "course") {
+        node = path.replace(course.url, "");
+        node = node.substr(node.indexOf("//") + 2, node.length);
+      }
+      let key = `${this.firebaseRoot}/${node}`;
+      key = key.replace(/[`#$.\[\]]/gi, "*");
       this.incrementValue(key, lo.title);
     }
   }
 
   incrementValue(key: string, title: string) {
     this.updateCount(`${key}/count`);
-    this.updateStr (`${key}/last`, new Date().toString())
-    this.updateStr (`${key}/title`, title);
+    this.updateStr(`${key}/last`, new Date().toLocaleString());
+    this.updateStr(`${key}/title`, title);
+  }
+
+  reportLogin(name: string, email: string, id: string) {
+    this.updateStr(`${this.firebaseRoot}/email`, email);
+    this.updateStr(`${this.firebaseRoot}/name`, name);
+    this.updateStr(`${this.firebaseRoot}/id`, id);
+    this.updateStr(`${this.firebaseRoot}/last`, new Date().toLocaleString());
+    this.updateCount(`${this.firebaseRoot}/count`);
   }
 
   updateCount(key: string) {
@@ -56,6 +70,7 @@ export class AnalyticsService {
       return (count || 0) + 1;
     });
   }
+
   updateStr(key: string, str: string) {
     let ref = firebase.database().ref(key);
     ref.transaction(function(value) {
