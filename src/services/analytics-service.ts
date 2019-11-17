@@ -13,7 +13,8 @@ export class AnalyticsService {
   courseBaseName = "";
   userEmail = "";
   userId = "";
-  firebaseRoot = "";
+  firebaseIdRoot = "";
+  firebaseEmailRoot = "";
 
   constructor() {
     initGTag(environment.ga);
@@ -26,7 +27,9 @@ export class AnalyticsService {
       this.userEmail = email;
       this.userId = id;
       const userFirebaseId = id.replace(/[`#$.\[\]\/]/gi, "*");
-      this.firebaseRoot = `${this.courseBaseName}/${userFirebaseId}`;
+      this.firebaseIdRoot = `${this.courseBaseName}/usersId/${userFirebaseId}`;
+      const userEmailSanitised = email.replace(/[`#$.\[\]\/]/gi, "*");
+      this.firebaseEmailRoot = `${this.courseBaseName}/users/${userEmailSanitised}`;
       this.reportLogin(name, email, id);
     }
   }
@@ -43,25 +46,35 @@ export class AnalyticsService {
       if (lo.type !== "course") {
         node = path.replace(course.url, "");
         node = node.substr(node.indexOf("//") + 2, node.length);
+        node = node.replace(/[`#$.\[\]]/gi, "*");
       }
-      let key = `${this.firebaseRoot}/${node}`;
-      key = key.replace(/[`#$.\[\]]/gi, "*");
-      this.incrementValue(key, lo.title);
+      this.incrementValue(node, lo.title);
     }
   }
 
   incrementValue(key: string, title: string) {
-    this.updateCount(`${key}/count`);
-    this.updateStr(`${key}/last`, new Date().toLocaleString());
-    this.updateStr(`${key}/title`, title);
+    this.updateCount(`${this.firebaseIdRoot}/${key}/count`);
+    this.updateStr(`${this.firebaseIdRoot}/${key}/last`, new Date().toLocaleString());
+    this.updateStr(`${this.firebaseIdRoot}/${key}/title`, title);
+
+    this.updateCount(`${this.firebaseEmailRoot}/${key}/count`);
+    this.updateStr(`${this.firebaseEmailRoot}/${key}/last`, new Date().toLocaleString());
+    this.updateStr(`${this.firebaseEmailRoot}/${key}/title`, title);
+
   }
 
   reportLogin(name: string, email: string, id: string) {
-    this.updateStr(`${this.firebaseRoot}/email`, email);
-    this.updateStr(`${this.firebaseRoot}/name`, name);
-    this.updateStr(`${this.firebaseRoot}/id`, id);
-    this.updateStr(`${this.firebaseRoot}/last`, new Date().toLocaleString());
-    this.updateCount(`${this.firebaseRoot}/count`);
+    this.updateStr(`${this.firebaseIdRoot}/email`, email);
+    this.updateStr(`${this.firebaseIdRoot}/name`, name);
+    this.updateStr(`${this.firebaseIdRoot}/id`, id);
+    this.updateStr(`${this.firebaseIdRoot}/last`, new Date().toLocaleString());
+    this.updateCount(`${this.firebaseIdRoot}/count`);
+
+    this.updateStr(`${this.firebaseEmailRoot}/email`, email);
+    this.updateStr(`${this.firebaseEmailRoot}/name`, name);
+    this.updateStr(`${this.firebaseEmailRoot}/id`, id);
+    this.updateStr(`${this.firebaseEmailRoot}/last`, new Date().toLocaleString());
+    this.updateCount(`${this.firebaseEmailRoot}/count`);
   }
 
   updateCount(key: string) {
