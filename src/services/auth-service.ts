@@ -51,7 +51,7 @@ export class AuthService {
         const id = localStorage.getItem("id");
         const email = decrypt(id);
         const name = decrypt(localStorage.getItem("info"));
-        this.analyticsService.login(name, email, id);
+        this.analyticsService.login(name, email, id, course.url);
       }
     }
     return status;
@@ -69,7 +69,8 @@ export class AuthService {
           const info = encrypt(user.name);
           localStorage.setItem("id", id);
           localStorage.setItem("info", info);
-          self.analyticsService.login(user.name, user.email, id);
+          const url = localStorage.getItem("course_url");
+          self.analyticsService.login(user.name, user.email, id, url);
         });
 
         this.setSession(authResult);
