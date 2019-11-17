@@ -120,17 +120,6 @@ export function analyicsPageTitle(courseId: string, course: Course, lo: Lo) {
   return title;
 }
 
-export function firebaseKey(courseId: string, courseUrl, path: string, userId: string, lo: Lo) {
-  let node = "";
-  if (lo.type !== "course") {
-    node = path.replace(courseUrl, "");
-    node = node.substr(node.indexOf("//") + 2, node.length);
-  }
-  let key = `${courseId}/${userId}/${node}`;
-  key = key.replace(".", "~");
-  return key;
-}
-
 var key = CryptoJS.enc.Hex.parse("000102030405060708090a0b0c0d0e0f");
 var iv = CryptoJS.enc.Hex.parse("101112131415161718191a1b1c1d1e1f");
 
