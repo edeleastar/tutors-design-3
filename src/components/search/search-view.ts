@@ -78,4 +78,8 @@ export class SearchView extends BaseView {
     const labs = allLos("lab", this.course.lo.los);
     this.search_strings = flattenedLos(labs, this.searchTerm);
   }
+
+  handleClick() {
+    console.log("searchTerm: ",this.searchTerm, "number hits ", this.search_strings.length);
+  }
 }

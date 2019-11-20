@@ -15,10 +15,10 @@
       </form>
 
       <dl>
-        <div repeat.for="search_string of search_strings | filter:searchTerm">
+        <div repeat.for="search_string of search_strings | filter:searchTerm" click.delegate="handleClick()">
           <dt innerhtml.bind="search_string | searchBold:searchTerm | highlight"></dt><br>
         </div>
-        </dt>
+      </dl>
     </fieldset>
   </div>
 </template>
