@@ -1,7 +1,4 @@
 import { Lo } from "./lo";
-// import environment from "environment";
-// const extraChars: number = +`${environment.searchTermExtraChars}`;
-// const maxNumberHits: number = +`${environment.searchMaxNumberHits}`;
 
 const extraChars: number = 80;
 const maxNumberHits: number = 100;
@@ -11,13 +8,13 @@ const removeMd = require("remove-markdown");
  * Searches an array of nested Lo arrays for presence of searchTerm.
  * When a string containing the searchTerm is found it is converted to text.
  * It is augmented to a length obtained by adding extraChars number characters,
- * which is an environment variable, to the length of the searchTerm.
+ * which is an environment variable, to the length of the searchTerm. 
  * On 31.10.19 resolved the issue whereby only first instance of a searchTerm on any
  * web page returned. Now all instances of the search term identified.
  * @param los The nested arrays of Lo objects.
  * @param searchTerm The term whose presence is searched for.
  */
-export function flattenedLos(los: Lo[], searchTerm: string): string[] {
+export function searchHits(los: Lo[], searchTerm: string): string[] {
   let flatLos = flattenNestedLosArrays(los);
   let result: string[] = [];
   flatLos.forEach(obj => {
@@ -31,14 +28,30 @@ export function flattenedLos(los: Lo[], searchTerm: string): string[] {
 }
 
 /**
- * Extratand return the path which is embedded in a href that comprises the first componet of astring.
+ * Extract and return the path from an the a tag part of astring.
+ * astring format: -<a href = #path> Simple </a>
  * @param astring In the form "<href = #xxx> yyyyy".
  * @return The path
  */
 export function extractPath(astring: string) {
-  let start = astring.indexOf('#') + 1;
-  let end = astring.indexOf('>');
+  let start = astring.indexOf('#');
+  let end = astring.indexOf('>') - 1;
   return astring.substring(start, end);
+}
+
+/**
+ * Given the route, discover and return a reference to the parent Lo object.
+ * @param route 
+ */
+export function findLo(route: string, los: Lo[]) : Lo {
+  let flatLos = flattenNestedLosArrays(los);
+  let lo: Lo;
+  flatLos.forEach(obj => {
+    if(obj.lab.route === route) {
+      lo = obj.lab
+    }
+  });
+  return lo;
 }
 
 function flattenNestedLosArrays(los: Lo[]) {
