@@ -29,13 +29,14 @@ export function searchHits(los: Lo[], searchTerm: string): string[] {
 
 /**
  * Extract and return the path from an the a tag part of astring.
- * astring format: -<a href = #path> Simple </a>
- * @param astring In the form "<href = #xxx> yyyyy".
+ * astring format: -<a href = #path"> Simple </a>
+ *                  <a href="${obj.lab.route}"> ...
+ * @param astring String to parse for path (route).
  * @return The path
  */
 export function extractPath(astring: string) {
-  let start = astring.indexOf('#');
-  let end = astring.indexOf('>') - 1;
+  let start = astring.indexOf('#') + 1; //exclude the #
+  let end = astring.indexOf('>') - 1; // exclude preceeding double quote.
   return astring.substring(start, end);
 }
 

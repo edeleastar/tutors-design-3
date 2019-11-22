@@ -91,10 +91,9 @@ export class SearchView extends BaseView {
     let path = extractPath(search_string);
     console.log("path: ", path);
 
-    let lo = findLo(path, this.labs);
+    let lo = findLo('#'+path, this.labs);
 
-    if(lo != undefined)
-      this.anaylticsService.logSearch(path, this.course, lo);
+    this.anaylticsService.logSearch(path, this.course, lo);
     this.router.navigateToRoute(path);
   }
 }
