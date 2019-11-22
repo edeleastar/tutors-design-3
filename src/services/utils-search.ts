@@ -30,6 +30,17 @@ export function flattenedLos(los: Lo[], searchTerm: string): string[] {
   return result.slice(0,maxNumberHits);
 }
 
+/**
+ * Extratand return the path which is embedded in a href that comprises the first componet of astring.
+ * @param astring In the form "<href = #xxx> yyyyy".
+ * @return The path
+ */
+export function extractPath(astring: string) {
+  let start = astring.indexOf('#') + 1;
+  let end = astring.indexOf('>');
+  return astring.substring(start, end);
+}
+
 function flattenNestedLosArrays(los: Lo[]) {
   return flatten(los, "");
 }

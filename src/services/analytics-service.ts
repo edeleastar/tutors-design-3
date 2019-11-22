@@ -52,6 +52,24 @@ export class AnalyticsService {
     }
   }
 
+  logSearch(path: string, course: Course, lo: Lo) {
+    this.courseBaseName = course.url.substr(0, course.url.indexOf("."));
+    const title = analyicsPageTitle(this.courseBaseName, course, lo);
+
+    trackTag(environment.ga, path, title, this.userId);
+    trackEvent(environment.ga, this.courseBaseName, path, lo, this.userId);
+
+    if (this.userEmail) {
+      let node = "";
+      if (lo.type !== "course") {
+        node = path.replace(course.url, "");
+        node = node.substr(node.indexOf("//") + 2, node.length);
+        node = node.replace(/[`#$.\[\]]/gi, "*");
+      }
+      this.incrementValue(node, lo.title);
+    }
+  }
+
   incrementValue(key: string, title: string) {
     this.updateCount(`${this.firebaseIdRoot}/${key}/count`);
     this.updateStr(`${this.firebaseIdRoot}/${key}/last`, new Date().toLocaleString());
@@ -75,6 +93,9 @@ export class AnalyticsService {
     this.updateStr(`${this.firebaseEmailRoot}/id`, id);
     this.updateStr(`${this.firebaseEmailRoot}/last`, new Date().toLocaleString());
     this.updateCount(`${this.firebaseEmailRoot}/count`);
+
+    this.updateStr(`${this.firebaseEmailRoot}/search`, email);
+
   }
 
   updateCount(key: string) {

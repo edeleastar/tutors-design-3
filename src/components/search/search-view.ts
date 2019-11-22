@@ -1,6 +1,7 @@
 import { autoinject } from "aurelia-framework";
 import { Course } from "../../services/course";
 import { flattenedLos } from "../../services/utils-search";
+import { extractPath }  from "../../services/utils-search";
 import { allLos } from "../../services/utils";
 import environment from "../../environment";
 import { BaseView } from "../base/base-view";
@@ -79,7 +80,13 @@ export class SearchView extends BaseView {
     this.search_strings = flattenedLos(labs, this.searchTerm);
   }
 
-  handleClick() {
+  handleClick(search_string: string) {
     console.log("searchTerm: ",this.searchTerm, "number hits ", this.search_strings.length);
+    console.log("clicked on: ", search_string);
+
+    let path = extractPath(search_string);
+    console.log("path: ", path);
+    
+    //this.anaylticsService.logSearch()
   }
 }
