@@ -93,7 +93,7 @@ export class SearchView extends BaseView {
 
     let lo = findLo('#'+path, this.labs);
 
-    this.anaylticsService.logSearch(path, this.course, lo);
+    this.anaylticsService.logSearch(this.searchTerm, path, this.course, lo);
     this.router.navigateToRoute(path);
   }
 }

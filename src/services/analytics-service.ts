@@ -56,9 +56,6 @@ export class AnalyticsService {
     this.courseBaseName = course.url.substr(0, course.url.indexOf("."));
     const title = analyicsPageTitle(this.courseBaseName, course, lo);
 
-    //trackTag(environment.ga, path, title, this.userId);
-    //trackEvent(environment.ga, this.courseBaseName, path, lo, this.userId);
-
     if (this.userEmail) {
       let node = "";
       if (lo.type !== "course") {
@@ -72,6 +69,7 @@ export class AnalyticsService {
 
   logSearchValue (term : string, path:string) {
     let searchkey = new Date().toLocaleString();
+    searchkey = searchkey.replace(/[\/]/g, "-");
     let key = `${this.firebaseEmailRoot}/search/${searchkey}/term`;
     this.updateStr(key, term);
     key = `${this.firebaseEmailRoot}/search/${searchkey}/path}`;
