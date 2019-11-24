@@ -72,7 +72,7 @@ export class AnalyticsService {
     searchkey = searchkey.replace(/[\/]/g, "-");
     let key = `${this.firebaseEmailRoot}/search/${searchkey}/term`;
     this.updateStr(key, term);
-    key = `${this.firebaseEmailRoot}/search/${searchkey}/path}`;
+    key = `${this.firebaseEmailRoot}/search/${searchkey}/path`;
     this.updateStr(key, path);
 
   }
