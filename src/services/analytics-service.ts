@@ -52,12 +52,12 @@ export class AnalyticsService {
     }
   }
 
-  logSearch(path: string, course: Course, lo: Lo) {
+  logSearch(term: string, path: string, course: Course, lo: Lo) {
     this.courseBaseName = course.url.substr(0, course.url.indexOf("."));
     const title = analyicsPageTitle(this.courseBaseName, course, lo);
 
-    trackTag(environment.ga, path, title, this.userId);
-    trackEvent(environment.ga, this.courseBaseName, path, lo, this.userId);
+    //trackTag(environment.ga, path, title, this.userId);
+    //trackEvent(environment.ga, this.courseBaseName, path, lo, this.userId);
 
     if (this.userEmail) {
       let node = "";
@@ -66,10 +66,19 @@ export class AnalyticsService {
         node = node.substr(node.indexOf("//") + 2, node.length);
         node = node.replace(/[`#$.\[\]]/gi, "*");
       }
-      this.incrementValue(node, lo.title);
+      this.logSearchValue(term, path);
     }
   }
 
+  logSearchValue (term : string, path:string) {
+    let searchkey = new Date().toLocaleString();
+    let key = `${this.firebaseEmailRoot}/search/${searchkey}/term`;
+    this.updateStr(key, term);
+    key = `${this.firebaseEmailRoot}/search/${searchkey}/path}`;
+    this.updateStr(key, path);
+
+  }
+ 
   incrementValue(key: string, title: string) {
     this.updateCount(`${this.firebaseIdRoot}/${key}/count`);
     this.updateStr(`${this.firebaseIdRoot}/${key}/last`, new Date().toLocaleString());
@@ -94,7 +103,7 @@ export class AnalyticsService {
     this.updateStr(`${this.firebaseEmailRoot}/last`, new Date().toLocaleString());
     this.updateCount(`${this.firebaseEmailRoot}/count`);
 
-    this.updateStr(`${this.firebaseEmailRoot}/search`, email);
+    //this.updateStr(`${this.firebaseEmailRoot}/search`, email);
 
   }
 
