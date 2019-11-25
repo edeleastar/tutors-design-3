@@ -1,10 +1,12 @@
 import { autoinject } from "aurelia-framework";
 import { Course } from "../../services/course";
-import { flattenedLos } from "../../services/utils-search";
+import { searchHits } from "../../services/utils-search";
+import { extractPath }  from "../../services/utils-search";
+import { findLo } from "../../services/utils-search"
 import { allLos } from "../../services/utils";
 import environment from "../../environment";
 import { BaseView } from "../base/base-view";
-
+import { Lo } from "../../services/lo";
 /**
  * Search the labs for presence of user-input search term.
  * Live output the results of the search character by character.
@@ -18,6 +20,7 @@ export class SearchView extends BaseView {
   search_strings: string[] = [];
   params: any;
   public searchTerm: string = "";
+  labs: Lo[] = [];
 
   public get searchTermInView() {
     return this.searchTerm;
@@ -72,10 +75,25 @@ export class SearchView extends BaseView {
 
   /**
    * Populate an array with the search results.
-   * Note: labs only searched.
+   * Note: labs only searched.s
    */
   setSearchStrings() {
-    const labs = allLos("lab", this.course.lo.los);
-    this.search_strings = flattenedLos(labs, this.searchTerm);
+    this.labs = allLos("lab", this.course.lo.los);
+    // this.flattened_los = flattenNestedLosArrays(labs);
+    // this.search_strings = searchHits(this.flattened_los, this.searchTerm);
+    this.search_strings = searchHits(this.labs, this.searchTerm);
+  }
+
+  handleClick(search_string: string) {
+    console.log("searchTerm: ",this.searchTerm, "number hits ", this.search_strings.length);
+    console.log("clicked on: ", search_string);
+
+    let path = extractPath(search_string);
+    console.log("path: ", path);
+
+    let lo = findLo('#'+path, this.labs);
+
+    this.anaylticsService.logSearch(this.searchTerm, path, this.course, lo);
+    this.router.navigateToRoute(path);
   }
 }
