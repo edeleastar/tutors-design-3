@@ -27,7 +27,7 @@ export class AnalyticsService {
       this.userEmail = email;
       this.userId = id;
       const userFirebaseId = id.replace(/[`#$.\[\]\/]/gi, "*");
-      this.firebaseIdRoot = `${this.courseBaseName}/usersId/${userFirebaseId}`;
+      this.firebaseIdRoot = `${this.courseBaseName}/usage`;
       const userEmailSanitised = email.replace(/[`#$.\[\]\/]/gi, "*");
       this.firebaseEmailRoot = `${this.courseBaseName}/users/${userEmailSanitised}`;
       this.reportLogin(name, email, id);
@@ -74,7 +74,8 @@ export class AnalyticsService {
     this.updateStr(key, term);
     key = `${this.firebaseEmailRoot}/search/${searchkey}/path`;
     this.updateStr(key, path);
-
+    key = `${this.firebaseIdRoot}/search/${searchkey}/path`;
+    this.updateStr(key, path);
   }
  
   incrementValue(key: string, title: string) {
@@ -89,20 +90,11 @@ export class AnalyticsService {
   }
 
   reportLogin(name: string, email: string, id: string) {
-    this.updateStr(`${this.firebaseIdRoot}/email`, email);
-    this.updateStr(`${this.firebaseIdRoot}/name`, name);
-    this.updateStr(`${this.firebaseIdRoot}/id`, id);
-    this.updateStr(`${this.firebaseIdRoot}/last`, new Date().toLocaleString());
-    this.updateCount(`${this.firebaseIdRoot}/count`);
-
     this.updateStr(`${this.firebaseEmailRoot}/email`, email);
     this.updateStr(`${this.firebaseEmailRoot}/name`, name);
     this.updateStr(`${this.firebaseEmailRoot}/id`, id);
     this.updateStr(`${this.firebaseEmailRoot}/last`, new Date().toLocaleString());
     this.updateCount(`${this.firebaseEmailRoot}/count`);
-
-    //this.updateStr(`${this.firebaseEmailRoot}/search`, email);
-
   }
 
   updateCount(key: string) {
