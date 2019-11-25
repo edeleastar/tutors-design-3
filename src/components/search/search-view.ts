@@ -79,8 +79,6 @@ export class SearchView extends BaseView {
    */
   setSearchStrings() {
     this.labs = allLos("lab", this.course.lo.los);
-    // this.flattened_los = flattenNestedLosArrays(labs);
-    // this.search_strings = searchHits(this.flattened_los, this.searchTerm);
     this.search_strings = searchHits(this.labs, this.searchTerm);
   }
 
@@ -93,7 +91,7 @@ export class SearchView extends BaseView {
 
     let lo = findLo('#'+path, this.labs);
 
-    this.anaylticsService.logSearch(this.searchTerm, path, this.course, lo);
+    this.anaylticsService.logSearch(this.searchTerm, this.search_strings.length, path, this.course, lo);
     this.router.navigateToRoute(path);
   }
 }

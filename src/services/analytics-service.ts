@@ -52,7 +52,7 @@ export class AnalyticsService {
     }
   }
 
-  logSearch(term: string, path: string, course: Course, lo: Lo) {
+  logSearch(term: string, hits: number, path: string, course: Course, lo: Lo) {
     this.courseBaseName = course.url.substr(0, course.url.indexOf("."));
     const title = analyicsPageTitle(this.courseBaseName, course, lo);
 
@@ -63,18 +63,19 @@ export class AnalyticsService {
         node = node.substr(node.indexOf("//") + 2, node.length);
         node = node.replace(/[`#$.\[\]]/gi, "*");
       }
-      this.logSearchValue(term, path);
+      this.logSearchValue(term, hits, path);
     }
   }
 
-  logSearchValue (term : string, path:string) {
+  logSearchValue (term : string, hits: number, path:string) {
     let searchkey = new Date().toLocaleString();
     searchkey = searchkey.replace(/[\/]/g, "-");
     let key = `${this.firebaseEmailRoot}/search/${searchkey}/term`;
     this.updateStr(key, term);
     key = `${this.firebaseEmailRoot}/search/${searchkey}/path`;
     this.updateStr(key, path);
-
+    key = `${this.firebaseEmailRoot}/search/${searchkey}/hits`;
+    this.updateStr(key, hits.toString());
   }
  
   incrementValue(key: string, title: string) {
