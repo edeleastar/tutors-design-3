@@ -12,6 +12,7 @@ const trackTag = require("./utils-ga.js").trackTag;
 export class AnalyticsService {
   courseBaseName = "";
   userEmail = "";
+  userEmailSanitised = "";
   userId = "";
   firebaseIdRoot = "";
   firebaseEmailRoot = "";
@@ -28,8 +29,8 @@ export class AnalyticsService {
       this.userId = id;
       const userFirebaseId = id.replace(/[`#$.\[\]\/]/gi, "*");
       this.firebaseIdRoot = `${this.courseBaseName}/usage`;
-      const userEmailSanitised = email.replace(/[`#$.\[\]\/]/gi, "*");
-      this.firebaseEmailRoot = `${this.courseBaseName}/users/${userEmailSanitised}`;
+      this.userEmailSanitised = email.replace(/[`#$.\[\]\/]/gi, "*");
+      this.firebaseEmailRoot = `${this.courseBaseName}/users/${this.userEmailSanitised}`;
       this.reportLogin(name, email, id);
     }
   }
@@ -42,6 +43,8 @@ export class AnalyticsService {
     trackEvent(environment.ga, this.courseBaseName, path, lo, this.userId);
 
     if (this.userEmail) {
+      this.firebaseIdRoot = `${this.courseBaseName}/usage`;
+      this.firebaseEmailRoot = `${this.courseBaseName}/users/${this.userEmailSanitised}`;
       let node = "";
       if (lo.type !== "course") {
         node = path.replace(course.url, "");
