@@ -22,7 +22,7 @@ export class AnalyticsService {
     firebase.initializeApp(environment.firebase);
   }
 
-  login(name: string, email: string, id: string, url: string) {
+  login(name: string, email: string, id: string, picture : string, url: string) {
     if (this.userEmail !== email) {
       this.courseBaseName = url.substr(0, url.indexOf("."));
       this.userEmail = email;
@@ -31,7 +31,7 @@ export class AnalyticsService {
       this.firebaseIdRoot = `${this.courseBaseName}/usage`;
       this.userEmailSanitised = email.replace(/[`#$.\[\]\/]/gi, "*");
       this.firebaseEmailRoot = `${this.courseBaseName}/users/${this.userEmailSanitised}`;
-      this.reportLogin(name, email, id);
+      this.reportLogin(name, email, id, picture);
     }
   }
 
@@ -80,7 +80,7 @@ export class AnalyticsService {
     key = `${this.firebaseIdRoot}/search/${searchkey}/path`;
     this.updateStr(key, path);
   }
- 
+
   incrementValue(key: string, title: string) {
     this.updateCount(`${this.firebaseIdRoot}/${key}/count`);
     this.updateStr(`${this.firebaseIdRoot}/${key}/last`, new Date().toLocaleString());
@@ -92,10 +92,11 @@ export class AnalyticsService {
 
   }
 
-  reportLogin(name: string, email: string, id: string) {
+  reportLogin(name: string, email: string, id: string, picture : string) {
     this.updateStr(`${this.firebaseEmailRoot}/email`, email);
     this.updateStr(`${this.firebaseEmailRoot}/name`, name);
     this.updateStr(`${this.firebaseEmailRoot}/id`, id);
+    this.updateStr(`${this.firebaseEmailRoot}/picture`, picture);
     this.updateStr(`${this.firebaseEmailRoot}/last`, new Date().toLocaleString());
     this.updateCount(`${this.firebaseEmailRoot}/count`);
   }
