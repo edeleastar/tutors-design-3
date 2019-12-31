@@ -16,6 +16,7 @@ export class AnalyticsService {
   userId = "";
   firebaseIdRoot = "";
   firebaseEmailRoot = "";
+  url = "";
 
   constructor() {
     initGTag(environment.ga);
@@ -23,7 +24,8 @@ export class AnalyticsService {
   }
 
   login(name: string, email: string, id: string, picture : string, url: string) {
-    if (this.userEmail !== email) {
+    if (this.userEmail !== email || this.url !== url) {
+      this.url = url;
       this.courseBaseName = url.substr(0, url.indexOf("."));
       this.userEmail = email;
       this.userId = id;
