@@ -23,7 +23,7 @@ export class AnalyticsService {
     firebase.initializeApp(environment.firebase);
   }
 
-  login(name: string, email: string, id: string, picture : string, url: string) {
+  login(name: string, email: string, id: string, picture : string, url: string, nickname : string) {
     if (this.userEmail !== email || this.url !== url) {
       this.url = url;
       this.courseBaseName = url.substr(0, url.indexOf("."));
@@ -33,7 +33,7 @@ export class AnalyticsService {
       this.firebaseIdRoot = `${this.courseBaseName}/usage`;
       this.userEmailSanitised = email.replace(/[`#$.\[\]\/]/gi, "*");
       this.firebaseEmailRoot = `${this.courseBaseName}/users/${this.userEmailSanitised}`;
-      this.reportLogin(name, email, id, picture);
+      this.reportLogin(name, email, id, picture, nickname);
     }
   }
 
@@ -94,10 +94,11 @@ export class AnalyticsService {
 
   }
 
-  reportLogin(name: string, email: string, id: string, picture : string) {
+  reportLogin(name: string, email: string, id: string, picture : string, nickname : string) {
     this.updateStr(`${this.firebaseEmailRoot}/email`, email);
     this.updateStr(`${this.firebaseEmailRoot}/name`, name);
     this.updateStr(`${this.firebaseEmailRoot}/id`, id);
+    this.updateStr(`${this.firebaseEmailRoot}/nickname`, nickname);
     this.updateStr(`${this.firebaseEmailRoot}/picture`, picture);
     this.updateStr(`${this.firebaseEmailRoot}/last`, new Date().toLocaleString());
     this.updateCount(`${this.firebaseEmailRoot}/count`);
