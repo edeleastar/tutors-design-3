@@ -51,10 +51,9 @@ export class AuthService {
         const id = localStorage.getItem("id");
         const email = decrypt(id);
         const name = decrypt(localStorage.getItem("info"));
-        const pic = localStorage.getItem("infoextra");
-        let picture =  null;
-        if (pic) picture = decrypt(pic);
-        this.analyticsService.login(name, email, id, picture, course.url);
+        const picture = decrypt(localStorage.getItem("infoextra"));
+        const nickname = decrypt(localStorage.getItem("infoextraplus"));
+        this.analyticsService.login(name, email, id, picture, course.url, nickname);
       }
     }
     return status;
@@ -71,11 +70,13 @@ export class AuthService {
           const id = encrypt(user.email);
           const info = encrypt(user.name);
           const picture = encrypt(user.picture);
+          const nickname =  encrypt(user.nickname);
           localStorage.setItem("id", id);
           localStorage.setItem("info", info);
           localStorage.setItem("infoextra", picture);
+          localStorage.setItem("infoextraplus", nickname);
           const url = localStorage.getItem("course_url");
-          self.analyticsService.login(user.name, user.email, id, user.picture, url);
+          self.analyticsService.login(user.name, user.email, id, user.picture, url, user.nickname);
         });
 
         this.setSession(authResult);
