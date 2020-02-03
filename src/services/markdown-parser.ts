@@ -2,9 +2,7 @@ const showdown = require("showdown");
 
 const showdownHighlight = require("showdown-highlight");
 
-let converter = new showdown.Converter({ tables:true,
-  extensions: [showdownHighlight]
-});
+let converter = new showdown.Converter({ tables: true, openLinksInNewWindow: true, extensions: [showdownHighlight] });
 
 function replaceAll(str, find, replace) {
   return str.replace(new RegExp(find, "g"), replace);
