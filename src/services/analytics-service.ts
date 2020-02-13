@@ -57,6 +57,21 @@ export class AnalyticsService {
     }
   }
 
+  logDuration(path: string, course: Course, lo: Lo) {
+    if (this.userEmail) {
+      this.courseBaseName = course.url.substr(0, course.url.indexOf("."));
+      this.firebaseIdRoot = `${this.courseBaseName}/usage`;
+      this.firebaseEmailRoot = `${this.courseBaseName}/users/${this.userEmailSanitised}`;
+      let node = "";
+      if (lo.type !== "course") {
+        node = path.replace(course.url, "");
+        node = node.substr(node.indexOf("//") + 2, node.length);
+        node = node.replace(/[`#$.\[\]]/gi, "*");
+      }
+      this.incrementDuration(node, lo.title);
+    }
+  }
+
   logSearch(term: string, path: string, course: Course, lo: Lo) {
     this.courseBaseName = course.url.substr(0, course.url.indexOf("."));
     const title = analyicsPageTitle(this.courseBaseName, course, lo);
@@ -91,7 +106,10 @@ export class AnalyticsService {
     this.updateCount(`${this.firebaseEmailRoot}/${key}/count`);
     this.updateStr(`${this.firebaseEmailRoot}/${key}/last`, new Date().toLocaleString());
     this.updateStr(`${this.firebaseEmailRoot}/${key}/title`, title);
+  }
 
+  incrementDuration(key: string, title: string) {
+    this.updateCount(`${this.firebaseEmailRoot}/${key}/duration`);
   }
 
   reportLogin(name: string, email: string, id: string, picture : string, nickname : string) {
@@ -100,7 +118,7 @@ export class AnalyticsService {
     this.updateStr(`${this.firebaseEmailRoot}/id`, id);
     this.updateStr(`${this.firebaseEmailRoot}/nickname`, nickname);
     this.updateStr(`${this.firebaseEmailRoot}/picture`, picture);
-    this.updateStr(`${this.firebaseEmailRoot}/last`, new Date().toLocaleString());
+    this.updateStr(`${this.firebaseEmailRoot}/last`, new Date().toString());
     this.updateCount(`${this.firebaseEmailRoot}/count`);
   }
 
