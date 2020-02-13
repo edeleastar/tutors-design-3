@@ -12,11 +12,13 @@ let currentRoute = "";
 let currentCourse: Course = null;
 let analyticsService: AnalyticsService = null;
 
-const func = () => {
-  if (analyticsService) {
-    analyticsService.logDuration(currentRoute, currentCourse, currentLo);
-  }
-};
+
+  const func = () => {
+    if (analyticsService && ! document.hidden) {
+      analyticsService.logDuration(currentRoute, currentCourse, currentLo);
+    }
+  };
+
 setInterval(func, 30 * 1000);
 
 @inject(CourseRepo, NavigatorProperties, AuthService, Router, AnalyticsService)
