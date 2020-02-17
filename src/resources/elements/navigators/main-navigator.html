@@ -30,11 +30,14 @@
     <div if.bind="navigatorProperties.walls.length>0">
       <icon-nav-bar nav.one-way="navigatorProperties.walls"></icon-nav-bar>
     </div>
+    <div if.bind="navigatorProperties.tutorstime">
+      <icon-nav-bar nav.one-way="navigatorProperties.timesheets"></icon-nav-bar>
+    </div>
     <div if.bind="navigatorProperties.courseRepo.course">
       <search-btn searchroute="${navigatorProperties.searchroute}"></search-btn>
     </div>
     <div if.bind="navigatorProperties.showLogout">
-      <logout-btn logoutroute="${navigatorProperties.logoutroute}"></logout-btn>
+      <logout-btn timeroute="${navigatorProperties.timeroute}" logoutroute="${navigatorProperties.logoutroute}"></logout-btn>
     </div>
 
   </div>

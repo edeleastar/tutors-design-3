@@ -16,7 +16,10 @@ import {
   faChalkboardTeacher,
   faSearch,
   faFilePdf,
-  faSignOutAlt
+  faSignOutAlt,
+  faVial,
+  faHourglass,
+  faHourglassEnd
 } from "@fortawesome/free-solid-svg-icons";
 
 import { faYoutube, faSlack, faGithub, faYoutubeSquare } from "@fortawesome/free-brands-svg-icons";
@@ -50,7 +53,11 @@ export class Icon {
     tutors: faChalkboardTeacher,
     search: faSearch,
     pdf: faFilePdf,
-    logout : faSignOutAlt
+    logout : faSignOutAlt,
+    time : faHourglass,
+    vial : faVial,
+    hourglass : faHourglass,
+    hourglassend : faHourglassEnd,
   };
 
   icon(type: string) {

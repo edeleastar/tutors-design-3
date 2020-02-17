@@ -23,7 +23,17 @@ export class NavigatorProperties {
   walls: IconNav[] = [];
   companions: IconNav[] = [];
   searchroute = "";
+  timeroute = "";
   logoutroute = "/logout";
+  tutorstime = false;
+
+  timesheets: IconNav[] = [
+    { link: '', icon: "lab", tip: "Labs Views" },
+    { link: '', icon: "vial", tip: "Labs View Summaries" },
+    { link: '', icon: "hourglass", tip: "Labs Minutes" },
+    { link: '', icon: "hourglassend", tip: "Labs Minutes Summary" },
+  ];
+
 
   constructor(private courseRepo: CourseRepo, private authService: AuthService) {}
 
@@ -50,10 +60,13 @@ export class NavigatorProperties {
     }
     this.showLogout =
       this.authService.isAuthenticated() || this.authService.isProtected(this.courseRepo.course, "course");
+    this.tutorstime = this.showLogout;
     this.searchroute = `${environment.urlPrefix}search/${this.courseRepo.courseUrl}`;
+    this.timeroute = `${environment.urlPrefix}time/${this.courseRepo.courseUrl}/viewsummary`;
 
     this.createWallBar();
     this.createCompanionBar(this.courseRepo.course.lo.properties);
+    this.createTimeSheets();
   }
 
   createWallBar() {
@@ -79,6 +92,13 @@ export class NavigatorProperties {
       icon: type,
       tip: `all ${type}'s in this module`
     };
+  }
+
+  createTimeSheets () {
+    this.timesheets[0].link = `time/${environment.urlPrefix}${this.courseRepo.courseUrl}viewdetail`;
+    this.timesheets[1].link = `time/${environment.urlPrefix}${this.courseRepo.courseUrl}viewsummary`;
+    this.timesheets[2].link = `time/${environment.urlPrefix}${this.courseRepo.courseUrl}timedetail`;
+    this.timesheets[3].link = `time/${environment.urlPrefix}${this.courseRepo.courseUrl}timesummary`;
   }
 
   clear() {

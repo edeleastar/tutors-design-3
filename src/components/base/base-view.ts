@@ -6,6 +6,8 @@ import { Lo } from "../../services/lo";
 import { Router } from "aurelia-router";
 import { AnalyticsService } from "../../services/analytics-service";
 import { Course } from "../../services/course";
+import { EventAggregator } from "aurelia-event-aggregator";
+import { MetricsService } from "../../services/metrics-service";
 
 let currentLo: Lo = null;
 let currentRoute = "";
@@ -21,7 +23,7 @@ let analyticsService: AnalyticsService = null;
 
 setInterval(func, 30 * 1000);
 
-@inject(CourseRepo, NavigatorProperties, AuthService, Router, AnalyticsService)
+@inject(CourseRepo, NavigatorProperties, AuthService, Router, AnalyticsService, EventAggregator, MetricsService)
 export class BaseView {
   show = false;
 
@@ -30,19 +32,25 @@ export class BaseView {
   authService: AuthService;
   router: Router;
   anaylticsService: AnalyticsService;
+  ea : EventAggregator;
+  metricsService : MetricsService;
 
   constructor(
     courseRepo: CourseRepo,
     navigatorProperties: NavigatorProperties,
     authService: AuthService,
     router: Router,
-    analyticsService: AnalyticsService
+    analyticsService: AnalyticsService,
+    ea: EventAggregator,
+    metricsService : MetricsService
   ) {
     this.courseRepo = courseRepo;
     this.navigatorProperties = navigatorProperties;
     this.authService = authService;
     this.router = router;
     this.anaylticsService = analyticsService;
+    this.ea = ea;
+    this.metricsService = metricsService;
   }
 
   async init(path: string, lo: Lo = null) {
