@@ -1,5 +1,6 @@
 import { Course } from "../../services/course";
 import { BaseView } from "../base/base-view";
+import environment from "../../environment";
 
 export class CourseView extends BaseView {
   course: Course;
@@ -12,6 +13,26 @@ export class CourseView extends BaseView {
     await this.courseRepo.fetchCourse(params.courseurl);
     this.course = this.courseRepo.course;
     super.init(`course/${params.courseurl}`, this.course.lo);
+
+    this.navigatorProperties.config(
+      {
+        titleCard: true,
+        parent: this.courseRepo.course.lo.properties.parent != null,
+        profile: true,
+        companions: true,
+        walls: true,
+        tutorsTime: false
+      },
+      {
+        title: this.course.lo.title,
+        subtitle: this.courseRepo.course.lo.properties.credits,
+        img: this.course.lo.img,
+        parentLink: this.courseRepo.course.lo.properties.parent,
+        parentIcon: "programHome",
+        parentTip: "To programme home ..."
+      }
+    );
+
 
     window.addEventListener("keypress", this.myKeypressCallback, false);
     if (this.courseRepo.course.lo.properties.ignorepin) {
@@ -30,9 +51,4 @@ export class CourseView extends BaseView {
       this.courseRepo.course.showAllLos();
     }
   }
-
-  // determineActivationStrategy() {
-  //   //return "replace";
-  //   return "invoke-lifecycle"
-  // }
 }

@@ -1,8 +1,24 @@
 import { Lo } from "../../../services/lo";
 import { UserMetric } from "../../../services/metrics-service";
 import { LabSheet } from "./lab-sheet";
+import {shallowScheme} from "./heat-map-colours";
 
 export class LabTimeSheet extends LabSheet {
+
+  populateCols(los: Lo[]) {
+    los.forEach(lab => {
+      lab.los.forEach(step => {
+        this.columnDefs.push({
+          headerName: step.shortTitle,
+          width: 55,
+          field: lab.title + step.shortTitle,
+          suppressSizeToFit: true,
+          cellClassRules: shallowScheme
+        });
+      });
+    });
+  }
+
   populateRows(user: UserMetric, los: Lo[]) {
     let row = this.creatRow(user);
     this.zeroEntriesComplete(los, row);

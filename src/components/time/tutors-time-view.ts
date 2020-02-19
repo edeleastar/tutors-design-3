@@ -5,6 +5,9 @@ import { LabSheet } from "./sheets/lab-sheet";
 import { Course } from "../../services/course";
 import { LabClickSummarySheet } from "./sheets/lab-click-summary-sheet";
 import environment from "../../environment";
+import { LabClickSheet } from "./sheets/lab-click-sheet";
+import { LabTimeSheet } from "./sheets/lab-time-sheet";
+import { LabsTimeSummarySheet } from "./sheets/lab-time-summary-sheet";
 
 export class TutorsTimeView extends BaseView {
   course: Course;
@@ -22,32 +25,46 @@ export class TutorsTimeView extends BaseView {
       return data.github;
     }
   };
-  sheet: LabSheet = null;
+  sheets: Map<string, LabSheet> = new Map();
+  sheet : LabSheet = null;
 
+  initMap() {
+    if (this.sheets.size == 0) {
+      this.sheets.set("viewsummary", new LabClickSummarySheet());
+      this.sheets.set("viewdetail", new LabClickSheet());
+      this.sheets.set("timesummary", new LabsTimeSummarySheet());
+      this.sheets.set("timedetail", new LabTimeSheet());
+    }
+  }
   async activate(params, subtitle: string) {
+    this.initMap();
     await this.courseRepo.fetchCourse(params.courseurl);
     this.courseRepo.course.populate();
     this.course = this.courseRepo.course;
-
-
-
-
     await this.metricsService.updateMetrics(this.courseRepo.course);
-
-    if (params.metric === "viewsummary") {
-      this.sheet = new LabClickSummarySheet();
-    }
-
     super.init(`time/${params.courseurl}`);
 
-    this.navigatorProperties.title = `Tutors Time for ${this.course.lo.title}`;
-    this.navigatorProperties.subtitle = "Aggegate page views for Labs";
-    this.navigatorProperties.parentLink = `${environment.urlPrefix}/course/${this.courseRepo.courseUrl}`;
-    this.navigatorProperties.parentIcon = "moduleHome";
-    this.navigatorProperties.parentIconTip = "To module home ...";
-    this.navigatorProperties.companions = [];
-    this.navigatorProperties.walls = [];
-    this.navigatorProperties.tutorstime = true;
+    this.sheet = this.sheets.get(params.metric);
+    this.sheet.clear(this.grid);
+
+    this.navigatorProperties.config(
+      {
+        titleCard: true,
+        parent: true,
+        profile: true,
+        companions: false,
+        walls: false,
+        tutorsTime: true
+      },
+      {
+        title: `Tutors Time for ${this.course.lo.title}`,
+        subtitle: "Aggegate page views for Labs",
+        img: this.course.lo.img,
+        parentLink: `${environment.urlPrefix}/course/${this.course.url}`,
+        parentIcon: "moduleHome",
+        parentTip: "To module home ..."
+      }
+    );
 
     this.ea.subscribe(UserUpdateEvent, userEvent => {
       if (this.grid) {
@@ -62,7 +79,7 @@ export class TutorsTimeView extends BaseView {
     });
 
     this.sheet.populateCols(this.metricsService.allLabs);
-    this.populateRows()
+    this.populateRows();
   }
 
   update() {

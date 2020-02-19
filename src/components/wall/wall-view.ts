@@ -13,10 +13,26 @@ export class WallView extends BaseView {
 
     super.init(`${route.name}s/${params.courseurl}`);
 
-    this.navigatorProperties.title = `All ${route.name}'s in ${course.lo.title}`;
-    this.navigatorProperties.subtitle = course.lo.properties.credits;
-    this.navigatorProperties.parentLink = `${environment.urlPrefix}/course/${this.courseRepo.courseUrl}`;
-    this.navigatorProperties.parentIcon = "moduleHome";
-    this.navigatorProperties.parentIconTip = "To module home ...";
+    this.navigatorProperties.config(
+      {
+        titleCard: true,
+        parent: this.courseRepo.course.lo.properties.parent != null,
+        profile: true,
+        companions: false,
+        walls: true,
+        tutorsTime: false
+      },
+      {
+        title: `All ${route.name}'s in ${course.lo.title}`,
+        subtitle: this.courseRepo.course.lo.properties.credits,
+        img: this.courseRepo.course.lo.img,
+        parentLink: `${environment.urlPrefix}/course/${this.courseRepo.courseUrl}`,
+        parentIcon: "moduleHome",
+        parentTip: "To module home ..."
+      });
+  }
+
+  determineActivationStrategy() {
+    return "replace";
   }
 }

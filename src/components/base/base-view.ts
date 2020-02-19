@@ -59,8 +59,8 @@ export class BaseView {
       type = lo.type;
     }
     this.show = this.authService.checkAuth(this.courseRepo.course, type);
+    this.navigatorProperties.init(this.courseRepo.course);
     if (lo) {
-      this.navigatorProperties.init(lo);
       this.anaylticsService.log(path, this.courseRepo.course, lo);
       this.router.title = lo.title;
       this.router.updateTitle();
@@ -69,9 +69,5 @@ export class BaseView {
       currentCourse = this.courseRepo.course;
       analyticsService = this.anaylticsService;
     }
-  }
-
-  async clearNavigator() {
-    this.navigatorProperties.clear();
   }
 }

@@ -1,9 +1,22 @@
 import { Lo } from "../../../services/lo";
 import { UserMetric } from "../../../services/metrics-service";
 import { LabSheet } from "./lab-sheet";
+import {deepScheme, shallowScheme} from "./heat-map-colours";
 
 export class LabClickSummarySheet extends LabSheet {
   totalStepsPerLab = [];
+
+  populateCols(los: Lo[]) {
+    los.forEach(lab => {
+      this.columnDefs.push({
+        headerName: lab.title,
+        width: 70,
+        field: lab.title,
+        suppressSizeToFit: true,
+        cellClassRules: deepScheme
+      });
+    });
+  }
 
   populateRows(user: UserMetric, los: Lo[]) {
     let row = this.creatRow(user);

@@ -13,6 +13,25 @@ export class VideoView extends BaseView {
     this.lo = this.courseRepo.course.videos.get(ref);
    // super.init("talk", this.lo);
     super.init(`video/${params.courseUrl}/${params.videoid}`, this.lo);
+
+    this.navigatorProperties.config(
+      {
+        titleCard: true,
+        parent: true,
+        profile: true,
+        companions: false,
+        walls: true,
+        tutorsTime: false
+      },
+      {
+        title: this.lo.title,
+        subtitle: this.courseRepo.course.lo.title,
+        img: this.lo.img,
+        parentLink: this.lo.parent.lo.route,
+        parentIcon: "topic",
+        parentTip: "To parent topic ..."
+      }
+    );
   }
 
   determineActivationStrategy() {

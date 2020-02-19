@@ -65,30 +65,12 @@ export class LabSheet {
     }
   }
 
-  populateColsComplete(los: Lo[]) {
-    los.forEach(lab => {
-      lab.los.forEach(step => {
-        this.columnDefs.push({
-          headerName: step.shortTitle,
-          width: 55,
-          field: lab.title + step.shortTitle,
-          suppressSizeToFit: true,
-          cellClassRules: shallowScheme
-        });
-      });
-    });
-  }
-
-  populateCols(los: Lo[]) {
-    los.forEach(lab => {
-      this.columnDefs.push({
-        headerName: lab.title,
-        width: 70,
-        field: lab.title,
-        suppressSizeToFit: true,
-        cellClassRules: deepScheme
-      });
-    });
+  clear (grid) {
+    if (grid) {
+      grid.api.setRowData([]);
+      this.rowData = [];
+      this.columnDefs.length = 5;
+    }
   }
 
   zeroEntries(los: Lo[], row) {
@@ -105,6 +87,7 @@ export class LabSheet {
     });
   }
 
+  populateCols(los: Lo[]) {}
   populateRows(user: UserMetric, los: Lo[]) {}
   updateRow(user: UserMetric, rowNode) {}
 }

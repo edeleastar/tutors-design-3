@@ -26,3 +26,8 @@ export interface IconNav {
   icon: string;
   tip: string;
 }
+
+export interface IconNavBar {
+  show : boolean;
+  bar : IconNav[];
+}
