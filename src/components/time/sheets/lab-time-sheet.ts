@@ -1,9 +1,11 @@
 import { Lo } from "../../../services/lo";
 import { UserMetric } from "../../../services/metrics-service";
 import { LabSheet } from "./lab-sheet";
-import {shallowScheme} from "./heat-map-colours";
+import { shallowScheme } from "./heat-map-colours";
 
 export class LabTimeSheet extends LabSheet {
+  title = "Lab Time in Minutes - Detailed";
+  subtitle = "Total number of minutes for step of each lab";
 
   populateCols(los: Lo[]) {
     los.forEach(lab => {

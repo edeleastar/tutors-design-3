@@ -1,12 +1,13 @@
 import { autoinject } from "aurelia-framework";
 import { Course } from "../../services/course";
 import { searchHits } from "../../services/utils-search";
-import { extractPath }  from "../../services/utils-search";
-import { findLo } from "../../services/utils-search"
+import { extractPath } from "../../services/utils-search";
+import { findLo } from "../../services/utils-search";
 import { allLos } from "../../services/utils";
 import environment from "../../environment";
 import { BaseView } from "../base/base-view";
 import { Lo } from "../../services/lo";
+import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";
 /**
  * Search the labs for presence of user-input search term.
  * Live output the results of the search character by character.
@@ -46,27 +47,8 @@ export class SearchView extends BaseView {
     this.updateUrl(this.searchTerm);
     super.init(`search/${params.courseurl}`);
 
-    this.navigatorProperties.config(
-      {
-        titleCard: true,
-        parent: this.courseRepo.course.lo.properties.parent != null,
-        profile: true,
-        companions: false,
-        walls: true,
-        tutorsTime: false
-      },
-      {
-        title: "Search...",
-        subtitle: this.course.lo.title,
-        img: this.courseRepo.course.lo.img,
-        parentLink: `${environment.urlPrefix}/course/${this.courseRepo.courseUrl}`,
-        parentIcon: "moduleHome",
-        parentTip: "To module home ..."
-      });
-
-
     // This test caters for situation where a non-empty search string is copied to a browser's
-    // navigation bar, this requiring immdiate action on invocation of the 
+    // navigation bar, this requiring immdiate action on invocation of the
     // search module.
     if (this.searchTerm) {
       this.setSearchStrings();
@@ -99,15 +81,36 @@ export class SearchView extends BaseView {
   }
 
   handleClick(search_string: string) {
-    console.log("searchTerm: ",this.searchTerm, "number hits ", this.search_strings.length);
+    console.log("searchTerm: ", this.searchTerm, "number hits ", this.search_strings.length);
     console.log("clicked on: ", search_string);
 
     let path = extractPath(search_string);
     console.log("path: ", path);
 
-    let lo = findLo('#'+path, this.labs);
+    let lo = findLo("#" + path, this.labs);
 
     this.anaylticsService.logSearch(this.searchTerm, path, this.course, lo);
     this.router.navigateToRoute(path);
+  }
+
+  configMainNav(nav: NavigatorProperties) {
+    nav.config(
+      {
+        titleCard: true,
+        parent: this.courseRepo.course.lo.properties.parent != null,
+        profile: true,
+        companions: false,
+        walls: true,
+        tutorsTime: false
+      },
+      {
+        title: "Search...",
+        subtitle: this.course.lo.title,
+        img: this.courseRepo.course.lo.img,
+        parentLink: `${environment.urlPrefix}/course/${this.courseRepo.courseUrl}`,
+        parentIcon: "moduleHome",
+        parentTip: "To module home ..."
+      }
+    );
   }
 }

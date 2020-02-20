@@ -2,6 +2,7 @@ import { Lo } from "../../services/lo";
 import environment from "../../environment";
 import { autoinject } from "aurelia-framework";
 import { BaseView } from "../base/base-view";
+import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";
 
 @autoinject
 export class TalkView extends BaseView {
@@ -12,7 +13,9 @@ export class TalkView extends BaseView {
     const ref = `${environment.urlPrefix}talk/${params.courseUrl}/${params.talkid}`;
     this.lo = this.courseRepo.course.talks.get(ref);
     super.init(`talk/${params.courseUrl}/${params.talkid}`, this.lo);
+  }
 
+  configMainNav(nav: NavigatorProperties) {
     this.navigatorProperties.config(
       {
         titleCard: true,

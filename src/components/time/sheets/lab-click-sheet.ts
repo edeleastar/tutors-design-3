@@ -5,6 +5,9 @@ import {deepScheme, shallowScheme} from "./heat-map-colours";
 
 export class LabClickSheet extends LabSheet {
 
+  title = "Lab Page Views - Detailed";
+  subtitle = "Total page view for all steps in each lab";
+
   populateCols(los: Lo[]) {
     los.forEach(lab => {
       lab.los.forEach(step => {

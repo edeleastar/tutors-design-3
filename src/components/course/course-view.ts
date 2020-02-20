@@ -13,10 +13,7 @@ export class CourseView extends BaseView {
     await this.courseRepo.fetchCourse(params.courseurl);
     this.course = this.courseRepo.course;
     super.init(`course/${params.courseurl}`, this.course.lo);
-
-    this.initCourseNav();
-
-
+    
     window.addEventListener("keypress", this.myKeypressCallback, false);
     if (this.courseRepo.course.lo.properties.ignorepin) {
       this.ignorePin = "" + this.courseRepo.course.lo.properties.ignorepin;
@@ -35,7 +32,7 @@ export class CourseView extends BaseView {
     }
   }
 
-  initCourseNav() {
+   configMainNav(nav) {
     let isPortfolio = false;
     if (this.course.lo.properties.portfolio !== undefined) {
       const portfolio: any = this.course.lo.properties.portfolio
@@ -43,7 +40,7 @@ export class CourseView extends BaseView {
     }
 
     if (isPortfolio) {
-      this.navigatorProperties.config(
+      nav.config(
         {
           titleCard: true,
           parent: false,
@@ -60,7 +57,7 @@ export class CourseView extends BaseView {
       );
     }
     else {
-      this.navigatorProperties.config(
+      nav.config(
         {
           titleCard: true,
           parent: this.courseRepo.course.lo.properties.parent != null,

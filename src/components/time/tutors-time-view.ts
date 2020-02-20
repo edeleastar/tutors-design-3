@@ -8,6 +8,7 @@ import environment from "../../environment";
 import { LabClickSheet } from "./sheets/lab-click-sheet";
 import { LabTimeSheet } from "./sheets/lab-time-sheet";
 import { LabsTimeSummarySheet } from "./sheets/lab-time-summary-sheet";
+import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";
 
 export class TutorsTimeView extends BaseView {
   course: Course;
@@ -26,7 +27,7 @@ export class TutorsTimeView extends BaseView {
     }
   };
   sheets: Map<string, LabSheet> = new Map();
-  sheet : LabSheet = null;
+  sheet: LabSheet = null;
 
   initMap() {
     if (this.sheets.size == 0) {
@@ -36,35 +37,16 @@ export class TutorsTimeView extends BaseView {
       this.sheets.set("timedetail", new LabTimeSheet());
     }
   }
+
   async activate(params, subtitle: string) {
     this.initMap();
     await this.courseRepo.fetchCourse(params.courseurl);
     this.courseRepo.course.populate();
     this.course = this.courseRepo.course;
     await this.metricsService.updateMetrics(this.courseRepo.course);
-    super.init(`time/${params.courseurl}`);
-
     this.sheet = this.sheets.get(params.metric);
+    super.init(`time/${params.courseurl}`);
     this.sheet.clear(this.grid);
-
-    this.navigatorProperties.config(
-      {
-        titleCard: true,
-        parent: true,
-        profile: true,
-        companions: false,
-        walls: false,
-        tutorsTime: true
-      },
-      {
-        title: `Tutors Time for ${this.course.lo.title}`,
-        subtitle: "Aggegate page views for Labs",
-        img: this.course.lo.img,
-        parentLink: `${environment.urlPrefix}/course/${this.course.url}`,
-        parentIcon: "moduleHome",
-        parentTip: "To module home ..."
-      }
-    );
 
     this.ea.subscribe(UserUpdateEvent, userEvent => {
       if (this.grid) {
@@ -100,5 +82,26 @@ export class TutorsTimeView extends BaseView {
       this.sheet.populateRows(user, this.metricsService.allLabs);
     });
     this.update();
+  }
+
+  configMainNav(nav: NavigatorProperties) {
+    this.navigatorProperties.config(
+      {
+        titleCard: true,
+        parent: true,
+        profile: true,
+        companions: false,
+        walls: false,
+        tutorsTime: true
+      },
+      {
+        title: this.sheet.title,
+        subtitle: this.sheet.subtitle,
+        img: this.course.lo.img,
+        parentLink: `${environment.urlPrefix}/course/${this.course.url}`,
+        parentIcon: "moduleHome",
+        parentTip: "To module home ..."
+      }
+    );
   }
 }

@@ -4,6 +4,10 @@ import { LabSheet } from "./lab-sheet";
 import {deepScheme, shallowScheme} from "./heat-map-colours";
 
 export class LabClickSummarySheet extends LabSheet {
+
+  title = "Lab Page Views - Totals";
+  subtitle = "Total page views for each step in a lab";
+
   totalStepsPerLab = [];
 
   populateCols(los: Lo[]) {

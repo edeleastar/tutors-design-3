@@ -4,6 +4,9 @@ import { UserMetric } from "../../../services/metrics-service";
 import { deepScheme, shallowScheme } from "./heat-map-colours";
 
 export class LabSheet {
+  title = "";
+  subtitle = "";
+
   columnDefs: any = [
     { headerName: "Rank", field: "index", pinned: "left", width: 40, suppressSizeToFit: true },
     { headerName: "User", field: "user", width: 180, suppressSizeToFit: true, pinned: "left" },

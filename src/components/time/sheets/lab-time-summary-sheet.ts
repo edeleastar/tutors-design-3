@@ -1,9 +1,12 @@
 import { Lo } from "../../../services/lo";
 import { UserMetric } from "../../../services/metrics-service";
 import { LabSheet } from "./lab-sheet";
-import {deepScheme} from "./heat-map-colours";
+import { deepScheme } from "./heat-map-colours";
 
 export class LabsTimeSummarySheet extends LabSheet {
+  title = "Lab Time in Minutes - Totals";
+  subtitle = "Total Number of Minutes for each lab";
+
   totalStepsPerLab = [];
 
   populateCols(los: Lo[]) {

@@ -2,6 +2,7 @@ import { Lo } from "../../services/lo";
 import environment from "../../environment";
 import { autoinject } from "aurelia-framework";
 import { BaseView } from "../base/base-view";
+import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";
 
 @autoinject
 export class VideoView extends BaseView {
@@ -11,9 +12,14 @@ export class VideoView extends BaseView {
     await this.courseRepo.fetchCourseFromTalk(params.courseUrl);
     const ref = `${environment.urlPrefix}video/${params.courseUrl}/${params.videoid}`;
     this.lo = this.courseRepo.course.videos.get(ref);
-   // super.init("talk", this.lo);
     super.init(`video/${params.courseUrl}/${params.videoid}`, this.lo);
+  }
 
+  determineActivationStrategy() {
+    return "replace";
+  }
+
+  configMainNav(nav: NavigatorProperties) {
     this.navigatorProperties.config(
       {
         titleCard: true,
@@ -32,9 +38,5 @@ export class VideoView extends BaseView {
         parentTip: "To parent topic ..."
       }
     );
-  }
-
-  determineActivationStrategy() {
-    return "replace";
   }
 }
