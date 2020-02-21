@@ -1,11 +1,9 @@
 import { Course } from "./course";
 import * as firebase from "firebase/app";
 import "firebase/database";
-import environment from "../environment";
 import { Lo } from "./lo";
 import { inject } from "aurelia-dependency-injection";
 import { EventAggregator } from "aurelia-event-aggregator";
-import DataSnapshot = firebase.database.DataSnapshot;
 
 export class SingleUserUpdateEvent {
   user: UserMetric;
@@ -103,55 +101,66 @@ export class MetricsService {
     }
   }
 
-  subscribeToAllUsers (course : Course) {
+  async retrieveAllUsers(course: Course) {
+    this.allLabs = course.walls.get("lab");
     const that = this;
     if (!this.course || this.course != course) {
       this.course = course;
       const courseBaseName = course.url.substr(0, course.url.indexOf("."));
-      firebase
+      const snapshot = await firebase
         .database()
         .ref(`${courseBaseName}`)
-        .once("value", function(snapshot: DataSnapshot) {
-          const genericMetrics = that.expandGenericMetrics("root", snapshot.val());
-          that.usage = genericMetrics.metrics[0];
-          for (let userMetric of genericMetrics.metrics[1].metrics) {
-            if (userMetric.nickname) {
-              const user = {
-                userId: userMetric.id,
-                email: userMetric.email,
-                name: userMetric.name,
-                picture: userMetric.picture,
-                nickname: userMetric.nickname,
-                id: "home",
-                title: userMetric.title,
-                count: userMetric.count,
-                last: userMetric.last,
-                duration: userMetric.duration,
-                metrics: userMetric.metrics,
-                labActivity: []
-              };
-              that.populateLabUsage(user);
-              that.usersMap.set(user.nickname, user);
-            }
-          }
-          //that.ea.publish(new BulkUserUpdateEvent(that.usersMap));
-          that.usersMap.forEach((user, id) => {
-            that.subscribeToUser(course, user.email);
-          });
-        });
+        .once("value");
+      const genericMetrics = this.expandGenericMetrics("root", snapshot.val());
+
+      that.usage = genericMetrics.metrics[0];
+      for (let userMetric of genericMetrics.metrics[1].metrics) {
+        if (userMetric.nickname) {
+          const user = {
+            userId: userMetric.id,
+            email: userMetric.email,
+            name: userMetric.name,
+            picture: userMetric.picture,
+            nickname: userMetric.nickname,
+            id: "home",
+            title: userMetric.title,
+            count: userMetric.count,
+            last: userMetric.last,
+            duration: userMetric.duration,
+            metrics: userMetric.metrics,
+            labActivity: []
+          };
+          that.populateLabUsage(user);
+          that.usersMap.set(user.nickname, user);
+        }
+      }
     }
   }
 
-  subscribeToUser (course : Course, userEmail : string) {
+  async retrieveUser(course: Course, userEmail: string) {
+    this.allLabs = course.walls.get("lab");
+    const courseBase = course.url.substr(0, course.url.indexOf("."));
+    const userEmailSanitised = userEmail.replace(/[`#$.\[\]\/]/gi, "*");
+    const snapshot = await firebase
+      .database()
+      .ref(`${courseBase}/users/${userEmailSanitised}`)
+      .once("value");
+    const user = this.expandGenericMetrics("root", snapshot.val());
+    this.populateLabUsage(user);
+    this.usersMap.set(user.nickname, user);
+  }
+
+  subscribeToAll(course: Course) {
+    this.usersMap.forEach(value => {
+      this.subscribeToUser(course, value.email);
+    });
+  }
+
+  subscribeToUser(course: Course, userEmail: string) {
     this.allLabs = course.walls.get("lab");
     const courseBaseName = course.url.substr(0, course.url.indexOf("."));
     this.subscribe(course, courseBaseName, userEmail);
   }
-
-  // async updateMetrics(course: Course) {
-  //   this.allLabs = course.walls.get("lab");
-  //   this.retrieveMetrics(course);
-  // }
 
   subscribe(course: Course, courseBase: string, email: string) {
     const that = this;

@@ -7,7 +7,14 @@ import { LabClickSheet } from "./sheets/lab-click-sheet";
 import { LabTimeSheet } from "./sheets/lab-time-sheet";
 import { LabsTimeSummarySheet } from "./sheets/lab-time-summary-sheet";
 import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";
-import { BulkUserUpdateEvent, SingleUserUpdateEvent, UserMetric } from "../../services/metrics-service";
+import { SingleUserUpdateEvent, UserMetric } from "../../services/metrics-service";
+
+let timeView: TutorsTimeView = null;
+const func = () => {
+  //timeView.startSubscription();
+};
+
+setTimeout(func, 30 * 1000);
 
 export class TutorsTimeView extends BaseView {
   grid = null;
@@ -37,29 +44,36 @@ export class TutorsTimeView extends BaseView {
   }
 
   async activate(params, subtitle: string) {
+    timeView = this;
     this.initMap();
     await this.courseRepo.fetchCourse(params.courseurl);
     this.course = this.courseRepo.course;
-    if (this.authService.isAuthenticated()) {
-      const email = this.authService.getUserEmail();
-      if (this.courseRepo.privelaged == true) {
-        this.metricsService.subscribeToAllUsers(this.course);
-      } else {
-        this.metricsService.subscribeToUser(this.course, email);
-      }
-    }
+
     this.sheet = this.sheets.get(params.metric);
     super.init(`time/${params.courseurl}`);
     this.sheet.clear(this.grid);
-    this.sheet.populateCols(this.metricsService.allLabs);
+    this.sheet.populateCols(this.course.walls.get("lab"));
+
+    if (this.authService.isAuthenticated()) {
+      const email = this.authService.getUserEmail();
+      if (this.courseRepo.privelaged == true) {
+        await this.metricsService.retrieveAllUsers(this.course);
+      } else {
+        await this.metricsService.retrieveUser(this.course, email);
+      }
+    }
     this.bulkUserUpdate(this.metricsService.usersMap);
     this.ea.subscribe(SingleUserUpdateEvent, userEvent => {
       this.singleUserUpdate(userEvent.user);
     });
-    this.ea.subscribe(BulkUserUpdateEvent, usersEvent => {
-      this.bulkUserUpdate(usersEvent.users);
-    });
+    this.metricsService.subscribeToAll(this.course);
   }
+
+  startSubscription() {
+    this.metricsService.subscribeToAll(this.course);
+  }
+
+  stopSubscription() {}
 
   update() {
     this.sheet.render(this.grid);
@@ -75,19 +89,12 @@ export class TutorsTimeView extends BaseView {
   }
 
   singleUserUpdate(user: UserMetric) {
-    try {
-      if (this.grid) {
-        let rowNode = this.grid.api.getRowNode(user.nickname);
-        if (rowNode) {
-          this.sheet.updateRow(user, rowNode);
-        } else {
-          this.sheet.populateRow(user, this.metricsService.allLabs);
-          this.update();
-        }
+    if (this.grid) {
+      let rowNode = this.grid.api.getRowNode(user.nickname);
+      if (rowNode) {
+        this.sheet.updateRow(user, rowNode);
       }
-     } catch (er) {
-      // console.log(er);
-     }
+    }
   }
 
   bulkUserUpdate(users: Map<string, UserMetric>) {
