@@ -91,6 +91,6 @@ export class LabSheet {
   }
 
   populateCols(los: Lo[]) {}
-  populateRows(user: UserMetric, los: Lo[]) {}
+  populateRow(user: UserMetric, los: Lo[]) {}
   updateRow(user: UserMetric, rowNode) {}
 }

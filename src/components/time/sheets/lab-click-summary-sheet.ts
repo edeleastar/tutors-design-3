@@ -22,7 +22,7 @@ export class LabClickSummarySheet extends LabSheet {
     });
   }
 
-  populateRows(user: UserMetric, los: Lo[]) {
+  populateRow(user: UserMetric, los: Lo[]) {
     let row = this.creatRow(user);
     this.zeroEntries(los, row);
 

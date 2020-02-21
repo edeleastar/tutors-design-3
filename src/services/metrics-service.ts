@@ -7,14 +7,14 @@ import { inject } from "aurelia-dependency-injection";
 import { EventAggregator } from "aurelia-event-aggregator";
 import DataSnapshot = firebase.database.DataSnapshot;
 
-export class UserUpdateEvent {
+export class SingleUserUpdateEvent {
   user: UserMetric;
   constructor(user) {
     this.user = user;
   }
 }
 
-export class UsersUpdateEvent {
+export class BulkUserUpdateEvent {
   usersMap = new Map<string, UserMetric>();
   constructor(usersMap) {
     this.usersMap = usersMap;
@@ -103,7 +103,7 @@ export class MetricsService {
     }
   }
 
-  async retrieveMetrics(course: Course) {
+  subscribeToAllUsers (course : Course) {
     const that = this;
     if (!this.course || this.course != course) {
       this.course = course;
@@ -132,18 +132,26 @@ export class MetricsService {
               };
               that.populateLabUsage(user);
               that.usersMap.set(user.nickname, user);
-              that.subscribe(course, courseBaseName, user.email);
             }
           }
-          that.ea.publish(new UsersUpdateEvent(that.usersMap));
+          //that.ea.publish(new BulkUserUpdateEvent(that.usersMap));
+          that.usersMap.forEach((user, id) => {
+            that.subscribeToUser(course, user.email);
+          });
         });
     }
   }
 
-  async updateMetrics(course: Course) {
+  subscribeToUser (course : Course, userEmail : string) {
     this.allLabs = course.walls.get("lab");
-    this.retrieveMetrics(course);
+    const courseBaseName = course.url.substr(0, course.url.indexOf("."));
+    this.subscribe(course, courseBaseName, userEmail);
   }
+
+  // async updateMetrics(course: Course) {
+  //   this.allLabs = course.walls.get("lab");
+  //   this.retrieveMetrics(course);
+  // }
 
   subscribe(course: Course, courseBase: string, email: string) {
     const that = this;
@@ -155,7 +163,7 @@ export class MetricsService {
         const user = that.expandGenericMetrics("root", snapshot.val());
         that.populateLabUsage(user);
         that.usersMap.set(user.nickname, user);
-        that.ea.publish(new UserUpdateEvent(user));
+        that.ea.publish(new SingleUserUpdateEvent(user));
       });
   }
 }

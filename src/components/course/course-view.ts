@@ -13,7 +13,7 @@ export class CourseView extends BaseView {
     await this.courseRepo.fetchCourse(params.courseurl);
     this.course = this.courseRepo.course;
     super.init(`course/${params.courseurl}`, this.course.lo);
-    
+
     window.addEventListener("keypress", this.myKeypressCallback, false);
     if (this.courseRepo.course.lo.properties.ignorepin) {
       this.ignorePin = "" + this.courseRepo.course.lo.properties.ignorepin;
@@ -29,6 +29,7 @@ export class CourseView extends BaseView {
     if (this.pinBuffer === this.ignorePin) {
       this.pinBuffer = "";
       this.courseRepo.course.showAllLos();
+      this.courseRepo.privelaged = true;
     }
   }
 

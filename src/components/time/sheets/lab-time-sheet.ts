@@ -21,7 +21,7 @@ export class LabTimeSheet extends LabSheet {
     });
   }
 
-  populateRows(user: UserMetric, los: Lo[]) {
+  populateRow(user: UserMetric, los: Lo[]) {
     let row = this.creatRow(user);
     this.zeroEntriesComplete(los, row);
 
