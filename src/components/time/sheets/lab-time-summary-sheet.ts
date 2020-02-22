@@ -7,8 +7,6 @@ export class LabsTimeSummarySheet extends LabSheet {
   title = "Lab Time in Minutes - Totals";
   subtitle = "Total Number of Minutes for each lab";
 
-  totalStepsPerLab = [];
-
   populateCols(los: Lo[]) {
     los.forEach(lab => {
       this.columnDefs.push({
@@ -24,10 +22,6 @@ export class LabsTimeSummarySheet extends LabSheet {
   populateRow(user: UserMetric, los: Lo[]) {
     let row = this.creatRow(user);
     this.zeroEntries(los, row);
-
-    los.forEach(lab => {
-      this.totalStepsPerLab[`${lab.title}`] = lab.los.length - 1;
-    });
 
     let summaryCount = 0;
     user.labActivity.forEach(labMetric => {

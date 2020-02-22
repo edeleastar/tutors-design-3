@@ -1,10 +1,9 @@
 import { Lo } from "../../../services/lo";
 import { UserMetric } from "../../../services/metrics-service";
 import { LabSheet } from "./lab-sheet";
-import {deepScheme, shallowScheme} from "./heat-map-colours";
+import { deepScheme } from "./heat-map-colours";
 
 export class LabClickSummarySheet extends LabSheet {
-
   title = "Lab Page Views - Totals";
   subtitle = "Total page views for each step in a lab";
 
@@ -58,7 +57,6 @@ export class LabClickSummarySheet extends LabSheet {
       }
       summaryCount = summaryCount + labSummaryCount;
     });
-
     rowNode.setDataValue("summary", summaryCount);
   }
 }

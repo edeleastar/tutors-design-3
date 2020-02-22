@@ -27,14 +27,17 @@ export class LabTimeSheet extends LabSheet {
 
     let summaryCount = 0;
     user.labActivity.forEach(labMetric => {
+      let labSummaryCount = 0;
       if (labMetric) {
         labMetric.metrics.forEach(stepMetric => {
           if (stepMetric.duration) {
             row[`${labMetric.title + stepMetric.title}`] = stepMetric.duration / 2;
-            summaryCount = summaryCount + stepMetric.duration;
+            labSummaryCount = labSummaryCount + stepMetric.duration / 2;
           }
         });
+        row[`${labMetric.title}`] = labSummaryCount;
       }
+      summaryCount = summaryCount + labSummaryCount;
     });
     row.summary = summaryCount / 2;
     this.rowData.push(row);
@@ -42,14 +45,19 @@ export class LabTimeSheet extends LabSheet {
 
   updateRow(user: UserMetric, rowNode) {
     let summaryCount = 0;
-    for (let labMetric of user.labActivity) {
+    user.labActivity.forEach(labMetric => {
+      let labSummaryCount = 0;
       if (labMetric) {
-        for (let stepMetric of labMetric.metrics) {
+        labMetric.metrics.forEach(stepMetric => {
           if (stepMetric.duration) {
             rowNode.setDataValue(`${labMetric.title + stepMetric.title}`, stepMetric.duration / 2);
+            labSummaryCount = labSummaryCount + stepMetric.duration / 2;
           }
-        }
+        });
+        rowNode.setDataValue(`${labMetric.title}`, labSummaryCount);
       }
-    }
+      summaryCount = summaryCount + labSummaryCount;
+    });
+    rowNode.setDataValue("summary", summaryCount / 2);
   }
 }

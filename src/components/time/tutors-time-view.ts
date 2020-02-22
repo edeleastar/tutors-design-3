@@ -63,9 +63,9 @@ export class TutorsTimeView extends BaseView {
       }
     }
     this.bulkUserUpdate(this.metricsService.usersMap);
-    this.ea.subscribe(SingleUserUpdateEvent, userEvent => {
-      this.singleUserUpdate(userEvent.user);
-    });
+    //this.ea.subscribe(SingleUserUpdateEvent, userEvent => {
+     // this.singleUserUpdate(userEvent.user);
+    //});
     this.metricsService.subscribeToAll(this.course);
   }
 

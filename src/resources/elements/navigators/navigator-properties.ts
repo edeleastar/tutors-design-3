@@ -139,7 +139,7 @@ export class NavigatorProperties {
   createProfileBar() {
     this.profile.nav = [];
     this.profile.nav.push({
-      link: `${environment.urlPrefix}time/${this.url}/viewsummary`,
+      link: `${environment.urlPrefix}time/${this.url}/timesummary`,
       icon: "hourglassend",
       tip: "Tutors Time"
     });
