@@ -74,6 +74,8 @@ export class BaseView {
       analyticsService = this.anaylticsService;
     }
     this.configMainNav(this.navigatorProperties);
+    this.navigatorProperties.companions.visible = this.navigatorProperties.companions.nav.length > 0;
+    this.navigatorProperties.profile.visible = this.course.walls.get("lab") != null && this.authService.isAuthenticated();
   }
 
   configMainNav(nav: NavigatorProperties) {

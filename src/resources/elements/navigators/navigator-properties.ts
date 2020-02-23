@@ -1,7 +1,7 @@
 import environment from "../../../environment";
 import { AuthService } from "../../../services/auth-service";
 import { autoinject } from "aurelia-framework";
-import {Course} from "../../../services/course";
+import { Course } from "../../../services/course";
 const readerVersion = require("../../../../package.json").version;
 
 interface Properties {
@@ -64,13 +64,15 @@ export class NavigatorProperties {
     this.parent.tip = params.parentTip;
   }
 
-  init(course : Course) {
+  init(course: Course) {
     if (course.url !== this.url) {
       this.url = course.url;
       this.createWallBar(course);
       this.createCompanionBar(course.lo.properties);
       this.createTimeSheets();
-      this.createProfileBar();
+      if (course.authLevel > 0) {
+        this.createProfileBar(course.isPortfolio());
+      }
     }
   }
 
@@ -78,7 +80,7 @@ export class NavigatorProperties {
     this.companions.nav = this.profile.nav = this.tutorsTime.nav = this.walls.nav = this.companions.nav = [];
   }
 
-  createWallBar(course : Course) {
+  createWallBar(course: Course) {
     this.walls.nav = [];
     course.walls.forEach((los, type) => {
       this.walls.nav.push(this.createWallLink(type));
@@ -102,6 +104,7 @@ export class NavigatorProperties {
         icon: "youtube",
         tip: "to youtube channel for this module"
       });
+    this.companions.visible = this.companions.nav.length > 0
   }
 
   createWallLink(type: string) {
@@ -136,14 +139,17 @@ export class NavigatorProperties {
     });
   }
 
-  createProfileBar() {
+  createProfileBar(isPortfolio: boolean) {
     this.profile.nav = [];
     this.profile.nav.push({
-      link: `${environment.urlPrefix}time/${this.url}/timesummary`,
+      link: `${environment.urlPrefix}time/${this.url}/viewsummary`,
       icon: "hourglassend",
       tip: "Tutors Time"
     });
     this.profile.nav.push({ link: `/logout`, icon: "logout", tip: "Logout form Tutors" });
     this.profile.visible = this.authService.isAuthenticated();
+    if (isPortfolio) {
+      this.profile.visible = false;
+    }
   }
 }

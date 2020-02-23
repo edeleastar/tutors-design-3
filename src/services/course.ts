@@ -88,4 +88,13 @@ export class Course {
     this.lo.los = this.allLos;
     this.populate();
   }
+
+  isPortfolio() {
+    let isPortfolio = false;
+    if (this.lo.properties.portfolio !== undefined) {
+      const portfolio: any = this.lo.properties.portfolio;
+      isPortfolio = portfolio == true;
+    }
+    return isPortfolio;
+  }
 }
