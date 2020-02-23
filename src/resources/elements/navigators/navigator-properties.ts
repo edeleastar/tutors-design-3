@@ -10,6 +10,10 @@ interface Properties {
 
 @autoinject
 export class NavigatorProperties {
+  toc = {
+    visible: true
+  };
+
   titleCard = {
     title: "",
     subtitle: "",
@@ -104,7 +108,7 @@ export class NavigatorProperties {
         icon: "youtube",
         tip: "to youtube channel for this module"
       });
-    this.companions.visible = this.companions.nav.length > 0
+    this.companions.visible = this.companions.nav.length > 0;
   }
 
   createWallLink(type: string) {
