@@ -10,6 +10,7 @@ interface Properties {
 
 @autoinject
 export class NavigatorProperties {
+  version = "";
   toc = {
     visible: true
   };
@@ -69,6 +70,7 @@ export class NavigatorProperties {
   }
 
   init(course: Course) {
+    this.version = `${readerVersion} (${course.lo.version})`;
     if (course.url !== this.url) {
       this.url = course.url;
       this.createWallBar(course);
