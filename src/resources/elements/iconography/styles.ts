@@ -1,3 +1,6 @@
+import {faClock, faEye, faHourglass, faHourglassEnd, faSignOutAlt, faVial} from "@fortawesome/free-solid-svg-icons";
+import {faClock as farClock, faEye as farEye} from "@fortawesome/free-regular-svg-icons";
+
 export const iconColours = {
   course: "#009688",
   topic: "#009688",
@@ -18,7 +21,13 @@ export const iconColours = {
   film: "red",
   web: "",
   unit: "",
-  pdf: "red"
+  pdf: "red",
+  logout : "forestgreen",
+  tutorsTime : "#85144b",
+  labViewDetail : "",
+  labViewSummary : "",
+  labTimeDetail : "",
+  LabTimeSummary : "",
 };
 
 export interface IconNav {

@@ -10,7 +10,7 @@ interface Properties {
 
 @autoinject
 export class NavigatorProperties {
-  version = "";
+  version = "hello";
   toc = {
     visible: true
   };
@@ -125,22 +125,22 @@ export class NavigatorProperties {
     this.tutorsTime.nav = [];
     this.tutorsTime.nav.push({
       link: `${environment.urlPrefix}time/${this.url}/viewdetail`,
-      icon: "lab",
+      icon: "labViewDetail",
       tip: "Views by Lab Step"
     });
     this.tutorsTime.nav.push({
       link: `${environment.urlPrefix}time/${this.url}/viewsummary`,
-      icon: "vial",
+      icon: "labViewSummary",
       tip: "Views by Lab"
     });
     this.tutorsTime.nav.push({
       link: `${environment.urlPrefix}time/${this.url}/timedetail`,
-      icon: "hourglass",
+      icon: "labTimeDetail",
       tip: "Minutes by Lab Step"
     });
     this.tutorsTime.nav.push({
       link: `${environment.urlPrefix}time/${this.url}/timesummary`,
-      icon: "hourglassend",
+      icon: "labTimeSummary",
       tip: "Minutes by lab"
     });
   }
@@ -149,7 +149,7 @@ export class NavigatorProperties {
     this.profile.nav = [];
     this.profile.nav.push({
       link: `${environment.urlPrefix}time/${this.url}/viewsummary`,
-      icon: "hourglassend",
+      icon: "tutorsTime",
       tip: "Tutors Time"
     });
     this.profile.nav.push({ link: `/logout`, icon: "logout", tip: "Logout form Tutors" });

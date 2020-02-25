@@ -17,13 +17,15 @@ import {
   faSearch,
   faFilePdf,
   faSignOutAlt,
-  faVial,
-  faHourglass,
-  faHourglassEnd
+  faHistory,
+  faEye,
+  faClock,
+  faStopwatch
 } from "@fortawesome/free-solid-svg-icons";
 
 import { faYoutube, faSlack, faGithub, faYoutubeSquare } from "@fortawesome/free-brands-svg-icons";
 import { faAddressCard } from "@fortawesome/free-regular-svg-icons/faAddressCard";
+import {faClock as farClock, faEye as farEye,} from "@fortawesome/free-regular-svg-icons";
 
 export class Icon {
   @bindable type: string;
@@ -54,10 +56,11 @@ export class Icon {
     search: faSearch,
     pdf: faFilePdf,
     logout : faSignOutAlt,
-    time : faHourglass,
-    vial : faVial,
-    hourglass : faHourglass,
-    hourglassend : faHourglassEnd,
+    tutorsTime : faHistory,
+    labViewDetail : faEye,
+    labViewSummary : farEye,
+    labTimeDetail : faClock,
+    labTimeSummary : farClock,
   };
 
   icon(type: string) {
