@@ -14,12 +14,11 @@ let currentRoute = "";
 let currentCourse: Course = null;
 let analyticsService: AnalyticsService = null;
 
-
-  const func = () => {
-    if (analyticsService && ! document.hidden) {
-      analyticsService.logDuration(currentRoute, currentCourse, currentLo);
-    }
-  };
+const func = () => {
+  if (analyticsService && !document.hidden) {
+    analyticsService.logDuration(currentRoute, currentCourse, currentLo);
+  }
+};
 
 setInterval(func, 30 * 1000);
 
@@ -32,9 +31,13 @@ export class BaseView {
   authService: AuthService;
   router: Router;
   anaylticsService: AnalyticsService;
-  ea : EventAggregator;
-  metricsService : MetricsService;
-  course : Course;
+  ea: EventAggregator;
+  metricsService: MetricsService;
+  course: Course;
+
+  myKeypressCallback: any;
+  pinBuffer = "";
+  ignorePin = "";
 
   constructor(
     courseRepo: CourseRepo,
@@ -43,7 +46,7 @@ export class BaseView {
     router: Router,
     analyticsService: AnalyticsService,
     ea: EventAggregator,
-    metricsService : MetricsService
+    metricsService: MetricsService
   ) {
     this.courseRepo = courseRepo;
     this.navigatorProperties = navigatorProperties;
@@ -75,6 +78,29 @@ export class BaseView {
     }
     this.configMainNav(this.navigatorProperties);
     this.autoNavProperties();
+
+    this.myKeypressCallback = this.keypressInput.bind(this);
+    window.addEventListener("keypress", this.myKeypressCallback, false);
+    if (this.courseRepo.course.lo.properties.ignorepin) {
+      this.ignorePin = "" + this.courseRepo.course.lo.properties.ignorepin;
+    }
+  }
+
+  deactivate() {
+    window.removeEventListener("keypress", this.myKeypressCallback);
+  }
+
+  keypressInput(e) {
+    this.pinBuffer = this.pinBuffer.concat(e.key);
+    if (this.pinBuffer === this.ignorePin) {
+      this.pinBuffer = "";
+      this.courseRepo.course.showAllLos();
+      this.courseRepo.privelaged = true;
+      this.instructorModeEnabled()
+    }
+  }
+
+  instructorModeEnabled() {
   }
 
   configMainNav(nav: NavigatorProperties) {
@@ -94,8 +120,10 @@ export class BaseView {
       }
     );
   }
-  autoNavProperties () {
-    this.navigatorProperties.companions.visible = this.navigatorProperties.companions.visible && this.navigatorProperties.companions.nav.length > 0;
-    this.navigatorProperties.profile.visible = this.course.authLevel > 0 && this.course.walls.get("lab") != null && this.authService.isAuthenticated();
+  autoNavProperties() {
+    this.navigatorProperties.companions.visible =
+      this.navigatorProperties.companions.visible && this.navigatorProperties.companions.nav.length > 0;
+    this.navigatorProperties.profile.visible =
+      this.course.authLevel > 0 && this.course.walls.get("lab") != null && this.authService.isAuthenticated();
   }
 }

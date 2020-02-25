@@ -53,7 +53,14 @@ export class TutorsTimeView extends BaseView {
     super.init(`time/${params.courseurl}`);
     this.sheet.clear(this.grid);
     this.sheet.populateCols(this.course.walls.get("lab"));
+    await this.populateSheet();
+  }
 
+  instructorModeEnabled() {
+    this.populateSheet();
+  }
+
+  async populateSheet() {
     if (this.authService.isAuthenticated()) {
       const email = this.authService.getUserEmail();
       if (this.courseRepo.privelaged == true) {
@@ -64,7 +71,7 @@ export class TutorsTimeView extends BaseView {
     }
     this.bulkUserUpdate(this.metricsService.usersMap);
     //this.ea.subscribe(SingleUserUpdateEvent, userEvent => {
-     // this.singleUserUpdate(userEvent.user);
+    // this.singleUserUpdate(userEvent.user);
     //});
     this.metricsService.subscribeToAll(this.course);
   }
