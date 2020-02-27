@@ -1,3 +1,4 @@
+import "ag-grid-enterprise"
 import { GridOptions } from "ag-grid-community";
 import { BaseView } from "../base/base-view";
 import { LabSheet } from "./sheets/lab-sheet";
@@ -49,7 +50,12 @@ export class TutorsTimeView extends BaseView {
     await this.courseRepo.fetchCourse(params.courseurl);
     this.course = this.courseRepo.course;
 
-    this.sheet = this.sheets.get(params.metric);
+    if (params.metric === 'export') {
+      this.grid.api.exportDataAsExcel()
+    }
+    else {
+      this.sheet = this.sheets.get(params.metric);
+    }
     super.init(`time/${params.courseurl}`);
     this.sheet.clear(this.grid);
     this.sheet.populateCols(this.course.walls.get("lab"));

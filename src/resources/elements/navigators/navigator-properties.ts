@@ -143,6 +143,11 @@ export class NavigatorProperties {
       icon: "labTimeSummary",
       tip: "Minutes by lab"
     });
+    this.tutorsTime.nav.push({
+      link: `${environment.urlPrefix}time/${this.url}/export`,
+      icon: "timeExport",
+      tip: "Export to Excel"
+    });
   }
 
   createProfileBar(isPortfolio: boolean) {

@@ -8,7 +8,6 @@ export class LabSheet {
   subtitle = "";
 
   columnDefs: any = [
-    //{ headerName: "Rank", field: "index", pinned: "left", width: 40, suppressSizeToFit: true },
     { headerName: "User", field: "user", width: 180, suppressSizeToFit: true, pinned: "left" },
     { headerName: "Github", field: "github", width: 80, suppressSizeToFit: true, cellRenderer: this.renderGithub },
     { headerName: "Total", field: "summary", width: 60, suppressSizeToFit: true },
@@ -68,11 +67,11 @@ export class LabSheet {
     }
   }
 
-  clear (grid) {
+  clear(grid) {
     if (grid) {
       grid.api.setRowData([]);
       this.rowData = [];
-      this.columnDefs.length = 5;
+      this.columnDefs.length = 4;
     }
   }
 

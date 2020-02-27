@@ -28,6 +28,7 @@ export const iconColours = {
   labViewSummary : "",
   labTimeDetail : "",
   LabTimeSummary : "",
+  timeExport : "forestgreen"
 };
 
 export interface IconNav {
