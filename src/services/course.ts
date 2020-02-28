@@ -1,4 +1,4 @@
-import { Lo } from "./lo";
+import { Lo, Student } from "./lo";
 import { HttpClient } from "aurelia-fetch-client";
 import { allLos, allVideoLos, fixRoutes, getSortedUnits, injectCourseUrl } from "./utils";
 import { Topic } from "./topic";
@@ -96,5 +96,13 @@ export class Course {
       isPortfolio = portfolio == true;
     }
     return isPortfolio;
+  }
+
+  hasEnrollment(): boolean {
+    return this.lo.enrollment !== undefined;
+  }
+
+  getStudents(): Student[] {
+    return this.lo.enrollment.students;
   }
 }

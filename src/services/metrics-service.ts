@@ -1,7 +1,7 @@
 import { Course } from "./course";
 import * as firebase from "firebase/app";
 import "firebase/database";
-import { Lo } from "./lo";
+import { Lo, Student } from "./lo";
 import { inject } from "aurelia-dependency-injection";
 import { EventAggregator } from "aurelia-event-aggregator";
 
@@ -46,6 +46,7 @@ export interface UserMetric {
 export class MetricsService {
   usage: Metric;
   usersMap = new Map<string, UserMetric>();
+  enrolledUsersMap = new Map<string, Student>();
   course: Course;
   allLabs: Lo[] = [];
 
@@ -137,6 +138,19 @@ export class MetricsService {
     }
   }
 
+  filterUsers(students: Student[]) {
+    students.forEach(student => {
+      this.enrolledUsersMap.set(student.github, student);
+    });
+    this.usersMap.forEach(user => {
+      const student = this.enrolledUsersMap.get(user.nickname);
+      if (student) {
+        user.name = student.name;
+      } else {
+        this.usersMap.delete(user.nickname);
+      }
+    });
+  }
   async retrieveUser(course: Course, userEmail: string) {
     this.allLabs = course.walls.get("lab");
     const courseBase = course.url.substr(0, course.url.indexOf("."));

@@ -71,6 +71,9 @@ export class TutorsTimeView extends BaseView {
       const email = this.authService.getUserEmail();
       if (this.courseRepo.privelaged == true) {
         await this.metricsService.retrieveAllUsers(this.course);
+        if (this.course.hasEnrollment()) {
+          this.metricsService.filterUsers(this.course.getStudents());
+        }
       } else {
         await this.metricsService.retrieveUser(this.course, email);
       }

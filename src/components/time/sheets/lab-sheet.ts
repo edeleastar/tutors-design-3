@@ -51,7 +51,7 @@ export class LabSheet {
 
   creatRow(user: UserMetric) {
     let row = {
-      user: this.formatName(user.name, user.email),
+      user: user.name, //this.formatName(user.name, user.email),
       summary: 0,
       date: user.last,
       github: user.nickname
