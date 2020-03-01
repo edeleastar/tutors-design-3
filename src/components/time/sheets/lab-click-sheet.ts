@@ -1,10 +1,9 @@
 import { Lo } from "../../../services/lo";
 import { UserMetric } from "../../../services/metrics-service";
 import { LabSheet } from "./lab-sheet";
-import {deepScheme, shallowScheme} from "./heat-map-colours";
+import { shallowScheme } from "./heat-map-colours";
 
 export class LabClickSheet extends LabSheet {
-
   title = "Lab Page Views - Detailed";
   subtitle = "Total page view for all steps in each lab";
 
@@ -41,12 +40,16 @@ export class LabClickSheet extends LabSheet {
 
   updateRow(user: UserMetric, rowNode) {
     let summaryCount = 0;
-    for (let labMetric of user.labActivity) {
+    user.labActivity.forEach(labMetric => {
+      let labSummaryCount = 0;
       if (labMetric) {
-        for (let stepMetric of labMetric.metrics) {
+        labMetric.metrics.forEach(stepMetric => {
           rowNode.setDataValue(`${labMetric.title + stepMetric.title}`, stepMetric.count);
-        }
+          labSummaryCount = labSummaryCount + stepMetric.count;
+        });
       }
-    }
+      summaryCount = summaryCount + labSummaryCount;
+    });
+    rowNode.setDataValue("summary", summaryCount);
   }
 }

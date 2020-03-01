@@ -187,6 +187,7 @@ export class MetricsService {
         that.populateLabUsage(user);
         that.usersMap.set(user.nickname, user);
         that.ea.publish(new SingleUserUpdateEvent(user));
+        //console.log(user.name);
       });
   }
 }

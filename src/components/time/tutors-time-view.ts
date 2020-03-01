@@ -1,4 +1,4 @@
-import "ag-grid-enterprise"
+import "ag-grid-enterprise";
 import { GridOptions } from "ag-grid-community";
 import { BaseView } from "../base/base-view";
 import { LabSheet } from "./sheets/lab-sheet";
@@ -10,15 +10,9 @@ import { LabsTimeSummarySheet } from "./sheets/lab-time-summary-sheet";
 import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";
 import { SingleUserUpdateEvent, UserMetric } from "../../services/metrics-service";
 
-let timeView: TutorsTimeView = null;
-const func = () => {
-  //timeView.startSubscription();
-};
-
-setTimeout(func, 30 * 1000);
-
 export class TutorsTimeView extends BaseView {
   grid = null;
+  subscribed = false;
 
   gridOptions: GridOptions = {
     animateRows: true,
@@ -27,6 +21,7 @@ export class TutorsTimeView extends BaseView {
       sortable: true,
       resizable: true
     },
+    enableRangeSelection: true,
     enableCellChangeFlash: true,
     getRowNodeId: function(data) {
       return data.github;
@@ -45,15 +40,13 @@ export class TutorsTimeView extends BaseView {
   }
 
   async activate(params, subtitle: string) {
-    timeView = this;
     this.initMap();
     await this.courseRepo.fetchCourse(params.courseurl);
     this.course = this.courseRepo.course;
 
-    if (params.metric === 'export') {
-      this.grid.api.exportDataAsExcel()
-    }
-    else {
+    if (params.metric === "export") {
+      this.grid.api.exportDataAsExcel();
+    } else {
       this.sheet = this.sheets.get(params.metric);
     }
     super.init(`time/${params.courseurl}`);
@@ -74,22 +67,20 @@ export class TutorsTimeView extends BaseView {
         if (this.course.hasEnrollment()) {
           this.metricsService.filterUsers(this.course.getStudents());
         }
+        this.subscribed = false;
       } else {
         await this.metricsService.retrieveUser(this.course, email);
       }
     }
     this.bulkUserUpdate(this.metricsService.usersMap);
-    //this.ea.subscribe(SingleUserUpdateEvent, userEvent => {
-    // this.singleUserUpdate(userEvent.user);
-    //});
-    this.metricsService.subscribeToAll(this.course);
+    if (!this.subscribed) {
+      this.subscribed = true;
+      this.metricsService.subscribeToAll(this.course);
+      this.ea.subscribe(SingleUserUpdateEvent, userEvent => {
+        this.singleUserUpdate(userEvent.user);
+      });
+    }
   }
-
-  startSubscription() {
-    this.metricsService.subscribeToAll(this.course);
-  }
-
-  stopSubscription() {}
 
   update() {
     this.sheet.render(this.grid);

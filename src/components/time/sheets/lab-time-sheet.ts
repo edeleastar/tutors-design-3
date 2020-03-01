@@ -39,7 +39,7 @@ export class LabTimeSheet extends LabSheet {
       }
       summaryCount = summaryCount + labSummaryCount;
     });
-    row.summary = summaryCount / 2;
+    row.summary = summaryCount;
     this.rowData.push(row);
   }
 
@@ -58,6 +58,6 @@ export class LabTimeSheet extends LabSheet {
       }
       summaryCount = summaryCount + labSummaryCount;
     });
-    rowNode.setDataValue("summary", summaryCount / 2);
+    rowNode.setDataValue("summary", summaryCount);
   }
 }

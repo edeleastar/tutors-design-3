@@ -1,7 +1,6 @@
 import { ICellRendererParams } from "ag-grid-community";
 import { Lo } from "../../../services/lo";
 import { UserMetric } from "../../../services/metrics-service";
-import { deepScheme, shallowScheme } from "./heat-map-colours";
 
 export class LabSheet {
   title = "";
