@@ -1,7 +1,7 @@
 {
   "name": "tutors-design",
   "description": "An Aurelia client application.",
-  "version": "0.7.1",
+  "version": "1.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/edeleastar/tutors-design"
