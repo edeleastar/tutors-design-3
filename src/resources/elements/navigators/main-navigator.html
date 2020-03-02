@@ -4,38 +4,34 @@
   <require from="../iconography/icon"></require>
   <require from="../iconography/icon-nav-bar.html"></require>
   <require from="./toc-btn.html"></require>
-  <require from="./search-btn.html"></require>
-  <require from="./logout-btn.html"></require>
 
   <div class="uk-flex uk-flex-center uk-flex-middle uk-text-center uk-container-expand uk-padding-small" uk-grid>
-    <div if.bind="navigatorProperties.courseRepo.course">
+    <div if.bind="navigatorProperties.toc.visible">
       <toc-btn></toc-btn>
     </div>
     <div class="uk-width-1-2@m  uk-card uk-card-default uk-padding-small uk-visible@m">
-      <title-card maintitle="${navigatorProperties.title}" subtitle="${navigatorProperties.subtitle}" img="${navigatorProperties.img}" version="${navigatorProperties.version}"></title-card>
+      <title-card maintitle="${navigatorProperties.titleCard.title}" subtitle="${navigatorProperties.titleCard.subtitle}" img="${navigatorProperties.titleCard.img}" version="${navigatorProperties.version}"></title-card>
     </div>
     <div class="uk-width-1-2@m  uk-card uk-card-default uk-text-center uk-padding-remove uk-hidden@m">
       <title-card-small maintitle="${navigatorProperties.title}" subtitle="${navigatorProperties.subtitle}" icon="${navigatorProperties.icon}"
                         colour="${navigatorProperties.iconColour}" version=${navigatorProperties.version}"></title-card-small>
     </div>
-
-    <div if.bind="navigatorProperties.parentLink">
-      <a id="parent" href="${navigatorProperties.parentLink}">
-        <icon type="${navigatorProperties.parentIcon}" size="4x"></icon>
+    <div if.bind="navigatorProperties.parent.visible">
+      <a id="parent" href="${navigatorProperties.parent.link}">
+        <icon type="${navigatorProperties.parent.icon}" size="4x"></icon>
       </a>
     </div>
-    <div if.bind="navigatorProperties.companions.length>0">
-      <icon-nav-bar nav.one-way="navigatorProperties.companions"></icon-nav-bar>
+    <div if.bind="navigatorProperties.companions.visible">
+      <icon-nav-bar nav.one-way="navigatorProperties.companions.nav"></icon-nav-bar>
     </div>
-    <div if.bind="navigatorProperties.walls.length>0">
-      <icon-nav-bar nav.one-way="navigatorProperties.walls"></icon-nav-bar>
+    <div if.bind="navigatorProperties.walls.visible">
+      <icon-nav-bar nav.one-way="navigatorProperties.walls.nav"></icon-nav-bar>
     </div>
-    <div if.bind="navigatorProperties.courseRepo.course">
-      <search-btn searchroute="${navigatorProperties.searchroute}"></search-btn>
+    <div if.bind="navigatorProperties.tutorsTime.visible">
+      <icon-nav-bar nav.one-way="navigatorProperties.tutorsTime.nav"></icon-nav-bar>
     </div>
-    <div if.bind="navigatorProperties.showLogout">
-      <logout-btn logoutroute="${navigatorProperties.logoutroute}"></logout-btn>
+    <div if.bind="navigatorProperties.profile.visible">
+      <icon-nav-bar nav.one-way="navigatorProperties.profile.nav"></icon-nav-bar>
     </div>
-
   </div>
 </template>

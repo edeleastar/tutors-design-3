@@ -96,7 +96,8 @@ export class AuthService {
   }
 
   setSession(authResult) {
-    let expiresAt = JSON.stringify(authResult.expiresIn * 1000 + new Date().getTime());
+    // 6 hour token
+    let expiresAt = JSON.stringify(authResult.expiresIn * 3000 + new Date().getTime());
     localStorage.setItem("access_token", authResult.accessToken);
     localStorage.setItem("id_token", authResult.idToken);
     localStorage.setItem("expires_at", expiresAt);
@@ -118,5 +119,11 @@ export class AuthService {
       return new Date().getTime() < expiresAt;
     }
     return false;
+  }
+
+  getUserEmail() {
+    const id = localStorage.getItem("id");
+    const email = decrypt(id);
+    return email;
   }
 }
