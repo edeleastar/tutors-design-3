@@ -34,7 +34,7 @@ export class LabClickSummarySheet extends LabSheet {
       let labSummaryCount = 0;
       if (labMetric) {
         labMetric.metrics.forEach(stepMetric => {
-          labSummaryCount = labSummaryCount + stepMetric.count;
+          if (stepMetric.count) labSummaryCount = labSummaryCount + stepMetric.count;
         });
         row[`${labMetric.title}`] = labSummaryCount;
       }
@@ -51,7 +51,7 @@ export class LabClickSummarySheet extends LabSheet {
       let labSummaryCount = 0;
       if (labMetric) {
         labMetric.metrics.forEach(stepMetric => {
-          labSummaryCount = labSummaryCount + stepMetric.count;
+          if (stepMetric.count) labSummaryCount = labSummaryCount + stepMetric.count;
         });
         rowNode.setDataValue(`${labMetric.title}`, labSummaryCount);
       }
