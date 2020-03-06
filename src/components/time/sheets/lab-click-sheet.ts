@@ -29,8 +29,10 @@ export class LabClickSheet extends LabSheet {
     user.labActivity.forEach(labMetric => {
       if (labMetric) {
         labMetric.metrics.forEach(stepMetric => {
-          row[`${labMetric.title + stepMetric.title}`] = stepMetric.count;
-          summaryCount = summaryCount + stepMetric.count;
+          if (stepMetric.count) {
+            row[`${labMetric.title + stepMetric.title}`] = stepMetric.count;
+            summaryCount = summaryCount + stepMetric.count;
+          }
         });
       }
     });
@@ -44,8 +46,10 @@ export class LabClickSheet extends LabSheet {
       let labSummaryCount = 0;
       if (labMetric) {
         labMetric.metrics.forEach(stepMetric => {
-          rowNode.setDataValue(`${labMetric.title + stepMetric.title}`, stepMetric.count);
-          labSummaryCount = labSummaryCount + stepMetric.count;
+          if (stepMetric.count) {
+            rowNode.setDataValue(`${labMetric.title + stepMetric.title}`, stepMetric.count);
+            labSummaryCount = labSummaryCount + stepMetric.count;
+          }
         });
       }
       summaryCount = summaryCount + labSummaryCount;
