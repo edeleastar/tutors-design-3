@@ -8,6 +8,7 @@ import environment from "../environment";
 @autoinject
 export class CourseRepo {
   course: Course;
+  privelaged = false;
   courses = new Map<string, Course>();
   courseUrl = "";
 

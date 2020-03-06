@@ -1,22 +1,41 @@
 import { Lo } from "../../services/lo";
 import environment from "../../environment";
 import { BaseView } from "../base/base-view";
+import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";
 
 export class WallView extends BaseView {
   los: Lo[];
   name = "";
+  routeName = "";
 
   async activate(params, route) {
     this.los = await this.courseRepo.fetchWall(params.courseurl, route.name);
-    const course = this.courseRepo.course;
-    this.name = route.name;
-
+    this.routeName = route.name;
     super.init(`${route.name}s/${params.courseurl}`);
+  }
 
-    this.navigatorProperties.title = `All ${route.name}'s in ${course.lo.title}`;
-    this.navigatorProperties.subtitle = course.lo.properties.credits;
-    this.navigatorProperties.parentLink = `${environment.urlPrefix}/course/${this.courseRepo.courseUrl}`;
-    this.navigatorProperties.parentIcon = "moduleHome";
-    this.navigatorProperties.parentIconTip = "To module home ...";
+  determineActivationStrategy() {
+    return "replace";
+  }
+
+  configMainNav(nav: NavigatorProperties) {
+    this.navigatorProperties.config(
+      {
+        titleCard: true,
+        parent: this.courseRepo.course.lo.properties.parent != null,
+        profile: true,
+        companions: false,
+        walls: true,
+        tutorsTime: false
+      },
+      {
+        title: `All ${this.routeName}'s in ${this.course.lo.title}`,
+        subtitle: this.courseRepo.course.lo.properties.credits,
+        img: this.courseRepo.course.lo.img,
+        parentLink: `${environment.urlPrefix}/course/${this.courseRepo.courseUrl}`,
+        parentIcon: "moduleHome",
+        parentTip: "To module home ..."
+      }
+    );
   }
 }

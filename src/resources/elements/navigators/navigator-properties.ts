@@ -1,9 +1,7 @@
-import { CourseRepo } from "../../../services/course-repo";
-import { Lo } from "../../../services/lo";
 import environment from "../../../environment";
 import { AuthService } from "../../../services/auth-service";
 import { autoinject } from "aurelia-framework";
-import { IconNav } from "../iconography/styles";
+import { Course } from "../../../services/course";
 const readerVersion = require("../../../../package.json").version;
 
 interface Properties {
@@ -12,77 +10,157 @@ interface Properties {
 
 @autoinject
 export class NavigatorProperties {
-  title: string;
-  subtitle: string;
-  img: string;
-  parentLink: string;
-  parentIcon: string;
-  parentIconTip: string;
-  showLogout = false;
-  version = "";
-  walls: IconNav[] = [];
-  companions: IconNav[] = [];
-  searchroute = "";
-  logoutroute = "/logout";
+  version = "hello";
+  toc = {
+    visible: true
+  };
 
-  constructor(private courseRepo: CourseRepo, private authService: AuthService) {}
+  titleCard = {
+    title: "",
+    subtitle: "",
+    img: "",
+    version: "",
+    visible: true
+  };
 
-  init(lo: Lo) {
-    this.title = lo.title;
-    this.img = lo.img;
-    this.version = `${readerVersion} (${this.courseRepo.course.lo.version})`;
-    if (lo.type == "course") {
-      this.subtitle = this.courseRepo.course.lo.properties.credits;
-      this.parentLink = this.courseRepo.course.lo.properties.parent;
-      this.parentIcon = "programHome";
-      //this.parentIconTip = "To programme home...";
-    } else if (lo.type == "topic") {
-      this.subtitle = this.courseRepo.course.lo.title;
-      this.parentLink = `${environment.urlPrefix}/course/${this.courseRepo.courseUrl}`;
-      this.parentIcon = "moduleHome";
-      //this.parentIconTip = "To module home ...";
-    } else if (lo.type == "talk" || lo.type == "video" || lo.type == 'lab') {
-      this.subtitle = lo.title;
-      this.title = lo.parent.lo.title;
-      this.parentLink = lo.parent.lo.route;
-      this.parentIcon = "topic";
-      //this.parentIconTip = "To parent topic...";
-    }
-    this.showLogout =
-      this.authService.isAuthenticated() || this.authService.isProtected(this.courseRepo.course, "course");
-    this.searchroute = `${environment.urlPrefix}search/${this.courseRepo.courseUrl}`;
+  parent = {
+    link: "",
+    icon: "",
+    tip: "",
+    visible: true
+  };
 
-    this.createWallBar();
-    this.createCompanionBar(this.courseRepo.course.lo.properties);
+  companions = {
+    nav: [],
+    visible: true
+  };
+
+  walls = {
+    nav: [],
+    visible: true
+  };
+
+  tutorsTime = {
+    nav: [],
+    visible: false
+  };
+
+  profile = {
+    nav: [],
+    visible: false
+  };
+
+  url = "";
+
+  constructor(private authService: AuthService) {}
+
+  config(navBars, params) {
+    this.titleCard.visible = navBars.titleCard;
+    this.parent.visible = navBars.parent;
+    this.companions.visible = navBars.companions;
+    this.walls.visible = navBars.walls;
+    this.tutorsTime.visible = navBars.tutorsTime;
+
+    this.titleCard.title = params.title;
+    this.titleCard.subtitle = params.subtitle;
+    this.titleCard.img = params.img;
+    this.parent.link = params.parentLink;
+    this.parent.icon = params.parentIcon;
+    this.parent.tip = params.parentTip;
   }
 
-  createWallBar() {
-    this.walls = [];
-    this.courseRepo.course.walls.forEach((los, type) => {
-      this.walls.push(this.createWallLink(type));
+  init(course: Course) {
+    this.version = `${readerVersion} (${course.lo.version})`;
+    if (course.url !== this.url) {
+      this.url = course.url;
+      this.createWallBar(course);
+      this.createCompanionBar(course.lo.properties);
+      this.createTimeSheets();
+      if (course.authLevel > 0) {
+        this.createProfileBar(course.isPortfolio());
+      }
+    }
+  }
+
+  clear() {
+    this.companions.nav = this.profile.nav = this.tutorsTime.nav = this.walls.nav = this.companions.nav = [];
+  }
+
+  createWallBar(course: Course) {
+    this.walls.nav = [];
+    course.walls.forEach((los, type) => {
+      this.walls.nav.push(this.createWallLink(type));
+    });
+    this.walls.nav.push({
+      link: `${environment.urlPrefix}search/${this.url}`,
+      icon: "search",
+      tip: "Search this course"
     });
   }
 
   createCompanionBar(properties: Properties) {
-    this.companions = [];
+    this.companions.nav = [];
     if (properties.slack)
-      this.companions.push({ link: properties["slack"], icon: "slack", tip: "to slack channel for this module" });
+      this.companions.nav.push({ link: properties["slack"], icon: "slack", tip: "to slack channel for this module" });
     if (properties.moodle)
-      this.companions.push({ link: properties["moodle"], icon: "moodle", tip: "to moodle module for this module" });
+      this.companions.nav.push({ link: properties["moodle"], icon: "moodle", tip: "to moodle module for this module" });
     if (properties.youtube)
-      this.companions.push({ link: properties["youtube"], icon: "youtube", tip: "to youtube channel for this module" });
+      this.companions.nav.push({
+        link: properties["youtube"],
+        icon: "youtube",
+        tip: "to youtube channel for this module"
+      });
+    this.companions.visible = this.companions.nav.length > 0;
   }
 
   createWallLink(type: string) {
     return {
-      link: `${environment.urlPrefix}/${type}s/${this.courseRepo.courseUrl}`,
+      link: `${environment.urlPrefix}/${type}s/${this.url}`,
       icon: type,
       tip: `all ${type}'s in this module`
     };
   }
 
-  clear() {
-    this.walls = [];
-    this.companions = [];
+  createTimeSheets() {
+    this.tutorsTime.nav = [];
+    this.tutorsTime.nav.push({
+      link: `${environment.urlPrefix}time/${this.url}/viewdetail`,
+      icon: "labViewDetail",
+      tip: "Views by Lab Step"
+    });
+    this.tutorsTime.nav.push({
+      link: `${environment.urlPrefix}time/${this.url}/viewsummary`,
+      icon: "labViewSummary",
+      tip: "Views by Lab"
+    });
+    this.tutorsTime.nav.push({
+      link: `${environment.urlPrefix}time/${this.url}/timedetail`,
+      icon: "labTimeDetail",
+      tip: "Minutes by Lab Step"
+    });
+    this.tutorsTime.nav.push({
+      link: `${environment.urlPrefix}time/${this.url}/timesummary`,
+      icon: "labTimeSummary",
+      tip: "Minutes by lab"
+    });
+    this.tutorsTime.nav.push({
+      link: `${environment.urlPrefix}time/${this.url}/export`,
+      icon: "timeExport",
+      tip: "Export to Excel"
+    });
+  }
+
+  createProfileBar(isPortfolio: boolean) {
+    this.profile.nav = [];
+    this.profile.nav.push({
+      link: `${environment.urlPrefix}time/${this.url}/viewsummary`,
+      icon: "tutorsTime",
+      tip: "Tutors Time"
+    });
+    this.profile.nav.push({ link: `/logout`, icon: "logout", tip: "Logout form Tutors" });
+    this.profile.visible = this.authService.isAuthenticated();
+    if (isPortfolio) {
+      this.profile.visible = false;
+    }
   }
 }
