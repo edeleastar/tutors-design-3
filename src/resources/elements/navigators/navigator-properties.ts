@@ -75,7 +75,7 @@ export class NavigatorProperties {
       this.url = course.url;
       this.createWallBar(course);
       this.createCompanionBar(course.lo.properties);
-      this.createTimeSheets();
+      this.createTimeSheets(course);
       if (course.authLevel > 0) {
         this.createProfileBar(course.isPortfolio());
       }
@@ -121,7 +121,7 @@ export class NavigatorProperties {
     };
   }
 
-  createTimeSheets() {
+  createTimeSheets(course:Course) {
     this.tutorsTime.nav = [];
     this.tutorsTime.nav.push({
       link: `${environment.urlPrefix}time/${this.url}/viewdetail`,
