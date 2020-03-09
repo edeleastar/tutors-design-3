@@ -2,14 +2,16 @@
   <require from="../../resources/elements/navigators/main-navigator"></require>
   <require from="../../resources/elements/card-decks/card-deck.html"></require>
   <require from="../../resources/elements/card-decks/video-deck-double.html"></require>
+  <require from="../../resources/elements/card-decks/video-deck.html"></require>
 
   <div if.bind="show">
     <div class="uk-container uk-padding-small">
-      <div if.bind="name != 'video'">
+      <div if.bind="routeName != 'video'">
         <card-deck los.one-way="los"></card-deck>
       </div>
       <div else>
-        <video-deck-double los.one-way="los"></video-deck-double>
+        <video-deck videos.one-way="panelVideos"></video-deck>
+        <video-deck-double los.one-way="talkVideos"></video-deck-double>
       </div>
     </div>
   </div>

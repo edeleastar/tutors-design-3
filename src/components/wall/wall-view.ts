@@ -5,13 +5,20 @@ import { NavigatorProperties } from "../../resources/elements/navigators/navigat
 
 export class WallView extends BaseView {
   los: Lo[];
-  name = "";
+  panelVideos : Lo[];
+  talkVideos : Lo[];
+
   routeName = "";
 
   async activate(params, route) {
     this.los = await this.courseRepo.fetchWall(params.courseurl, route.name);
     this.routeName = route.name;
     super.init(`${route.name}s/${params.courseurl}`);
+
+    if (this.routeName == "video") {
+      this.panelVideos = this.los.filter(lo => lo.type === 'panelvideo');
+      this.talkVideos = this.los.filter(lo => lo.type !== 'panelvideo');
+    }
   }
 
   determineActivationStrategy() {
