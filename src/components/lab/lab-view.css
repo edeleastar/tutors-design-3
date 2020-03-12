@@ -16,7 +16,7 @@ p {
 }
 
 pre code {
-  font-family: "Monaco";
+  font-family: "Monaco", "Consolas", "Courier New";
   font-size: 100%;
   line-height:18px;
 }
