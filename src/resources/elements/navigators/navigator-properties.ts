@@ -148,6 +148,15 @@ export class NavigatorProperties {
       icon: "timeExport",
       tip: "Export to Excel"
     });
+    this.tutorsTime.nav.push({
+      link: `${environment.urlPrefix}time/${this.url}/timelive`,
+      icon: "timeLive",
+      tip: "See who is doing labs right now"
+    });
+  }
+
+  privelagedEnabled() {
+
   }
 
   createProfileBar(isPortfolio: boolean) {
