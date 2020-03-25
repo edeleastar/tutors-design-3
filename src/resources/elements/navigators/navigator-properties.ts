@@ -60,6 +60,8 @@ export class NavigatorProperties {
     this.companions.visible = navBars.companions;
     this.walls.visible = navBars.walls;
     this.tutorsTime.visible = navBars.tutorsTime;
+    this.profile.visible = navBars.profile;
+    this.toc.visible = navBars.toc;
 
     this.titleCard.title = params.title;
     this.titleCard.subtitle = params.subtitle;
@@ -123,36 +125,36 @@ export class NavigatorProperties {
 
   createTimeSheets(course:Course) {
     this.tutorsTime.nav = [];
-    this.tutorsTime.nav.push({
-      link: `${environment.urlPrefix}time/${this.url}/viewdetail`,
-      icon: "labViewDetail",
-      tip: "Views by Lab Step"
-    });
+    // this.tutorsTime.nav.push({
+    //   link: `${environment.urlPrefix}time/${this.url}/viewdetail`,
+    //   icon: "labViewDetail",
+    //   tip: "Views by Lab Step"
+    // });
     this.tutorsTime.nav.push({
       link: `${environment.urlPrefix}time/${this.url}/viewsummary`,
       icon: "labViewSummary",
       tip: "Views by Lab"
     });
-    this.tutorsTime.nav.push({
-      link: `${environment.urlPrefix}time/${this.url}/timedetail`,
-      icon: "labTimeDetail",
-      tip: "Minutes by Lab Step"
-    });
+    // this.tutorsTime.nav.push({
+    //   link: `${environment.urlPrefix}time/${this.url}/timedetail`,
+    //   icon: "labTimeDetail",
+    //   tip: "Minutes by Lab Step"
+    // });
     this.tutorsTime.nav.push({
       link: `${environment.urlPrefix}time/${this.url}/timesummary`,
       icon: "labTimeSummary",
       tip: "Minutes by lab"
     });
-    this.tutorsTime.nav.push({
-      link: `${environment.urlPrefix}time/${this.url}/export`,
-      icon: "timeExport",
-      tip: "Export to Excel"
-    });
-    this.tutorsTime.nav.push({
-      link: `${environment.urlPrefix}time/${this.url}/timelive`,
-      icon: "timeLive",
-      tip: "See who is doing labs right now"
-    });
+    // this.tutorsTime.nav.push({
+    //   link: `${environment.urlPrefix}time/${this.url}/export`,
+    //   icon: "timeExport",
+    //   tip: "Export to Excel"
+    // });
+    // this.tutorsTime.nav.push({
+    //   link: `${environment.urlPrefix}live/${this.url}`,
+    //   icon: "timeLive",
+    //   tip: "See who is doing labs right now"
+    // });
   }
 
   privelagedEnabled() {
@@ -162,14 +164,22 @@ export class NavigatorProperties {
   createProfileBar(isPortfolio: boolean) {
     this.profile.nav = [];
     this.profile.nav.push({
+      link: `${environment.urlPrefix}live/${this.url}`,
+      icon: "timeLive",
+      tip: "See who is doing labs right now",
+      target : "_blank"
+    });
+    this.profile.nav.push({
       link: `${environment.urlPrefix}time/${this.url}/viewsummary`,
       icon: "tutorsTime",
       tip: "Tutors Time"
     });
     this.profile.nav.push({ link: `/logout`, icon: "logout", tip: "Logout form Tutors" });
-    this.profile.visible = this.authService.isAuthenticated();
-    if (isPortfolio) {
-      this.profile.visible = false;
+    if (this.profile.visible) {
+      this.profile.visible = this.authService.isAuthenticated();
+      if (isPortfolio) {
+        this.profile.visible = false;
+      }
     }
   }
 }
