@@ -96,12 +96,11 @@ export class BaseView {
       this.pinBuffer = "";
       this.courseRepo.course.showAllLos();
       this.courseRepo.privelaged = true;
-      this.instructorModeEnabled()
+      this.instructorModeEnabled();
     }
   }
 
-  instructorModeEnabled() {
-  }
+  instructorModeEnabled() {}
 
   configMainNav(nav: NavigatorProperties) {
     nav.clear();
@@ -123,7 +122,9 @@ export class BaseView {
   autoNavProperties() {
     this.navigatorProperties.companions.visible =
       this.navigatorProperties.companions.visible && this.navigatorProperties.companions.nav.length > 0;
-    this.navigatorProperties.profile.visible =
-      this.course.authLevel > 0 && this.course.walls.get("lab") != null && this.authService.isAuthenticated();
+    if (this.navigatorProperties.profile.visible) {
+      this.navigatorProperties.profile.visible =
+        this.course.authLevel > 0 && this.course.walls.get("lab") != null && this.authService.isAuthenticated();
+    }
   }
 }

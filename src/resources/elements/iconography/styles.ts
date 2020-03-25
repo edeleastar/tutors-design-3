@@ -35,6 +35,7 @@ export interface IconNav {
   link: string;
   icon: string;
   tip: string;
+  target : ""
 }
 
 export interface IconNavBar {

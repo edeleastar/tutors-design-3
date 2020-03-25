@@ -19,7 +19,8 @@ export class TopicView extends BaseView {
         profile: true,
         companions: true,
         walls: true,
-        tutorsTime: false
+        tutorsTime: false,
+        toc: true
       },
       {
         title: this.topic.lo.title,

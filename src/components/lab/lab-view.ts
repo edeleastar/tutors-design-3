@@ -54,7 +54,8 @@ export class LabView extends BaseView {
         profile: true,
         companions: false,
         walls: true,
-        tutorsTime: false
+        tutorsTime: false,
+        toc: true
       },
       {
         title: this.lab.title,
