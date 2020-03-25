@@ -19,7 +19,8 @@ export class CourseView extends BaseView {
           profile: false,
           companions: false,
           walls: false,
-          tutorsTime: false
+          tutorsTime: false,
+          toc: false
         },
         {
           title: this.course.lo.title,
@@ -35,7 +36,8 @@ export class CourseView extends BaseView {
           profile: true,
           companions: true,
           walls: true,
-          tutorsTime: false
+          tutorsTime: false,
+          toc: true
         },
         {
           title: this.course.lo.title,

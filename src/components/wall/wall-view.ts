@@ -33,7 +33,8 @@ export class WallView extends BaseView {
         profile: true,
         companions: false,
         walls: true,
-        tutorsTime: false
+        tutorsTime: false,
+        toc: true
       },
       {
         title: `All ${this.routeName}'s in ${this.course.lo.title}`,
