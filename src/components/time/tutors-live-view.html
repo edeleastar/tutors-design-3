@@ -1,0 +1,11 @@
+<template>
+  <require from="./tutors-time-view.css"></require>
+  <require from="ag-grid-community/dist/styles/ag-grid.css"></require>
+  <require from="ag-grid-community/dist/styles/ag-theme-balham.css"></require>
+  <base-view></base-view>
+    <div style="width: 100%; height: 2200px;" resizeable resize.trigger="resize($event.detail)">
+      <ag-grid-aurelia #agGrid style="width: 100%; height: 100%;" class="ag-theme-balham"
+                       grid-options.bind="gridOptions" grid-ready.call="onReady($event)">
+      </ag-grid-aurelia>
+    </div>
+</template>
