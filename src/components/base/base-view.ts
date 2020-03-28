@@ -8,6 +8,7 @@ import { AnalyticsService } from "../../services/analytics-service";
 import { Course } from "../../services/course";
 import { EventAggregator } from "aurelia-event-aggregator";
 import { MetricsService } from "../../services/metrics-service";
+import { App } from "../../app";
 
 let currentLo: Lo = null;
 let currentRoute = "";
@@ -22,7 +23,7 @@ const func = () => {
 
 setInterval(func, 30 * 1000);
 
-@inject(CourseRepo, NavigatorProperties, AuthService, Router, AnalyticsService, EventAggregator, MetricsService)
+@inject(CourseRepo, NavigatorProperties, AuthService, Router, AnalyticsService, EventAggregator, MetricsService, App)
 export class BaseView {
   show = false;
 
@@ -34,6 +35,7 @@ export class BaseView {
   ea: EventAggregator;
   metricsService: MetricsService;
   course: Course;
+  app : App;
 
   myKeypressCallback: any;
   pinBuffer = "";
@@ -46,7 +48,8 @@ export class BaseView {
     router: Router,
     analyticsService: AnalyticsService,
     ea: EventAggregator,
-    metricsService: MetricsService
+    metricsService: MetricsService,
+    app : App
   ) {
     this.courseRepo = courseRepo;
     this.navigatorProperties = navigatorProperties;
@@ -55,6 +58,7 @@ export class BaseView {
     this.anaylticsService = analyticsService;
     this.ea = ea;
     this.metricsService = metricsService;
+    this.app = app;
   }
 
   async init(path: string = "", lo: Lo = null) {

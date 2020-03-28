@@ -27,17 +27,17 @@ export class TutorsLiveView extends BaseView {
   sheets: Map<string, LabSheet> = new Map();
   usersMap = new Map<string, number>();
   usersMetricMap = new Map<string, UserMetric>();
-  sheet: LabSheet = new LabLiveSheet()
-
+  sheet: LabSheet = new LabLiveSheet();
 
   async activate(params, subtitle: string) {
     await this.courseRepo.fetchCourse(params.courseurl);
+    this.authService.checkAuth(this.courseRepo.course, "talk");
     this.course = this.courseRepo.course;
     super.init(`time/${params.courseurl}`);
+    this.app.live = true;
     this.sheet.clear(this.grid);
     this.sheet.populateCols(this.course.walls.get("lab"));
     this.populateTime();
-
   }
 
   async populateTime() {
@@ -65,7 +65,9 @@ export class TutorsLiveView extends BaseView {
   }
 
   singleUserUpdate(user: UserMetric) {
+    if (!user.onlineStatus || user.onlineStatus == "online") {
       this.processLiveUpdate(user);
+    }
   }
 
   bulkUserUpdate(users: Map<string, UserMetric>) {

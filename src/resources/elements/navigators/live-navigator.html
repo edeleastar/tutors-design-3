@@ -1,0 +1,18 @@
+<template>
+  <require from="../cards/title-card.html"></require>
+
+  <div class="uk-flex uk-flex-center uk-flex-middle uk-text-center uk-container-expand uk-padding-small" uk-grid>
+    <div class="uk-width-3-5@m  uk-card uk-card-default uk-padding-small uk-visible@m">
+      <title-card maintitle="${navigatorProperties.titleCard.title}" subtitle="${navigatorProperties.titleCard.subtitle}" img="${navigatorProperties.titleCard.img}" version="${navigatorProperties.version}"></title-card>
+    </div>
+    <div class="uk-width-1-5@m  uk-padding-small">
+      <div if.bind="onlineStatus">
+        <button click.trigger="statusChange()" class="uk-button uk-button-primary">Online</button>
+        <button class="js-gitter-toggle-chat-button">Toggle Chat</button>
+      </div>
+      <div else>
+        <button click.trigger="statusChange()" class="uk-button uk-button-danger">Offline</button>
+      </div>
+    </div>
+  </div>
+</template>

@@ -9,6 +9,7 @@ import { AuthService } from "./services/auth-service";
 @autoinject
 export class App {
   title = 'Tutors';
+  live = false;
 
   constructor(private navigatorProperties: NavigatorProperties, private courseRepo : CourseRepo) {}
 

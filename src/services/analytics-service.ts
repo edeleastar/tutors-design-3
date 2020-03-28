@@ -4,11 +4,22 @@ import { Lo } from "./lo";
 import environment from "../environment";
 import { Course } from "./course";
 import { analyicsPageTitle } from "./utils";
+import { SingleUserUpdateEvent, UserMetric } from "./metrics-service";
+import { inject } from "aurelia-dependency-injection";
+import { EventAggregator } from "aurelia-event-aggregator";
 
 const initGTag = require("./utils-ga.js").initGTag;
 const trackEvent = require("./utils-ga.js").trackEvent;
 const trackTag = require("./utils-ga.js").trackTag;
 
+export class OnlineStatusEvent {
+  status = "online";
+  constructor(status: string) {
+    this.status = status;
+  }
+}
+
+@inject(EventAggregator)
 export class AnalyticsService {
   courseBaseName = "";
   userEmail = "";
@@ -17,13 +28,27 @@ export class AnalyticsService {
   firebaseIdRoot = "";
   firebaseEmailRoot = "";
   url = "";
+  onlneStatus = false;
 
-  constructor() {
+  constructor(private ea: EventAggregator) {
     initGTag(environment.ga);
     firebase.initializeApp(environment.firebase);
   }
 
-  login(name: string, email: string, id: string, picture : string, url: string, nickname : string) {
+  getOnlineStatus(): boolean {
+    return this.onlneStatus;
+  }
+
+  setOnlineStatus(status: boolean) {
+    this.onlneStatus = status;
+    if (status) {
+      this.updateStr(`${this.firebaseEmailRoot}/onlineStatus`, 'online');
+    } else {
+      this.updateStr(`${this.firebaseEmailRoot}/onlineStatus`, 'offline');
+    }
+  }
+
+  login(name: string, email: string, id: string, picture: string, url: string, nickname: string) {
     if (this.userEmail !== email || this.url !== url) {
       this.url = url;
       this.courseBaseName = url.substr(0, url.indexOf("."));
@@ -34,6 +59,18 @@ export class AnalyticsService {
       this.userEmailSanitised = email.replace(/[`#$.\[\]\/]/gi, "*");
       this.firebaseEmailRoot = `${this.courseBaseName}/users/${this.userEmailSanitised}`;
       this.reportLogin(name, email, id, picture, nickname);
+
+      const that = this;
+      firebase
+        .database()
+        .ref(`${this.courseBaseName}/users/${this.userEmailSanitised}/onlineStatus`)
+        .on("value", function(snapshot) {
+          let status = snapshot.val()
+          if (!status) {
+            status = "online";
+          }
+          that.ea.publish(new OnlineStatusEvent(status));
+        });
     }
   }
 
@@ -87,7 +124,7 @@ export class AnalyticsService {
     }
   }
 
-  logSearchValue (term : string, path:string) {
+  logSearchValue(term: string, path: string) {
     let searchkey = new Date().toLocaleString();
     searchkey = searchkey.replace(/[\/]/g, "-");
     let key = `${this.firebaseEmailRoot}/search/${searchkey}/term`;
@@ -112,7 +149,7 @@ export class AnalyticsService {
     this.updateCount(`${this.firebaseEmailRoot}/${key}/duration`);
   }
 
-  reportLogin(name: string, email: string, id: string, picture : string, nickname : string) {
+  reportLogin(name: string, email: string, id: string, picture: string, nickname: string) {
     this.updateStr(`${this.firebaseEmailRoot}/email`, email);
     this.updateStr(`${this.firebaseEmailRoot}/name`, name);
     this.updateStr(`${this.firebaseEmailRoot}/id`, id);
