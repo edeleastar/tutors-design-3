@@ -38,6 +38,9 @@ export function fixRoutes(lo: Lo) {
   if (environment.pushState && lo.video && lo.video[0] == "#") {
     lo.video = lo.video.slice(1);
   }
+  if (lo.route.endsWith("md") && lo.video) {
+    lo.route = lo.video;
+  }
 }
 
 export function lastSegment(url: string) {
