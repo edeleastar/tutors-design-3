@@ -25,6 +25,7 @@ export interface Metric {
   count: number;
   last: string;
   duration: number;
+  onlineStatus : string;
   metrics: Metric[];
 }
 
@@ -37,6 +38,7 @@ export interface UserMetric {
   title: string;
   count: number;
   last: string;
+  onlineStatus : string;
   duration: number;
   metrics: Metric[];
   labActivity: Metric[];
@@ -123,6 +125,7 @@ export class MetricsService {
             name: userMetric.name,
             picture: userMetric.picture,
             nickname: userMetric.nickname,
+            onlineStatus : userMetric.onlineStatus,
             id: "home",
             title: userMetric.title,
             count: userMetric.count,
