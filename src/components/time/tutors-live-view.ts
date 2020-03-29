@@ -65,9 +65,17 @@ export class TutorsLiveView extends BaseView {
   }
 
   singleUserUpdate(user: UserMetric) {
-    if (!user.onlineStatus || user.onlineStatus == "online") {
+    if (!this.instructorMode) {
+      if (!user.onlineStatus || user.onlineStatus == "online") {
+        this.processLiveUpdate(user);
+      }
+    } else {
       this.processLiveUpdate(user);
     }
+  }
+
+  instructorModeEnabled() {
+
   }
 
   bulkUserUpdate(users: Map<string, UserMetric>) {

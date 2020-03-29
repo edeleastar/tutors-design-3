@@ -40,6 +40,7 @@ export class BaseView {
   myKeypressCallback: any;
   pinBuffer = "";
   ignorePin = "";
+  instructorMode = false;
 
   constructor(
     courseRepo: CourseRepo,
@@ -101,6 +102,7 @@ export class BaseView {
       this.courseRepo.course.showAllLos();
       this.courseRepo.privelaged = true;
       this.instructorModeEnabled();
+      this.instructorMode = true;
     }
   }
 
