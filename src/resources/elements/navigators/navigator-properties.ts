@@ -145,6 +145,12 @@ export class NavigatorProperties {
       icon: "labTimeSummary",
       tip: "Minutes by lab"
     });
+    this.tutorsTime.nav.push({
+      link: `${environment.urlPrefix}live/${this.url}`,
+      icon: "timeLive",
+      tip: "See who is doing labs right now",
+      target : "_blank"
+    });
     // this.tutorsTime.nav.push({
     //   link: `${environment.urlPrefix}time/${this.url}/export`,
     //   icon: "timeExport",
@@ -163,12 +169,7 @@ export class NavigatorProperties {
 
   createProfileBar(isPortfolio: boolean) {
     this.profile.nav = [];
-    this.profile.nav.push({
-      link: `${environment.urlPrefix}live/${this.url}`,
-      icon: "timeLive",
-      tip: "See who is doing labs right now",
-      target : "_blank"
-    });
+
     this.profile.nav.push({
       link: `${environment.urlPrefix}time/${this.url}/viewsummary`,
       icon: "tutorsTime",
