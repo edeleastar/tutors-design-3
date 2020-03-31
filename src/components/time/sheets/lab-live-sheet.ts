@@ -1,11 +1,15 @@
 import { Lo } from "../../../services/lo";
 import { UserMetric } from "../../../services/metrics-service";
 import { LabSheet } from "./lab-sheet";
-import { deepScheme, shallowScheme } from "./heat-map-colours";
+import { deepScheme, liveScheme, shallowScheme } from "./heat-map-colours";
 
 export class LabLiveSheet extends LabSheet {
   title = "Whos is Here?";
   subtitle = "Students doing labs right now";
+
+  columnDefs: any = [
+    { headerName: "Github Profile Name", field: "user", width: 180, suppressSizeToFit: true, pinned: "left" },
+  ];
 
   populateCols(los: Lo[]) {
     los.forEach(lab => {
@@ -14,7 +18,7 @@ export class LabLiveSheet extends LabSheet {
         width: 70,
         field: lab.title,
         suppressSizeToFit: true,
-        cellClassRules: deepScheme
+        cellClassRules: liveScheme
       });
     });
   }
