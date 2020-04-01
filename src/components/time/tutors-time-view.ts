@@ -8,11 +8,11 @@ import { LabClickSheet } from "./sheets/lab-click-sheet";
 import { LabTimeSheet } from "./sheets/lab-time-sheet";
 import { LabsTimeSummarySheet } from "./sheets/lab-time-summary-sheet";
 import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";
-import { SingleUserUpdateEvent, UserMetric } from "../../services/metrics-service";
 
 export class TutorsTimeView extends BaseView {
   grid = null;
-  subscribed = false;
+  sheets: Map<string, LabSheet> = new Map();
+  sheet: LabSheet = null;
 
   gridOptions: GridOptions = {
     animateRows: true,
@@ -23,12 +23,7 @@ export class TutorsTimeView extends BaseView {
     },
     enableRangeSelection: true,
     enableCellChangeFlash: true,
-    getRowNodeId: function(data) {
-      return data.github;
-    }
   };
-  sheets: Map<string, LabSheet> = new Map();
-  sheet: LabSheet = null;
 
   initMap() {
     if (this.sheets.size == 0) {
@@ -67,18 +62,13 @@ export class TutorsTimeView extends BaseView {
         if (this.course.hasEnrollment()) {
           this.metricsService.filterUsers(this.course.getStudents());
         }
-        this.subscribed = false;
       } else {
         await this.metricsService.retrieveUser(this.course, email);
       }
-    }
-    this.bulkUserUpdate(this.metricsService.usersMap);
-    if (!this.subscribed) {
-      this.subscribed = true;
-      this.metricsService.subscribeToAll(this.course);
-      this.ea.subscribe(SingleUserUpdateEvent, userEvent => {
-        this.singleUserUpdate(userEvent.user);
+      this.metricsService.usersMap.forEach((user, id) => {
+        this.sheet.populateRow(user, this.metricsService.allLabs);
       });
+      this.update();
     }
   }
 
@@ -93,22 +83,6 @@ export class TutorsTimeView extends BaseView {
 
   resize(detail) {
     if (this.grid) this.grid.api.sizeColumnsToFit();
-  }
-
-  singleUserUpdate(user: UserMetric) {
-    if (this.grid) {
-      let rowNode = this.grid.api.getRowNode(user.nickname);
-      if (rowNode) {
-        this.sheet.updateRow(user, rowNode);
-      }
-    }
-  }
-
-  bulkUserUpdate(users: Map<string, UserMetric>) {
-    this.metricsService.usersMap.forEach((user, id) => {
-      this.sheet.populateRow(user, this.metricsService.allLabs);
-    });
-    this.update();
   }
 
   configMainNav(nav: NavigatorProperties) {

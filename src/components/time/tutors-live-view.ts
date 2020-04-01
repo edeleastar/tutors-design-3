@@ -4,8 +4,8 @@ import { BaseView } from "../base/base-view";
 import { LabSheet } from "./sheets/lab-sheet";
 import environment from "../../environment";
 import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";
-import { SingleUserUpdateEvent, UserMetric } from "../../services/metrics-service";
 import { LabLiveSheet } from "./sheets/lab-live-sheet";
+import { SingleUserUpdateEvent, UserMetric } from "../../services/event-bus";
 
 export class TutorsLiveView extends BaseView {
   grid = null;
@@ -20,11 +20,8 @@ export class TutorsLiveView extends BaseView {
     },
     enableRangeSelection: true,
     enableCellChangeFlash: true,
-    getRowNodeId: function(data) {
-      return data.github;
-    }
   };
-  sheets: Map<string, LabSheet> = new Map();
+
   usersMap = new Map<string, number>();
   usersMetricMap = new Map<string, UserMetric>();
   sheet: LabSheet = new LabLiveSheet();
@@ -72,17 +69,6 @@ export class TutorsLiveView extends BaseView {
     } else {
       this.processLiveUpdate(user);
     }
-  }
-
-  instructorModeEnabled() {
-
-  }
-
-  bulkUserUpdate(users: Map<string, UserMetric>) {
-    this.metricsService.usersMap.forEach((user, id) => {
-      this.sheet.populateRow(user, this.metricsService.allLabs);
-    });
-    this.update();
   }
 
   configMainNav(nav: NavigatorProperties) {

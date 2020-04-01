@@ -4,7 +4,6 @@ import { Lo } from "./lo";
 import environment from "../environment";
 import { Course } from "./course";
 import { analyicsPageTitle } from "./utils";
-import { SingleUserUpdateEvent, UserMetric } from "./metrics-service";
 import { inject } from "aurelia-dependency-injection";
 import { EventAggregator } from "aurelia-event-aggregator";
 

@@ -4,45 +4,8 @@ import "firebase/database";
 import { Lo, Student } from "./lo";
 import { inject } from "aurelia-dependency-injection";
 import { EventAggregator } from "aurelia-event-aggregator";
+import { Metric, SingleUserUpdateEvent, UserMetric } from "./event-bus";
 
-export class SingleUserUpdateEvent {
-  user: UserMetric;
-  constructor(user) {
-    this.user = user;
-  }
-}
-
-export class BulkUserUpdateEvent {
-  usersMap = new Map<string, UserMetric>();
-  constructor(usersMap) {
-    this.usersMap = usersMap;
-  }
-}
-
-export interface Metric {
-  id: string;
-  title: string;
-  count: number;
-  last: string;
-  duration: number;
-  onlineStatus : string;
-  metrics: Metric[];
-}
-
-export interface UserMetric {
-  userId: string;
-  email: string;
-  picture: string;
-  name: string;
-  nickname: string;
-  title: string;
-  count: number;
-  last: string;
-  onlineStatus : string;
-  duration: number;
-  metrics: Metric[];
-  labActivity: Metric[];
-}
 
 @inject(EventAggregator)
 export class MetricsService {
@@ -53,7 +16,6 @@ export class MetricsService {
   allLabs: Lo[] = [];
 
   constructor(private ea: EventAggregator) {
-    //firebase.initializeApp(environment.firebase);
   }
 
   expandGenericMetrics(id: string, fbData): any {
@@ -154,6 +116,7 @@ export class MetricsService {
       }
     });
   }
+
   async retrieveUser(course: Course, userEmail: string) {
     this.allLabs = course.walls.get("lab");
     const courseBase = course.url.substr(0, course.url.indexOf("."));
