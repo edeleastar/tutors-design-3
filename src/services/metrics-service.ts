@@ -4,8 +4,7 @@ import "firebase/database";
 import { Lo, Student } from "./lo";
 import { inject } from "aurelia-dependency-injection";
 import { EventAggregator } from "aurelia-event-aggregator";
-import { Metric, SingleUserUpdateEvent, UserMetric } from "./event-bus";
-
+import { LabUpdateEvent, Metric, SingleUserUpdateEvent, UserMetric } from "./event-bus";
 
 @inject(EventAggregator)
 export class MetricsService {
@@ -15,8 +14,7 @@ export class MetricsService {
   course: Course;
   allLabs: Lo[] = [];
 
-  constructor(private ea: EventAggregator) {
-  }
+  constructor(private ea: EventAggregator) {}
 
   expandGenericMetrics(id: string, fbData): any {
     let metric = {
@@ -87,7 +85,7 @@ export class MetricsService {
             name: userMetric.name,
             picture: userMetric.picture,
             nickname: userMetric.nickname,
-            onlineStatus : userMetric.onlineStatus,
+            onlineStatus: userMetric.onlineStatus,
             id: "home",
             title: userMetric.title,
             count: userMetric.count,
@@ -133,6 +131,27 @@ export class MetricsService {
   subscribeToAll(course: Course) {
     this.usersMap.forEach(value => {
       this.subscribeToUser(course, value.email);
+    });
+  }
+
+  subscribeToLabs(course: Course) {
+    const that = this;
+    const labs = course.walls.get("lab");
+    const courseBase = course.url.substr(0, course.url.indexOf("."));
+
+    this.usersMap.forEach(user => {
+      const userEmailSanitised = user.email.replace(/[`#$.\[\]\/]/gi, "*");
+      labs.forEach(lab => {
+        const labRoute = lab.route.split('topic')
+        const route = `${courseBase}/users/${userEmailSanitised}/topic${labRoute[1]}`;
+        firebase
+          .database()
+          .ref(route)
+          .on("value", function(snapshot) {
+            //console.log(route);
+            that.ea.publish(new LabUpdateEvent(user, lab.title));
+          });
+      });
     });
   }
 

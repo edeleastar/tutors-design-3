@@ -23,6 +23,9 @@ export class TutorsTimeView extends BaseView {
     },
     enableRangeSelection: true,
     enableCellChangeFlash: true,
+    getRowNodeId: function(data) {
+      return data.github;
+    }
   };
 
   initMap() {

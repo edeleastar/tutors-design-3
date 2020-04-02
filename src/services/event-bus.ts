@@ -38,16 +38,25 @@ export class SingleUserUpdateEvent {
   }
 }
 
-export class LoginEvent {
-  user: User;
-  constructor(user) {
+export class LabUpdateEvent {
+  user : User;
+  lab : string;
+  constructor(user : User, lab: string) {
     this.user = user;
+    this.lab = lab;
   }
 }
 
-export class LogoutEvent {
-  user: User;
-  constructor(user) {
-    this.user = user;
-  }
-}
+// export class LoginEvent {
+//   user: User;
+//   constructor(user) {
+//     this.user = user;
+//   }
+// }
+//
+// export class LogoutEvent {
+//   user: User;
+//   constructor(user) {
+//     this.user = user;
+//   }
+// }

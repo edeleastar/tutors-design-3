@@ -1,14 +1,15 @@
 import { Lo } from "../../../services/lo";
 import { LabSheet } from "./lab-sheet";
-import { deepScheme, liveScheme, shallowScheme } from "./heat-map-colours";
-import { UserMetric } from "../../../services/event-bus";
+import { liveScheme } from "./heat-map-colours";
+import { User } from "../../../services/event-bus";
 
 export class LabLiveSheet extends LabSheet {
   title = "Whos is Here?";
   subtitle = "Students doing labs right now";
+  rowData = [];
 
   columnDefs: any = [
-    { headerName: "Github Profile Name", field: "user", width: 180, suppressSizeToFit: true, pinned: "left" },
+    { headerName: "Github Profile Name", field: "user", width: 180, suppressSizeToFit: true, pinned: "left" }
   ];
 
   populateCols(los: Lo[]) {
@@ -23,49 +24,22 @@ export class LabLiveSheet extends LabSheet {
     });
   }
 
-  populateRow(user: UserMetric, los: Lo[]) {
-    let row = this.creatRow(user);
-    //this.zeroEntries(los, row);
-
-    let summaryCount = 0;
-    user.labActivity.forEach(labMetric => {
-      let labSummaryCount = 0;
-      if (labMetric) {
-        labMetric.metrics.forEach(stepMetric => {
-          if (stepMetric.duration) {
-            labSummaryCount = labSummaryCount + stepMetric.duration / 2;
-          }
-        });
-        if (labSummaryCount === 0) {
-          row[`${labMetric.title}`] = "-";
-        } else {
-          row[`${labMetric.title}`] = labSummaryCount;
-        }
-      }
-      summaryCount = summaryCount + labSummaryCount;
-    });
-    row.summary = summaryCount;
+  populateLab(user: User, lab: string) {
+    let row = {
+      user: user.name,
+      github: user.nickname
+    };
+    row[`${lab}`] = 1;
     this.rowData.push(row);
   }
 
-  updateRow(user: UserMetric, rowNode) {
-    let summaryCount = 0;
-    user.labActivity.forEach(labMetric => {
-      let labSummaryCount = 0;
-      if (labMetric) {
-        labMetric.metrics.forEach(stepMetric => {
-          if (stepMetric.duration) {
-            labSummaryCount = labSummaryCount + stepMetric.duration / 2;
-          }
-        });
-        if (labSummaryCount > 0) {
-          rowNode.setDataValue(`${labMetric.title}`, labSummaryCount);
-        } else {
-          rowNode.setDataValue(`${labMetric.title}`, "-");
-        }
-      }
-      summaryCount = summaryCount + labSummaryCount;
-    });
-    rowNode.setDataValue("summary", summaryCount);
+  updateLab(lab: string, rowNode) {
+    let val = rowNode.data[lab];
+    if (val) {
+      val++;
+    } else {
+      val = 1;
+    }
+    rowNode.setDataValue(lab, val);
   }
 }
