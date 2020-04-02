@@ -4,45 +4,7 @@ import "firebase/database";
 import { Lo, Student } from "./lo";
 import { inject } from "aurelia-dependency-injection";
 import { EventAggregator } from "aurelia-event-aggregator";
-
-export class SingleUserUpdateEvent {
-  user: UserMetric;
-  constructor(user) {
-    this.user = user;
-  }
-}
-
-export class BulkUserUpdateEvent {
-  usersMap = new Map<string, UserMetric>();
-  constructor(usersMap) {
-    this.usersMap = usersMap;
-  }
-}
-
-export interface Metric {
-  id: string;
-  title: string;
-  count: number;
-  last: string;
-  duration: number;
-  onlineStatus : string;
-  metrics: Metric[];
-}
-
-export interface UserMetric {
-  userId: string;
-  email: string;
-  picture: string;
-  name: string;
-  nickname: string;
-  title: string;
-  count: number;
-  last: string;
-  onlineStatus : string;
-  duration: number;
-  metrics: Metric[];
-  labActivity: Metric[];
-}
+import { LabUpdateEvent, Metric, SingleUserUpdateEvent, UserMetric } from "./event-bus";
 
 @inject(EventAggregator)
 export class MetricsService {
@@ -52,9 +14,7 @@ export class MetricsService {
   course: Course;
   allLabs: Lo[] = [];
 
-  constructor(private ea: EventAggregator) {
-    //firebase.initializeApp(environment.firebase);
-  }
+  constructor(private ea: EventAggregator) {}
 
   expandGenericMetrics(id: string, fbData): any {
     let metric = {
@@ -125,7 +85,7 @@ export class MetricsService {
             name: userMetric.name,
             picture: userMetric.picture,
             nickname: userMetric.nickname,
-            onlineStatus : userMetric.onlineStatus,
+            onlineStatus: userMetric.onlineStatus,
             id: "home",
             title: userMetric.title,
             count: userMetric.count,
@@ -154,6 +114,7 @@ export class MetricsService {
       }
     });
   }
+
   async retrieveUser(course: Course, userEmail: string) {
     this.allLabs = course.walls.get("lab");
     const courseBase = course.url.substr(0, course.url.indexOf("."));
@@ -170,6 +131,27 @@ export class MetricsService {
   subscribeToAll(course: Course) {
     this.usersMap.forEach(value => {
       this.subscribeToUser(course, value.email);
+    });
+  }
+
+  subscribeToLabs(course: Course) {
+    const that = this;
+    const labs = course.walls.get("lab");
+    const courseBase = course.url.substr(0, course.url.indexOf("."));
+
+    this.usersMap.forEach(user => {
+      const userEmailSanitised = user.email.replace(/[`#$.\[\]\/]/gi, "*");
+      labs.forEach(lab => {
+        const labRoute = lab.route.split('topic')
+        const route = `${courseBase}/users/${userEmailSanitised}/topic${labRoute[1]}`;
+        firebase
+          .database()
+          .ref(route)
+          .on("value", function(snapshot) {
+            //console.log(route);
+            that.ea.publish(new LabUpdateEvent(user, lab.title));
+          });
+      });
     });
   }
 

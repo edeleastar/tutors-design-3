@@ -1,11 +1,11 @@
 import "ag-grid-enterprise";
 import { GridOptions } from "ag-grid-community";
 import { BaseView } from "../base/base-view";
-import { LabSheet } from "./sheets/lab-sheet";
 import environment from "../../environment";
 import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";
-import { SingleUserUpdateEvent, UserMetric } from "../../services/metrics-service";
 import { LabLiveSheet } from "./sheets/lab-live-sheet";
+import { LabUpdateEvent, User } from "../../services/event-bus";
+import { Lo } from "../../services/lo";
 
 export class TutorsLiveView extends BaseView {
   grid = null;
@@ -24,16 +24,17 @@ export class TutorsLiveView extends BaseView {
       return data.github;
     }
   };
-  sheets: Map<string, LabSheet> = new Map();
+
   usersMap = new Map<string, number>();
-  usersMetricMap = new Map<string, UserMetric>();
-  sheet: LabSheet = new LabLiveSheet();
+  sheet: LabLiveSheet = new LabLiveSheet();
+  allLabs: Lo[] = [];
 
   async activate(params, subtitle: string) {
     await this.courseRepo.fetchCourse(params.courseurl);
     this.authService.checkAuth(this.courseRepo.course, "talk");
     this.course = this.courseRepo.course;
     super.init(`time/${params.courseurl}`);
+    this.allLabs = this.course.walls.get("lab");
     this.app.live = true;
     this.sheet.clear(this.grid);
     this.sheet.populateCols(this.course.walls.get("lab"));
@@ -44,9 +45,10 @@ export class TutorsLiveView extends BaseView {
     await this.metricsService.retrieveAllUsers(this.course);
     if (!this.subscribed) {
       this.subscribed = true;
-      this.metricsService.subscribeToAll(this.course);
-      this.ea.subscribe(SingleUserUpdateEvent, userEvent => {
-        this.singleUserUpdate(userEvent.user);
+      this.metricsService.subscribeToLabs(this.course);
+      this.ea.subscribe(LabUpdateEvent, event => {
+        console.log(`${event.user.name} : ${event.lab}`);
+        this.processLabUpdate(event.user, event.lab);
       });
     }
   }
@@ -62,27 +64,6 @@ export class TutorsLiveView extends BaseView {
 
   resize(detail) {
     if (this.grid) this.grid.api.sizeColumnsToFit();
-  }
-
-  singleUserUpdate(user: UserMetric) {
-    if (!this.instructorMode) {
-      if (!user.onlineStatus || user.onlineStatus == "online") {
-        this.processLiveUpdate(user);
-      }
-    } else {
-      this.processLiveUpdate(user);
-    }
-  }
-
-  instructorModeEnabled() {
-
-  }
-
-  bulkUserUpdate(users: Map<string, UserMetric>) {
-    this.metricsService.usersMap.forEach((user, id) => {
-      this.sheet.populateRow(user, this.metricsService.allLabs);
-    });
-    this.update();
   }
 
   configMainNav(nav: NavigatorProperties) {
@@ -107,38 +88,23 @@ export class TutorsLiveView extends BaseView {
     );
   }
 
-  processLiveUpdate(user: UserMetric) {
-    const userRef = this.usersMap.get(user.nickname);
-    if (userRef) {
-      const baseLineMetric = this.usersMetricMap.get(user.nickname);
 
-      let summaryCount = 0;
-      user.labActivity.forEach((labMetric, i) => {
-        let labSummaryCount = 0;
-        if (labMetric) {
-          labMetric.metrics.forEach((stepMetric, j) => {
-            if (stepMetric.duration) {
-              if (baseLineMetric.labActivity[i] && baseLineMetric.labActivity[i].metrics[j]) {
-                stepMetric.duration = stepMetric.duration - baseLineMetric.labActivity[i].metrics[j].duration;
-              }
-            }
-          });
-        }
-      });
-
-      if (userRef == 1) {
-        this.sheet.populateRow(user, this.metricsService.allLabs);
+  processLabUpdate(user: User, lab: string) {
+    let labCount = this.usersMap.get(user.nickname);
+    if (!labCount) {
+      this.usersMap.set(user.nickname, 1);
+    } else {
+      labCount++;
+      this.usersMap.set(user.nickname, labCount);
+      if (labCount == this.allLabs.length + 1) {
+        this.sheet.populateLab(user, lab);
         this.update();
-        this.usersMap.set(user.nickname, 2);
       } else {
         let rowNode = this.grid.api.getRowNode(user.nickname);
         if (rowNode) {
-          this.sheet.updateRow(user, rowNode);
+          this.sheet.updateLab(lab, rowNode);
         }
       }
-    } else {
-      this.usersMap.set(user.nickname, 1);
-      this.usersMetricMap.set(user.nickname, user);
     }
   }
 }

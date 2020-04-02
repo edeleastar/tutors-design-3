@@ -123,23 +123,13 @@ export class NavigatorProperties {
     };
   }
 
-  createTimeSheets(course:Course) {
+  createTimeSheets(course: Course) {
     this.tutorsTime.nav = [];
-    // this.tutorsTime.nav.push({
-    //   link: `${environment.urlPrefix}time/${this.url}/viewdetail`,
-    //   icon: "labViewDetail",
-    //   tip: "Views by Lab Step"
-    // });
     this.tutorsTime.nav.push({
       link: `${environment.urlPrefix}time/${this.url}/viewsummary`,
       icon: "labViewSummary",
       tip: "Views by Lab"
     });
-    // this.tutorsTime.nav.push({
-    //   link: `${environment.urlPrefix}time/${this.url}/timedetail`,
-    //   icon: "labTimeDetail",
-    //   tip: "Minutes by Lab Step"
-    // });
     this.tutorsTime.nav.push({
       link: `${environment.urlPrefix}time/${this.url}/timesummary`,
       icon: "labTimeSummary",
@@ -149,22 +139,26 @@ export class NavigatorProperties {
       link: `${environment.urlPrefix}live/${this.url}`,
       icon: "timeLive",
       tip: "See who is doing labs right now",
-      target : "_blank"
+      target: "_blank"
     });
-    // this.tutorsTime.nav.push({
-    //   link: `${environment.urlPrefix}time/${this.url}/export`,
-    //   icon: "timeExport",
-    //   tip: "Export to Excel"
-    // });
-    // this.tutorsTime.nav.push({
-    //   link: `${environment.urlPrefix}live/${this.url}`,
-    //   icon: "timeLive",
-    //   tip: "See who is doing labs right now"
-    // });
   }
 
   privelagedEnabled() {
-
+    this.tutorsTime.nav.push({
+      link: `${environment.urlPrefix}time/${this.url}/viewdetail`,
+      icon: "labViewDetail",
+      tip: "Views by Lab Step"
+    });
+    this.tutorsTime.nav.push({
+      link: `${environment.urlPrefix}time/${this.url}/timedetail`,
+      icon: "labTimeDetail",
+      tip: "Minutes by Lab Step"
+    });
+    this.tutorsTime.nav.push({
+      link: `${environment.urlPrefix}time/${this.url}/export`,
+      icon: "timeExport",
+      tip: "Export to Excel"
+    });
   }
 
   createProfileBar(isPortfolio: boolean) {
