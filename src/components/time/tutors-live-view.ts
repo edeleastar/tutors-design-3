@@ -15,7 +15,7 @@ export class TutorsLiveView extends BaseView {
     headerHeight: 180,
     defaultColDef: {
       sortable: true,
-      resizable: true
+      resizable: true,
     },
     enableRangeSelection: true,
     enableCellChangeFlash: true,

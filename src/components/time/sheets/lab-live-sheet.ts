@@ -16,10 +16,10 @@ export class LabLiveSheet extends LabSheet {
     los.forEach(lab => {
       this.columnDefs.push({
         headerName: lab.title,
-        width: 70,
+        width: 55,
         field: lab.title,
         suppressSizeToFit: true,
-        cellClassRules: deepScheme
+        cellClassRules: deepScheme,
       });
     });
   }
