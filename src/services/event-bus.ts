@@ -39,11 +39,18 @@ export class SingleUserUpdateEvent {
 }
 
 export class LabUpdateEvent {
-  user : User;
-  lab : string;
-  constructor(user : User, lab: string) {
+  user: User;
+  lab: string;
+  constructor(user: User, lab: string) {
     this.user = user;
     this.lab = lab;
+  }
+}
+
+export class StatusUpdateEvent {
+  user: User;
+  constructor(user: User) {
+    this.user = user;
   }
 }
 

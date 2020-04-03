@@ -4,7 +4,7 @@ import "firebase/database";
 import { Lo, Student } from "./lo";
 import { inject } from "aurelia-dependency-injection";
 import { EventAggregator } from "aurelia-event-aggregator";
-import { LabUpdateEvent, Metric, SingleUserUpdateEvent, UserMetric } from "./event-bus";
+import { LabUpdateEvent, Metric, SingleUserUpdateEvent, StatusUpdateEvent, UserMetric } from "./event-bus";
 
 @inject(EventAggregator)
 export class MetricsService {
@@ -101,6 +101,24 @@ export class MetricsService {
     }
   }
 
+  subscribeToUserStatus (course: Course) {
+    const that = this;
+    const courseBase = course.url.substr(0, course.url.indexOf("."));
+    this.usersMap.forEach(user => {
+      const userEmailSanitised = user.email.replace(/[`#$.\[\]\/]/gi, "*");
+      const route = `${courseBase}/users/${userEmailSanitised}`;
+      firebase
+        .database()
+        .ref(route)
+        .on("value", function(snapshot) {
+          const userSnapshot = snapshot.val();
+          const user = that.usersMap.get(userSnapshot.nickname);
+          user.onlineStatus = userSnapshot.onlineStatus;
+          that.ea.publish(new StatusUpdateEvent(user));
+        });
+    });
+  }
+
   filterUsers(students: Student[]) {
     students.forEach(student => {
       this.enrolledUsersMap.set(student.github, student);
@@ -128,6 +146,8 @@ export class MetricsService {
     this.usersMap.set(user.nickname, user);
   }
 
+
+
   subscribeToAll(course: Course) {
     this.usersMap.forEach(value => {
       this.subscribeToUser(course, value.email);
@@ -148,12 +168,12 @@ export class MetricsService {
           .database()
           .ref(route)
           .on("value", function(snapshot) {
-            //console.log(route);
             that.ea.publish(new LabUpdateEvent(user, lab.title));
           });
       });
     });
   }
+
 
   subscribeToUser(course: Course, userEmail: string) {
     this.allLabs = course.walls.get("lab");

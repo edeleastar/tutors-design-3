@@ -4,12 +4,11 @@ import { BaseView } from "../base/base-view";
 import environment from "../../environment";
 import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";
 import { LabLiveSheet } from "./sheets/lab-live-sheet";
-import { LabUpdateEvent, User } from "../../services/event-bus";
+import { LabUpdateEvent, StatusUpdateEvent, User } from "../../services/event-bus";
 import { Lo } from "../../services/lo";
 
 export class TutorsLiveView extends BaseView {
   grid = null;
-  subscribed = false;
 
   gridOptions: GridOptions = {
     animateRows: true,
@@ -31,8 +30,8 @@ export class TutorsLiveView extends BaseView {
 
   async activate(params, subtitle: string) {
     await this.courseRepo.fetchCourse(params.courseurl);
-    this.authService.checkAuth(this.courseRepo.course, "talk");
     this.course = this.courseRepo.course;
+    this.authService.checkAuth(this.courseRepo.course, "talk");
     super.init(`time/${params.courseurl}`);
     this.allLabs = this.course.walls.get("lab");
     this.app.live = true;
@@ -42,15 +41,26 @@ export class TutorsLiveView extends BaseView {
   }
 
   async populateTime() {
+    const that = this;
     await this.metricsService.retrieveAllUsers(this.course);
-    if (!this.subscribed) {
-      this.subscribed = true;
-      this.metricsService.subscribeToLabs(this.course);
-      this.ea.subscribe(LabUpdateEvent, event => {
-        console.log(`${event.user.name} : ${event.lab}`);
-        this.processLabUpdate(event.user, event.lab);
-      });
-    }
+    this.metricsService.subscribeToUserStatus(this.course);
+    this.metricsService.subscribeToLabs(this.course);
+    this.ea.subscribe(LabUpdateEvent, event => {
+      if (!event.user.onlineStatus || event.user.onlineStatus === "online") {
+        that.processLabUpdate(event.user, event.lab);
+      }
+    });
+    // this.ea.subscribe(StatusUpdateEvent, event => {
+    //   if (event.user.onlineStatus && event.user.onlineStatus === "offline") {
+    //     console.log(`${event.user.email}: going offline `);
+    //     let rowNode = that.grid.api.getRowNode(event.user.nickname);
+    //     if (rowNode) {
+    //       that.grid.api.updateRowNode({remove:[event.user.nickname]})
+    //     }
+    //   } else {
+    //     console.log(`${event.user.email}: going online `);
+    //   }
+    // });
   }
 
   update() {
@@ -70,12 +80,12 @@ export class TutorsLiveView extends BaseView {
     this.navigatorProperties.config(
       {
         titleCard: true,
-        parent: false,
-        profile: false,
+        parent: true,
+        profile: true,
         companions: false,
         walls: false,
-        tutorsTime: false,
-        toc: false
+        tutorsTime: true,
+        toc: true
       },
       {
         title: `${this.courseRepo.course.lo.title} Live`,
@@ -87,7 +97,6 @@ export class TutorsLiveView extends BaseView {
       }
     );
   }
-
 
   processLabUpdate(user: User, lab: string) {
     let labCount = this.usersMap.get(user.nickname);
