@@ -42,6 +42,7 @@ export class TutorsTimeView extends BaseView {
     await this.courseRepo.fetchCourse(params.courseurl);
     this.course = this.courseRepo.course;
 
+
     if (params.metric === "export") {
       this.grid.api.exportDataAsExcel();
     } else {

@@ -136,7 +136,7 @@ export class NavigatorProperties {
       tip: "Minutes by lab"
     });
     this.tutorsTime.nav.push({
-      link: `${environment.urlPrefix}live/${this.url}`,
+      link: `${environment.urlPrefix}live/${this.url}/`,
       icon: "timeLive",
       tip: "See who is doing labs right now",
       target: "_blank"
@@ -172,7 +172,7 @@ export class NavigatorProperties {
     this.profile.nav.push({ link: `/logout`, icon: "logout", tip: "Logout form Tutors" });
     if (this.profile.visible) {
       this.profile.visible = this.authService.isAuthenticated();
-      if (isPortfolio) {
+      if (isPortfolio === true) {
         this.profile.visible = false;
       }
     }

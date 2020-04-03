@@ -1,6 +1,6 @@
 import { Lo } from "../../../services/lo";
 import { LabSheet } from "./lab-sheet";
-import { liveScheme } from "./heat-map-colours";
+import { deepScheme, liveScheme } from "./heat-map-colours";
 import { User } from "../../../services/event-bus";
 
 export class LabLiveSheet extends LabSheet {
@@ -19,7 +19,7 @@ export class LabLiveSheet extends LabSheet {
         width: 70,
         field: lab.title,
         suppressSizeToFit: true,
-        cellClassRules: liveScheme
+        cellClassRules: deepScheme
       });
     });
   }
