@@ -1,4 +1,4 @@
-import { isValid } from "../../services/utils-search";
+import { isValid } from "../../services/utils/utils-search";
 
 export class HighlightValueConverter {
   toView(value) {

@@ -1,4 +1,4 @@
-import { Course } from "../../services/course";
+import { Course } from "../../services/course/course";
 import { BaseView } from "../base/base-view";
 
 export class CourseView extends BaseView {

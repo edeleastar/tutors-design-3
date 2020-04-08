@@ -1,7 +1,7 @@
 import environment from "../../../environment";
-import { AuthService } from "../../../services/auth-service";
+import { AuthService } from "../../../services/authentication/auth-service";
 import { autoinject } from "aurelia-framework";
-import { Course } from "../../../services/course";
+import { Course } from "../../../services/course/course";
 const readerVersion = require("../../../../package.json").version;
 
 interface Properties {

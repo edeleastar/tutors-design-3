@@ -1,4 +1,4 @@
-import { Lo } from "../../services/lo";
+import { Lo } from "../../services/course/lo";
 import environment from "../../environment";
 import { autoinject } from "aurelia-framework";
 import { BaseView } from "../base/base-view";

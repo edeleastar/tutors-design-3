@@ -1,5 +1,5 @@
 import { ICellRendererParams } from "ag-grid-community";
-import { Lo } from "../../../services/lo";
+import { Lo } from "../../../services/course/lo";
 import { UserMetric } from "../../../services/event-bus";
 
 export class LabSheet {

@@ -1,7 +1,4 @@
 import { autoinject } from "aurelia-framework";
-import { AuthService } from "services/auth-service";
-import { CourseRepo } from "../../services/course-repo";
-import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";
 import { BaseView } from "../base/base-view";
 
 @autoinject

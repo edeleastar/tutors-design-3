@@ -1,5 +1,5 @@
 import { Lo } from "./lo";
-import { fixRoutes, getSortedUnits } from "./utils";
+import { fixRoutes, getSortedUnits } from "../utils/utils";
 
 export class Topic {
   lo: Lo;

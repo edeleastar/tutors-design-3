@@ -1,6 +1,6 @@
 import { Lo, Student } from "./lo";
 import { HttpClient } from "aurelia-fetch-client";
-import { allLos, allVideoLos, fixRoutes, getSortedUnits, injectCourseUrl } from "./utils";
+import { allLos, allVideoLos, fixRoutes, getSortedUnits, injectCourseUrl } from "../utils/utils";
 import { Topic } from "./topic";
 
 export class Course {

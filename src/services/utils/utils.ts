@@ -1,7 +1,7 @@
-import { Lo } from "./lo";
-import environment from "../environment";
+import { Lo } from "../course/lo";
+import environment from "../../environment";
 import * as path from "path";
-import { Course } from "./course";
+import { Course } from "../course/course";
 var CryptoJS = require("crypto-js");
 
 export function injectCourseUrl(lo: Lo, url) {

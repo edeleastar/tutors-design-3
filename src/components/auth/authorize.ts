@@ -1,5 +1,5 @@
 import { autoinject } from "aurelia-framework";
-import { AuthService } from "services/auth-service";
+import { AuthService } from "services/authentication/auth-service";
 
 @autoinject
 export class Authorize {

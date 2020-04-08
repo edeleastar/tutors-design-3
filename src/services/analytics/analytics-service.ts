@@ -1,15 +1,12 @@
 import * as firebase from "firebase/app";
 import "firebase/database";
-import { Lo } from "./lo";
-import environment from "../environment";
-import { Course } from "./course";
-import { analyicsPageTitle } from "./utils";
-import { inject } from "aurelia-dependency-injection";
+import { Lo } from "../course/lo";
+import environment from "../../environment";
+import { Course } from "../course/course";
+import { analyicsPageTitle } from "../utils/utils";
 import { EventAggregator } from "aurelia-event-aggregator";
-
-const initGTag = require("./utils-ga.js").initGTag;
-const trackEvent = require("./utils-ga.js").trackEvent;
-const trackTag = require("./utils-ga.js").trackTag;
+import { EventBus, InteractionListener, LoginListener, User } from "../event-bus";
+import { autoinject } from "aurelia-framework";
 
 export class OnlineStatusEvent {
   status = "online";
@@ -18,8 +15,8 @@ export class OnlineStatusEvent {
   }
 }
 
-@inject(EventAggregator)
-export class AnalyticsService {
+@autoinject
+export class AnalyticsService implements LoginListener, InteractionListener {
   courseBaseName = "";
   userEmail = "";
   userEmailSanitised = "";
@@ -27,44 +24,44 @@ export class AnalyticsService {
   firebaseIdRoot = "";
   firebaseEmailRoot = "";
   url = "";
-  onlneStatus = false;
+  onlineStatus = false;
 
-  constructor(private ea: EventAggregator) {
-    initGTag(environment.ga);
+  constructor(private ea: EventAggregator, private eb: EventBus) {
     firebase.initializeApp(environment.firebase);
+    this.eb.observeLogin(this);
+    this.eb.observeInteraction(this);
   }
 
   getOnlineStatus(): boolean {
-    return this.onlneStatus;
+    return this.onlineStatus;
   }
 
   setOnlineStatus(status: boolean) {
-    this.onlneStatus = status;
+    this.onlineStatus = status;
     if (status) {
-      this.updateStr(`${this.firebaseEmailRoot}/onlineStatus`, 'online');
+      this.updateStr(`${this.firebaseEmailRoot}/onlineStatus`, "online");
     } else {
-      this.updateStr(`${this.firebaseEmailRoot}/onlineStatus`, 'offline');
+      this.updateStr(`${this.firebaseEmailRoot}/onlineStatus`, "offline");
     }
   }
 
-  login(name: string, email: string, id: string, picture: string, url: string, nickname: string) {
-    if (this.userEmail !== email || this.url !== url) {
+  login(user: User, url: string) {
+    if (this.userEmail !== user.email || this.url !== url) {
       this.url = url;
       this.courseBaseName = url.substr(0, url.indexOf("."));
-      this.userEmail = email;
-      this.userId = id;
-      const userFirebaseId = id.replace(/[`#$.\[\]\/]/gi, "*");
+      this.userEmail = user.email;
+      this.userId = user.userId;
       this.firebaseIdRoot = `${this.courseBaseName}/usage`;
-      this.userEmailSanitised = email.replace(/[`#$.\[\]\/]/gi, "*");
+      this.userEmailSanitised = user.email.replace(/[`#$.\[\]\/]/gi, "*");
       this.firebaseEmailRoot = `${this.courseBaseName}/users/${this.userEmailSanitised}`;
-      this.reportLogin(name, email, id, picture, nickname);
+      this.reportLogin(user);
 
       const that = this;
       firebase
         .database()
         .ref(`${this.courseBaseName}/users/${this.userEmailSanitised}/onlineStatus`)
         .on("value", function(snapshot) {
-          let status = snapshot.val()
+          let status = snapshot.val();
           if (!status) {
             status = "online";
           }
@@ -73,12 +70,12 @@ export class AnalyticsService {
     }
   }
 
+  logout() {
+    console.log("logout");
+  }
+
   log(path: string, course: Course, lo: Lo) {
     this.courseBaseName = course.url.substr(0, course.url.indexOf("."));
-    const title = analyicsPageTitle(this.courseBaseName, course, lo);
-
-    trackTag(environment.ga, path, title, this.userId);
-    trackEvent(environment.ga, this.courseBaseName, path, lo, this.userId);
 
     if (this.userEmail) {
       this.firebaseIdRoot = `${this.courseBaseName}/usage`;
@@ -148,12 +145,12 @@ export class AnalyticsService {
     this.updateCount(`${this.firebaseEmailRoot}/${key}/duration`);
   }
 
-  reportLogin(name: string, email: string, id: string, picture: string, nickname: string) {
-    this.updateStr(`${this.firebaseEmailRoot}/email`, email);
-    this.updateStr(`${this.firebaseEmailRoot}/name`, name);
-    this.updateStr(`${this.firebaseEmailRoot}/id`, id);
-    this.updateStr(`${this.firebaseEmailRoot}/nickname`, nickname);
-    this.updateStr(`${this.firebaseEmailRoot}/picture`, picture);
+  reportLogin(user: User) {
+    this.updateStr(`${this.firebaseEmailRoot}/email`, user.email);
+    this.updateStr(`${this.firebaseEmailRoot}/name`, user.name);
+    this.updateStr(`${this.firebaseEmailRoot}/id`, user.userId);
+    this.updateStr(`${this.firebaseEmailRoot}/nickname`, user.nickname);
+    this.updateStr(`${this.firebaseEmailRoot}/picture`, user.picture);
     this.updateStr(`${this.firebaseEmailRoot}/last`, new Date().toString());
     this.updateCount(`${this.firebaseEmailRoot}/count`);
   }

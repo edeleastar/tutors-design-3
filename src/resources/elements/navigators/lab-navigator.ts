@@ -1,7 +1,7 @@
-import { CourseRepo } from "../../../services/course-repo";
+import { CourseRepo } from "../../../services/course/course-repo";
 import { autoinject } from "aurelia-framework";
-import { Course } from "../../../services/course";
-import { Lo } from "../../../services/lo";
+import { Course } from "../../../services/course/course";
+import { Lo } from "../../../services/course/lo";
 
 @autoinject
 export class LabNavigator {

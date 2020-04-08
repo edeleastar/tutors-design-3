@@ -1,4 +1,4 @@
-import { Lo } from "../../../services/lo";
+import { Lo } from "../../../services/course/lo";
 import { LabSheet } from "./lab-sheet";
 import { deepScheme } from "./heat-map-colours";
 import { UserMetric } from "../../../services/event-bus";
@@ -11,10 +11,11 @@ export class LabsTimeSummarySheet extends LabSheet {
     los.forEach(lab => {
       this.columnDefs.push({
         headerName: lab.title,
-        width: 70,
+        width: 48,
         field: lab.title,
         suppressSizeToFit: true,
-        cellClassRules: deepScheme
+        cellClassRules: deepScheme,
+        menuTabs: []
       });
     });
   }

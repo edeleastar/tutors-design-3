@@ -1,4 +1,4 @@
-import { Lo } from '../../../services/lo';
+import { Lo } from '../../../services/course/lo';
 import { bindable } from 'aurelia-framework';
 
 export class UnitCard {

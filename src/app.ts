@@ -2,16 +2,23 @@ import { PLATFORM } from "aurelia-pal";
 import { Router, RouterConfiguration } from "aurelia-router";
 import environment from "./environment";
 import { autoinject } from "aurelia-framework";
-import { CourseRepo } from "./services/course-repo";
+import { CourseRepo } from "./services/course/course-repo";
 import { NavigatorProperties } from "./resources/elements/navigators/navigator-properties";
-import { AuthService } from "./services/auth-service";
+import { AuthService } from "./services/authentication/auth-service";
+import { GoogleAnalytics } from "./services/analytics/google-analytics";
+import { AnalyticsService } from "./services/analytics/analytics-service";
+import { EventBus } from "./services/event-bus";
 
 @autoinject
 export class App {
   title = 'Tutors';
   live = false;
 
-  constructor(private navigatorProperties: NavigatorProperties, private courseRepo : CourseRepo) {}
+  constructor(private navigatorProperties: NavigatorProperties,
+              private courseRepo : CourseRepo,
+              private ga: GoogleAnalytics,
+              private as: AnalyticsService,
+              private eb : EventBus) {}
 
   configureRouter(config: RouterConfiguration, router: Router) {
     config.title = 'Tutors';
