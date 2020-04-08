@@ -1,6 +1,6 @@
 import { autoinject } from "aurelia-framework";
 import { NavigatorProperties } from "./navigator-properties";
-import { AnalyticsService, OnlineStatusEvent } from "../../../services/analytics-service";
+import { AnalyticsService, OnlineStatusEvent } from "../../../services/analytics/analytics-service";
 import { EventAggregator } from "aurelia-event-aggregator";
 
 @autoinject

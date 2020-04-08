@@ -1,4 +1,4 @@
-import { Topic } from "../../services/topic";
+import { Topic } from "../../services/course/topic";
 import { BaseView } from "../base/base-view";
 import environment from "../../environment";
 import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";

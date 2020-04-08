@@ -1,4 +1,4 @@
-import { Lo } from "../../services/lo";
+import { Lo } from "../../services/course/lo";
 import environment from "../../environment";
 import { BaseView } from "../base/base-view";
 import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";

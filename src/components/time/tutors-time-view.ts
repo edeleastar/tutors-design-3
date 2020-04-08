@@ -8,11 +8,17 @@ import { LabClickSheet } from "./sheets/lab-click-sheet";
 import { LabTimeSheet } from "./sheets/lab-time-sheet";
 import { LabsTimeSummarySheet } from "./sheets/lab-time-summary-sheet";
 import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";
+import { UserMetric } from "../../services/event-bus";
+import { Lo } from "../../services/course/lo";
 
 export class TutorsTimeView extends BaseView {
   grid = null;
   sheets: Map<string, LabSheet> = new Map();
   sheet: LabSheet = null;
+  email: string;
+  user: UserMetric;
+  users = new Map<string, UserMetric>();
+  allLabs: Lo[] = [];
 
   gridOptions: GridOptions = {
     animateRows: true,
@@ -41,8 +47,7 @@ export class TutorsTimeView extends BaseView {
     this.initMap();
     await this.courseRepo.fetchCourse(params.courseurl);
     this.course = this.courseRepo.course;
-
-
+    this.allLabs = this.course.walls.get("lab");
     if (params.metric === "export") {
       this.grid.api.exportDataAsExcel();
     } else {
@@ -51,7 +56,11 @@ export class TutorsTimeView extends BaseView {
     super.init(`time/${params.courseurl}`);
     this.sheet.clear(this.grid);
     this.sheet.populateCols(this.course.walls.get("lab"));
-    await this.populateSheet();
+
+    if (this.authService.isAuthenticated()) {
+      this.email = this.authService.getUserEmail();
+    }
+    this.populateSheet();
   }
 
   instructorModeEnabled() {
@@ -59,21 +68,25 @@ export class TutorsTimeView extends BaseView {
   }
 
   async populateSheet() {
-    if (this.authService.isAuthenticated()) {
-      const email = this.authService.getUserEmail();
-      if (this.courseRepo.privelaged == true) {
-        await this.metricsService.retrieveAllUsers(this.course);
+    if (this.courseRepo.privelaged == false) {
+      if (!this.user) this.user = await this.metricsService.fetchUser(this.course, this.email);
+      this.sheet.populateRow(this.user, this.allLabs);
+    } else {
+      if (this.users.size == 0) {
+        this.users = await this.metricsService.fetchAllUsers(this.course);
         if (this.course.hasEnrollment()) {
-          this.metricsService.filterUsers(this.course.getStudents());
+          this.users = this.metricsService.filterUsers(this.users, this.course.getStudents());
         }
-      } else {
-        await this.metricsService.retrieveUser(this.course, email);
       }
-      this.metricsService.usersMap.forEach((user, id) => {
-        this.sheet.populateRow(user, this.metricsService.allLabs);
+      this.users.forEach((user, id) => {
+        this.sheet.populateRow(user, this.allLabs);
       });
-      this.update();
     }
+    this.update();
+  }
+
+  loggedInUserUpdate(user: UserMetric) {
+    this.update();
   }
 
   update() {

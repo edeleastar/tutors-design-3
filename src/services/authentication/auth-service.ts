@@ -2,10 +2,10 @@ import { WebAuth, Auth0DecodedHash } from "auth0-js";
 import { autoinject } from "aurelia-framework";
 import { Router } from "aurelia-router";
 import { EventEmitter } from "events";
-import { Course } from "./course";
-import environment from "../environment";
-import { AnalyticsService } from "./analytics-service";
-import { decrypt, encrypt } from "./utils";
+import { Course } from "../course/course";
+import environment from "../../environment";
+import { decrypt, encrypt } from "../utils/utils";
+import { EventBus, User } from "../event-bus";
 
 const authLevels = {
   course: 4,
@@ -18,9 +18,6 @@ const authLevels = {
 @autoinject
 export class AuthService {
   private accessToken: string;
-  private id_token: string;
-  private expires_at: string;
-
   authNotifier = new EventEmitter();
 
   auth0 = new WebAuth({
@@ -32,7 +29,7 @@ export class AuthService {
     scope: "openid"
   });
 
-  constructor(private router: Router, private analyticsService: AnalyticsService) {
+  constructor(private router: Router, private eb: EventBus) {
     this.authNotifier.setMaxListeners(21);
   }
 
@@ -48,12 +45,8 @@ export class AuthService {
         localStorage.setItem("course_url", course.url);
         this.login();
       } else {
-        const id = localStorage.getItem("id");
-        const email = decrypt(id);
-        const name = decrypt(localStorage.getItem("info"));
-        const picture = decrypt(localStorage.getItem("infoextra"));
-        const nickname = decrypt(localStorage.getItem("infoextraplus"));
-        this.analyticsService.login(name, email, id, picture, course.url, nickname);
+        const user = this.fromLocalStorage();
+        this.eb.emitLogin(user, course.url);
       }
     }
     return status;
@@ -62,21 +55,15 @@ export class AuthService {
   handleAuthentication(): void {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
-        let self = this;
+        let that = this;
         this.auth0.client.userInfo(authResult.accessToken, function(err, user) {
           if (err) {
             console.log("Error loading the Profile", err);
           }
-          const id = encrypt(user.email);
-          const info = encrypt(user.name);
-          const picture = encrypt(user.picture);
-          const nickname =  encrypt(user.nickname);
-          localStorage.setItem("id", id);
-          localStorage.setItem("info", info);
-          localStorage.setItem("infoextra", picture);
-          localStorage.setItem("infoextraplus", nickname);
+          that.toLocalStorage(user);
           const url = localStorage.getItem("course_url");
-          self.analyticsService.login(user.name, user.email, id, user.picture, url, user.nickname);
+          user.userId = encrypt(user.email);
+          that.eb.emitLogin(user, url);
         });
 
         this.setSession(authResult);
@@ -104,12 +91,7 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem("course_url");
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("id_token");
-    localStorage.removeItem("expires_at");
-    localStorage.removeItem("id");
-    localStorage.removeItem("info");
+    this.clearLocalStorage();
     this.authNotifier.emit("authChange", false);
   }
 
@@ -122,8 +104,42 @@ export class AuthService {
   }
 
   getUserEmail() {
+    const user = this.fromLocalStorage();
+    return user.email;
+  }
+
+  toLocalStorage(user: User) {
+    const id = encrypt(user.email);
+    const info = encrypt(user.name);
+    const picture = encrypt(user.picture);
+    const nickname = encrypt(user.nickname);
+    localStorage.setItem("id", id);
+    localStorage.setItem("info", info);
+    localStorage.setItem("infoextra", picture);
+    localStorage.setItem("infoextraplus", nickname);
+  }
+
+  fromLocalStorage() {
     const id = localStorage.getItem("id");
-    const email = decrypt(id);
-    return email;
+    const user = {
+      userId: localStorage.getItem("id"),
+      email: decrypt(id),
+      picture: decrypt(localStorage.getItem("infoextra")),
+      name: decrypt(localStorage.getItem("info")),
+      nickname: decrypt(localStorage.getItem("infoextraplus")),
+      onlineStatus : ""
+    };
+    return user;
+  }
+
+  clearLocalStorage() {
+    localStorage.removeItem("id");
+    localStorage.removeItem("info");
+    localStorage.removeItem("infoextra");
+    localStorage.removeItem("infoextraplus");
+    localStorage.removeItem("course_url");
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("id_token");
+    localStorage.removeItem("expires_at");
   }
 }

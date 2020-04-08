@@ -1,4 +1,4 @@
-import { Lo } from "../../../services/lo";
+import { Lo } from "../../../services/course/lo";
 import { LabSheet } from "./lab-sheet";
 import { deepScheme, liveScheme } from "./heat-map-colours";
 import { User } from "../../../services/event-bus";
@@ -16,10 +16,11 @@ export class LabLiveSheet extends LabSheet {
     los.forEach(lab => {
       this.columnDefs.push({
         headerName: lab.title,
-        width: 55,
+        width: 38,
         field: lab.title,
         suppressSizeToFit: true,
         cellClassRules: deepScheme,
+        menuTabs: []
       });
     });
   }

@@ -1,29 +1,29 @@
-import { CourseRepo } from "../../services/course-repo";
+import { CourseRepo } from "../../services/course/course-repo";
 import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";
-import { AuthService } from "../../services/auth-service";
+import { AuthService } from "../../services/authentication/auth-service";
 import { inject } from "aurelia-framework";
-import { Lo } from "../../services/lo";
+import { Lo } from "../../services/course/lo";
 import { Router } from "aurelia-router";
-import { AnalyticsService } from "../../services/analytics-service";
-import { Course } from "../../services/course";
-import { EventAggregator } from "aurelia-event-aggregator";
-import { MetricsService } from "../../services/metrics-service";
+import { Course } from "../../services/course/course";
+import { MetricsService } from "../../services/analytics/metrics-service";
 import { App } from "../../app";
+import { EventBus } from "../../services/event-bus";
+import { AnalyticsService } from "../../services/analytics/analytics-service";
 
 let currentLo: Lo = null;
 let currentRoute = "";
 let currentCourse: Course = null;
-let analyticsService: AnalyticsService = null;
+let eb: EventBus = null;
 
 const func = () => {
-  if (analyticsService && !document.hidden) {
-    analyticsService.logDuration(currentRoute, currentCourse, currentLo);
+  if (eb && !document.hidden) {
+    eb.emitLog(currentRoute, currentCourse, currentLo);
   }
 };
 
 setInterval(func, 30 * 1000);
 
-@inject(CourseRepo, NavigatorProperties, AuthService, Router, AnalyticsService, EventAggregator, MetricsService, App)
+@inject(CourseRepo, NavigatorProperties, AuthService, Router, EventBus, MetricsService, AnalyticsService, App)
 export class BaseView {
   show = false;
 
@@ -31,9 +31,9 @@ export class BaseView {
   navigatorProperties: NavigatorProperties;
   authService: AuthService;
   router: Router;
-  anaylticsService: AnalyticsService;
-  ea: EventAggregator;
+  eb: EventBus;
   metricsService: MetricsService;
+  anaylticsService : AnalyticsService;
   course: Course;
   app : App;
 
@@ -47,18 +47,18 @@ export class BaseView {
     navigatorProperties: NavigatorProperties,
     authService: AuthService,
     router: Router,
-    analyticsService: AnalyticsService,
-    ea: EventAggregator,
+    eb: EventBus,
     metricsService: MetricsService,
-    app : App
+    analyticsService : AnalyticsService,
+    app: App
   ) {
     this.courseRepo = courseRepo;
     this.navigatorProperties = navigatorProperties;
     this.authService = authService;
     this.router = router;
-    this.anaylticsService = analyticsService;
-    this.ea = ea;
+    this.eb = eb;
     this.metricsService = metricsService;
+    this.anaylticsService = analyticsService;
     this.app = app;
   }
 
@@ -73,13 +73,13 @@ export class BaseView {
       this.navigatorProperties.init(this.courseRepo.course);
     }
     if (lo) {
-      this.anaylticsService.log(path, this.courseRepo.course, lo);
-      this.router.title = lo.title;
-      this.router.updateTitle();
       currentLo = lo;
       currentRoute = path;
       currentCourse = this.courseRepo.course;
-      analyticsService = this.anaylticsService;
+      eb = this.eb;
+      this.eb.emitLog(path, this.courseRepo.course, lo);
+      this.router.title = lo.title;
+      this.router.updateTitle();
     }
     this.configMainNav(this.navigatorProperties);
     this.autoNavProperties();

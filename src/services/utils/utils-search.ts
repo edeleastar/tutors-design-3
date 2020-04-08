@@ -1,4 +1,4 @@
-import { Lo } from "./lo";
+import { Lo } from "../course/lo";
 
 const extraChars: number = 80;
 const maxNumberHits: number = 100;
