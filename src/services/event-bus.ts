@@ -30,13 +30,6 @@ export interface UserMetric extends User {
   labActivity: Metric[];
 }
 
-export class SingleUserUpdateEvent {
-  user: UserMetric;
-  constructor(user) {
-    this.user = user;
-  }
-}
-
 export class LabUpdateEvent {
   user: User;
   lab: string;
@@ -46,10 +39,19 @@ export class LabUpdateEvent {
   }
 }
 
-export class UsersUpdate {
-  users: Map<string, UserMetric>;
-  constructor(users: Map<string, UserMetric>) {
-    this.users = users;
+export class TopicUpdateEvent {
+  user: User;
+  topic: string;
+  constructor(user: User, topic: string) {
+    this.user = user;
+    this.topic = topic;
+  }
+}
+
+export class OnlineStatusEvent {
+  status = "online";
+  constructor(status: string) {
+    this.status = status;
   }
 }
 
@@ -61,9 +63,9 @@ export class UserUpdate {
 }
 
 export class StatusUpdateEvent {
-  user: User;
-  constructor(user: User) {
-    this.user = user;
+  status : string;
+  constructor(status : string) {
+    this.status = status;
   }
 }
 
@@ -96,6 +98,7 @@ class InteractionEvent {
 
 export interface LoginListener {
   login(user: User, url: string);
+  statusUpdate (status : string);
   logout();
 }
 
@@ -105,6 +108,7 @@ export interface InteractionListener {
 
 export interface CourseListener {
   labUpdate(user: User, labTitle: string);
+  topicUpdate (user: User, topicTitle : string);
   loggedInUserUpdate(user : UserMetric);
 }
 
@@ -114,6 +118,10 @@ export class EventBus {
 
   emitLogin(user: User, url: string) {
     this.ea.publish(new LoginEvent(user, url));
+  }
+
+  emitStatusUpdate (status : string) {
+    this.ea.publish(new StatusUpdateEvent(status))
   }
 
   emitLogout(user: User) {
@@ -126,6 +134,10 @@ export class EventBus {
 
   emitLabUpdate(user: User, labTitle: string) {
     this.ea.publish(new LabUpdateEvent(user, labTitle));
+  }
+
+  emitTopicUpdate(user: User, labTitle: string) {
+    this.ea.publish(new TopicUpdateEvent(user, labTitle));
   }
 
   emitLoggedinUserUpdate(user :UserMetric) {
@@ -153,6 +165,9 @@ export class EventBus {
   observeCourse(listener: CourseListener) {
     this.ea.subscribe(LabUpdateEvent, event => {
       listener.labUpdate(event.user, event.lab);
+    });
+    this.ea.subscribe(TopicUpdateEvent, event => {
+      listener.topicUpdate(event.user, event.topic);
     });
   }
 

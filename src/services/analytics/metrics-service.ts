@@ -123,6 +123,30 @@ export class MetricsService {
     return users;
   }
 
+  subscribeToUserActivity(users: Map<string, UserMetric>, course: Course) {
+    this.subscribeToLabs(users, course);
+    //this.subscribeToTopics(users, course);
+  }
+
+  subscribeToTopics(users: Map<string, UserMetric>, course: Course) {
+    const that = this;
+    const topics = course.topics
+    const courseBase = course.url.substr(0, course.url.indexOf("."));
+
+    users.forEach(user => {
+      const userEmailSanitised = user.email.replace(/[`#$.\[\]\/]/gi, "*");
+      topics.forEach(topic => {
+        const route = `${courseBase}/users/${userEmailSanitised}/${topic.lo.id}`;
+        firebase
+          .database()
+          .ref(route)
+          .on("value", function(snapshot) {
+            that.eb.emitTopicUpdate(user, topic.lo.title);
+          });
+      });
+    });
+  }
+
   subscribeToLabs(users: Map<string, UserMetric>, course: Course) {
     const that = this;
     const labs = course.walls.get("lab");
