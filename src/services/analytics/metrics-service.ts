@@ -75,6 +75,7 @@ export class MetricsService {
   }
 
   async fetchAllUsers(course: Course) {
+    this.allLabs = course.walls.get("lab");
     const users = new Map<string, UserMetric>();
     const that = this;
     const courseBaseName = course.url.substr(0, course.url.indexOf("."));
