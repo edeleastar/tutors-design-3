@@ -1,22 +1,32 @@
 import { autoinject } from "aurelia-framework";
 import { NavigatorProperties } from "./navigator-properties";
-import { AnalyticsService, OnlineStatusEvent } from "../../../services/analytics/analytics-service";
+import { AnalyticsService } from "../../../services/analytics/analytics-service";
 import { EventAggregator } from "aurelia-event-aggregator";
+import { EventBus, LoginListener, User } from "../../../services/event-bus";
 
 @autoinject
-export class LiveNavigator {
+export class LiveNavigator implements LoginListener {
   onlineStatus = true;
 
-  constructor(private navigatorProperties: NavigatorProperties, private analyticsService: AnalyticsService, private ea: EventAggregator) {
-    this.onlineStatus = this.analyticsService.getOnlineStatus();
+  constructor(private navigatorProperties: NavigatorProperties, private analyticsService : AnalyticsService, private eb: EventBus) {
+  }
 
-    this.ea.subscribe(OnlineStatusEvent, statusEvent => {
-      this.onlineStatus = statusEvent.status == "online";
-    });
+  attached() {
+    this.eb.observeLogin(this);
+    this.onlineStatus = this.analyticsService.getOnlineStatus();
   }
 
   statusChange() {
     this.onlineStatus = !this.onlineStatus;
     this.analyticsService.setOnlineStatus(this.onlineStatus);
   }
+
+  login(user: User, url: string) {
+  }
+
+  statusUpdate(status: string) {
+    this.onlineStatus = status == "online";
+  }
+
+  logout() {}
 }

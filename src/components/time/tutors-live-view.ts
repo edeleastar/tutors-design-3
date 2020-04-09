@@ -25,6 +25,7 @@ export class TutorsLiveView extends BaseView implements CourseListener {
   };
 
   usersMap = new Map<string, number>();
+  users: Map<string, UserMetric>;
   sheet: LabLiveSheet = new LabLiveSheet();
   allLabs: Lo[] = [];
 
@@ -37,15 +38,12 @@ export class TutorsLiveView extends BaseView implements CourseListener {
     this.app.live = true;
     this.sheet.clear(this.grid);
     this.sheet.populateCols(this.course.walls.get("lab"));
-    this.populateTime();
-  }
-
-  async populateTime() {
-    const that = this;
-    const users = await this.metricsService.fetchAllUsers(this.course);
-    this.metricsService.subscribeToLabs(users, this.course);
+    this.users = await this.metricsService.fetchAllUsers(this.course);
+    this.metricsService.subscribeToUserActivity(this.users, this.course);
     this.eb.observeCourse(this);
   }
+
+  topicUpdate(user: User, topicTitle: string) {}
 
   labUpdate(user: User, lab: string) {
     if (!user.onlineStatus || user.onlineStatus === "online") {
@@ -59,9 +57,11 @@ export class TutorsLiveView extends BaseView implements CourseListener {
           this.sheet.populateLab(user, lab);
           this.update();
         } else {
-          let rowNode = this.grid.api.getRowNode(user.nickname);
-          if (rowNode) {
-            this.sheet.updateLab(lab, rowNode);
+          if (this.grid) {
+            let rowNode = this.grid.api.getRowNode(user.nickname);
+            if (rowNode) {
+              this.sheet.updateLab(lab, rowNode);
+            }
           }
         }
       }

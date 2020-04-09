@@ -9,7 +9,8 @@ export class LabLiveSheet extends LabSheet {
   rowData = [];
 
   columnDefs: any = [
-    { headerName: "Github Profile Name", field: "user", width: 180, suppressSizeToFit: true, pinned: "left" }
+    { headerName: "Github Profile Name", field: "user", width: 180, suppressSizeToFit: true, pinned: "left" },
+    { headerName: "Topic", field: "topic", width: 120, suppressSizeToFit: true }
   ];
 
   populateCols(los: Lo[]) {

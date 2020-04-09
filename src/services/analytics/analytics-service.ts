@@ -8,12 +8,6 @@ import { EventAggregator } from "aurelia-event-aggregator";
 import { EventBus, InteractionListener, LoginListener, User } from "../event-bus";
 import { autoinject } from "aurelia-framework";
 
-export class OnlineStatusEvent {
-  status = "online";
-  constructor(status: string) {
-    this.status = status;
-  }
-}
 
 @autoinject
 export class AnalyticsService implements LoginListener, InteractionListener {
@@ -65,10 +59,13 @@ export class AnalyticsService implements LoginListener, InteractionListener {
           if (!status) {
             status = "online";
           }
-          that.ea.publish(new OnlineStatusEvent(status));
+          that.onlineStatus = status == "online";
+          that.eb.emitStatusUpdate(status);
         });
     }
   }
+
+  statusUpdate (status : string) {}
 
   logout() {
     console.log("logout");
