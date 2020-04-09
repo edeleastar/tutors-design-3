@@ -2,12 +2,15 @@ import { Course } from "../course/course";
 import * as firebase from "firebase/app";
 import "firebase/database";
 import { Lo, Student } from "../course/lo";
-import { EventBus, Metric, UserMetric } from "../event-bus";
+import { EventBus, User, Metric, UserMetric } from "../event-bus";
 import { autoinject } from "aurelia-framework";
 
 @autoinject
 export class MetricsService {
-
+  course: Course;
+  users = new Map<string, UserMetric>();
+  allLabs: Lo[] = [];
+  courseBaseName = "";
   constructor(private eb: EventBus) {}
 
   expandGenericMetrics(id: string, fbData): any {
@@ -73,7 +76,6 @@ export class MetricsService {
 
   async fetchAllUsers(course: Course) {
     const users = new Map<string, UserMetric>();
-    const allLabs = course.walls.get("lab");
     const that = this;
     const courseBaseName = course.url.substr(0, course.url.indexOf("."));
     const snapshot = await firebase
@@ -100,10 +102,11 @@ export class MetricsService {
           metrics: userMetric.metrics,
           labActivity: []
         };
-        that.populateLabUsage(user, allLabs);
+        that.populateLabUsage(user, this.allLabs);
         users.set(user.nickname, user);
       }
     }
+    this.users = users;
     return users;
   }
 
@@ -123,47 +126,60 @@ export class MetricsService {
     return users;
   }
 
-  subscribeToUserActivity(users: Map<string, UserMetric>, course: Course) {
-    this.subscribeToLabs(users, course);
-    //this.subscribeToTopics(users, course);
-  }
-
-  subscribeToTopics(users: Map<string, UserMetric>, course: Course) {
-    const that = this;
-    const topics = course.topics
-    const courseBase = course.url.substr(0, course.url.indexOf("."));
-
-    users.forEach(user => {
+  async startMetricsService(course: Course) {
+    this.course = course;
+    this.allLabs = this.course.walls.get("lab");
+    await this.fetchAllUsers(this.course);
+    this.courseBaseName = course.url.substr(0, course.url.indexOf("."));
+    this.users.forEach(user => {
       const userEmailSanitised = user.email.replace(/[`#$.\[\]\/]/gi, "*");
-      topics.forEach(topic => {
-        const route = `${courseBase}/users/${userEmailSanitised}/${topic.lo.id}`;
-        firebase
-          .database()
-          .ref(route)
-          .on("value", function(snapshot) {
-            that.eb.emitTopicUpdate(user, topic.lo.title);
-          });
-      });
+      this.subscribeToUserStatus(user, userEmailSanitised);
+      this.subscribeToUserLabs(user, userEmailSanitised);
+      this.subscribeToUserTopics(user, userEmailSanitised);
     });
   }
 
-  subscribeToLabs(users: Map<string, UserMetric>, course: Course) {
+  subscribeToUserStatus(user: User, email: string) {
     const that = this;
-    const labs = course.walls.get("lab");
-    const courseBase = course.url.substr(0, course.url.indexOf("."));
-
-    users.forEach(user => {
-      const userEmailSanitised = user.email.replace(/[`#$.\[\]\/]/gi, "*");
-      labs.forEach(lab => {
-        const labRoute = lab.route.split("topic");
-        const route = `${courseBase}/users/${userEmailSanitised}/topic${labRoute[1]}`;
-        firebase
-          .database()
-          .ref(route)
-          .on("value", function(snapshot) {
-            that.eb.emitLabUpdate(user, lab.title);
-          });
+    firebase
+      .database()
+      .ref(`${this.courseBaseName}/users/${email}`)
+      .on("value", function(snapshot) {
+        const userUpdate = that.expandGenericMetrics("root", snapshot.val());
+        const user = that.users.get(userUpdate.nickname);
+        user.onlineStatus = userUpdate.onlineStatus;
       });
+  }
+
+  subscribeToUserLabs(user: User, email: string) {
+    const that = this;
+    this.allLabs.forEach(lab => {
+      const labRoute = lab.route.split("topic");
+      const route = `${this.courseBaseName}/users/${email}/topic${labRoute[1]}`;
+      firebase
+        .database()
+        .ref(route)
+        .on("value", function(snapshot) {
+          that.eb.emitLabUpdate(user, lab.title);
+        });
+    });
+  }
+
+  subscribeToUserTopics(user, email: string) {
+    const that = this;
+    const topics = this.course.topics;
+
+    topics.forEach(topic => {
+      const route = `${this.courseBaseName}/users/${email}/${topic.lo.id}`;
+      firebase
+        .database()
+        .ref(route)
+        .on("value", function(snapshot) {
+          const datum = snapshot.val();
+          if (datum && datum.title) {
+            that.eb.emitTopicUpdate(user, topic.lo.title);
+          }
+        });
     });
   }
 }

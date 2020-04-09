@@ -7,8 +7,19 @@ import { LabLiveSheet } from "./sheets/lab-live-sheet";
 import { CourseListener, User, UserMetric } from "../../services/event-bus";
 import { Lo } from "../../services/course/lo";
 
+let liveView: TutorsLiveView = null;
+
+const func = () => {
+  if (liveView) {
+    liveView.live = true;
+  }
+};
+
+setTimeout(func, 30 * 1000);
+
 export class TutorsLiveView extends BaseView implements CourseListener {
   grid = null;
+  live = false;
 
   gridOptions: GridOptions = {
     animateRows: true,
@@ -24,12 +35,13 @@ export class TutorsLiveView extends BaseView implements CourseListener {
     }
   };
 
-  usersMap = new Map<string, number>();
-  users: Map<string, UserMetric>;
+  usersLabCount = new Map<string, number>();
+  usersTopicCount = new Map<string, number>();
   sheet: LabLiveSheet = new LabLiveSheet();
   allLabs: Lo[] = [];
 
   async activate(params, subtitle: string) {
+    liveView = this;
     await this.courseRepo.fetchCourse(params.courseurl);
     this.course = this.courseRepo.course;
     this.authService.checkAuth(this.courseRepo.course, "talk");
@@ -38,31 +50,34 @@ export class TutorsLiveView extends BaseView implements CourseListener {
     this.app.live = true;
     this.sheet.clear(this.grid);
     this.sheet.populateCols(this.course.walls.get("lab"));
-    this.users = await this.metricsService.fetchAllUsers(this.course);
-    this.metricsService.subscribeToUserActivity(this.users, this.course);
+    await this.metricsService.startMetricsService(this.course);
     this.eb.observeCourse(this);
+
   }
 
-  topicUpdate(user: User, topicTitle: string) {}
+  topicUpdate(user: User, topicTitle: string) {
+    if (this.live) {
+      if (this.grid) {
+        let rowNode = this.grid.api.getRowNode(user.nickname);
+        if (rowNode) {
+          this.sheet.updateTopic(topicTitle, rowNode);
+        } else {
+          this.sheet.populateTopic(user, topicTitle);
+          this.update()
+        }
+      }
+    }
+  }
 
   labUpdate(user: User, lab: string) {
-    if (!user.onlineStatus || user.onlineStatus === "online") {
-      let labCount = this.usersMap.get(user.nickname);
-      if (!labCount) {
-        this.usersMap.set(user.nickname, 1);
-      } else {
-        labCount++;
-        this.usersMap.set(user.nickname, labCount);
-        if (labCount == this.allLabs.length + 1) {
-          this.sheet.populateLab(user, lab);
-          this.update();
+    if (this.live) {
+      if (this.grid) {
+        let rowNode = this.grid.api.getRowNode(user.nickname);
+        if (rowNode) {
+          this.sheet.updateLab(lab, rowNode);
         } else {
-          if (this.grid) {
-            let rowNode = this.grid.api.getRowNode(user.nickname);
-            if (rowNode) {
-              this.sheet.updateLab(lab, rowNode);
-            }
-          }
+          this.sheet.populateLab(user, lab);
+          this.update()
         }
       }
     }
