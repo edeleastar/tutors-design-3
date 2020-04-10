@@ -17,7 +17,7 @@ export class LabLiveSheet extends LabSheet {
     los.forEach(lab => {
       this.columnDefs.push({
         headerName: lab.title,
-        width: 38,
+        width: 42,
         field: lab.title,
         suppressSizeToFit: true,
         cellClassRules: deepScheme,

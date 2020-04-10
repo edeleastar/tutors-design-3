@@ -52,33 +52,40 @@ export class TutorsLiveView extends BaseView implements CourseListener {
     this.sheet.populateCols(this.course.walls.get("lab"));
     await this.metricsService.startMetricsService(this.course);
     this.eb.observeCourse(this);
+  }
 
+  canUpdate(user: User): boolean {
+    let update = false;
+    if (this.live && this.grid) {
+      if (!user.onlineStatus || user.onlineStatus === "online") {
+        update = true;
+      } else if (this.instructorMode) {
+        update = true;
+      }
+    }
+    return update;
   }
 
   topicUpdate(user: User, topicTitle: string) {
-    if (this.live) {
-      if (this.grid) {
-        let rowNode = this.grid.api.getRowNode(user.nickname);
-        if (rowNode) {
-          this.sheet.updateTopic(topicTitle, rowNode);
-        } else {
-          this.sheet.populateTopic(user, topicTitle);
-          this.update()
-        }
+    if (this.canUpdate(user)) {
+      let rowNode = this.grid.api.getRowNode(user.nickname);
+      if (rowNode) {
+        this.sheet.updateTopic(topicTitle, rowNode);
+      } else {
+        this.sheet.populateTopic(user, topicTitle);
+        this.update();
       }
     }
   }
 
   labUpdate(user: User, lab: string) {
-    if (this.live) {
-      if (this.grid) {
-        let rowNode = this.grid.api.getRowNode(user.nickname);
-        if (rowNode) {
-          this.sheet.updateLab(lab, rowNode);
-        } else {
-          this.sheet.populateLab(user, lab);
-          this.update()
-        }
+    if (this.canUpdate(user)) {
+      let rowNode = this.grid.api.getRowNode(user.nickname);
+      if (rowNode) {
+        this.sheet.updateLab(lab, rowNode);
+      } else {
+        this.sheet.populateLab(user, lab);
+        this.update();
       }
     }
   }
