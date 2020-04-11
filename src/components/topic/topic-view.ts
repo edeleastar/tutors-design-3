@@ -1,4 +1,4 @@
-import { Topic } from "../../services/topic";
+import { Topic } from "../../services/course/topic";
 import { BaseView } from "../base/base-view";
 import environment from "../../environment";
 import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";
@@ -19,7 +19,8 @@ export class TopicView extends BaseView {
         profile: true,
         companions: true,
         walls: true,
-        tutorsTime: false
+        tutorsTime: false,
+        toc: true
       },
       {
         title: this.topic.lo.title,

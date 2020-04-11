@@ -1,7 +1,7 @@
-import { Lo } from "../../../services/lo";
-import { UserMetric } from "../../../services/metrics-service";
+import { Lo } from "../../../services/course/lo";
 import { LabSheet } from "./lab-sheet";
 import { deepScheme } from "./heat-map-colours";
+import { UserMetric } from "../../../services/events/event-bus";
 
 export class LabClickSummarySheet extends LabSheet {
   title = "Lab Page Views - Totals";
@@ -13,10 +13,11 @@ export class LabClickSummarySheet extends LabSheet {
     los.forEach(lab => {
       this.columnDefs.push({
         headerName: lab.title,
-        width: 70,
+        width: 48,
         field: lab.title,
         suppressSizeToFit: true,
-        cellClassRules: deepScheme
+        cellClassRules: deepScheme,
+        menuTabs: []
       });
     });
   }

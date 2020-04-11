@@ -1,4 +1,4 @@
-import { Lo } from "../../services/lo";
+import { Lo } from "../../services/course/lo";
 import environment from "../../environment";
 import { BaseView } from "../base/base-view";
 import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";
@@ -33,7 +33,8 @@ export class WallView extends BaseView {
         profile: true,
         companions: false,
         walls: true,
-        tutorsTime: false
+        tutorsTime: false,
+        toc: true
       },
       {
         title: `All ${this.routeName}'s in ${this.course.lo.title}`,

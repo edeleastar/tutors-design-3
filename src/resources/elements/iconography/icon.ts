@@ -21,7 +21,8 @@ import {
   faEye,
   faClock,
   faStopwatch,
-  faFileExcel
+  faFileExcel,
+  faUserClock
 } from "@fortawesome/free-solid-svg-icons";
 
 import { faYoutube, faSlack, faGithub, faYoutubeSquare } from "@fortawesome/free-brands-svg-icons";
@@ -62,7 +63,8 @@ export class Icon {
     labViewSummary : farEye,
     labTimeDetail : faClock,
     labTimeSummary : farClock,
-    timeExport : faFileExcel
+    timeExport : faFileExcel,
+    timeLive: faUserClock
   };
 
   icon(type: string) {

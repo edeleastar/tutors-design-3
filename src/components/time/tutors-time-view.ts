@@ -8,11 +8,17 @@ import { LabClickSheet } from "./sheets/lab-click-sheet";
 import { LabTimeSheet } from "./sheets/lab-time-sheet";
 import { LabsTimeSummarySheet } from "./sheets/lab-time-summary-sheet";
 import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";
-import { SingleUserUpdateEvent, UserMetric } from "../../services/metrics-service";
+import { Lo } from "../../services/course/lo";
+import { UserMetric } from "../../services/events/event-definitions";
 
 export class TutorsTimeView extends BaseView {
   grid = null;
-  subscribed = false;
+  sheets: Map<string, LabSheet> = new Map();
+  sheet: LabSheet = null;
+  email: string;
+  user: UserMetric;
+  users = new Map<string, UserMetric>();
+  allLabs: Lo[] = [];
 
   gridOptions: GridOptions = {
     animateRows: true,
@@ -27,8 +33,6 @@ export class TutorsTimeView extends BaseView {
       return data.github;
     }
   };
-  sheets: Map<string, LabSheet> = new Map();
-  sheet: LabSheet = null;
 
   initMap() {
     if (this.sheets.size == 0) {
@@ -43,7 +47,7 @@ export class TutorsTimeView extends BaseView {
     this.initMap();
     await this.courseRepo.fetchCourse(params.courseurl);
     this.course = this.courseRepo.course;
-
+    this.allLabs = this.course.walls.get("lab");
     if (params.metric === "export") {
       this.grid.api.exportDataAsExcel();
     } else {
@@ -52,7 +56,11 @@ export class TutorsTimeView extends BaseView {
     super.init(`time/${params.courseurl}`);
     this.sheet.clear(this.grid);
     this.sheet.populateCols(this.course.walls.get("lab"));
-    await this.populateSheet();
+
+    if (this.authService.isAuthenticated()) {
+      this.email = this.authService.getUserEmail();
+    }
+    this.populateSheet();
   }
 
   instructorModeEnabled() {
@@ -60,26 +68,25 @@ export class TutorsTimeView extends BaseView {
   }
 
   async populateSheet() {
-    if (this.authService.isAuthenticated()) {
-      const email = this.authService.getUserEmail();
-      if (this.courseRepo.privelaged == true) {
-        await this.metricsService.retrieveAllUsers(this.course);
+    if (this.courseRepo.privelaged == false) {
+      if (!this.user) this.user = await this.metricsService.fetchUser(this.course, this.email);
+      this.sheet.populateRow(this.user, this.allLabs);
+    } else {
+      if (this.users.size == 0) {
+        this.users = await this.metricsService.fetchAllUsers(this.course);
         if (this.course.hasEnrollment()) {
-          this.metricsService.filterUsers(this.course.getStudents());
+          this.users = this.metricsService.filterUsers(this.users, this.course.getStudents());
         }
-        this.subscribed = false;
-      } else {
-        await this.metricsService.retrieveUser(this.course, email);
       }
-    }
-    this.bulkUserUpdate(this.metricsService.usersMap);
-    if (!this.subscribed) {
-      this.subscribed = true;
-      this.metricsService.subscribeToAll(this.course);
-      this.ea.subscribe(SingleUserUpdateEvent, userEvent => {
-        this.singleUserUpdate(userEvent.user);
+      this.users.forEach((user, id) => {
+        this.sheet.populateRow(user, this.allLabs);
       });
     }
+    this.update();
+  }
+
+  loggedInUserUpdate(user: UserMetric) {
+    this.update();
   }
 
   update() {
@@ -93,22 +100,6 @@ export class TutorsTimeView extends BaseView {
 
   resize(detail) {
     if (this.grid) this.grid.api.sizeColumnsToFit();
-  }
-
-  singleUserUpdate(user: UserMetric) {
-    if (this.grid) {
-      let rowNode = this.grid.api.getRowNode(user.nickname);
-      if (rowNode) {
-        this.sheet.updateRow(user, rowNode);
-      }
-    }
-  }
-
-  bulkUserUpdate(users: Map<string, UserMetric>) {
-    this.metricsService.usersMap.forEach((user, id) => {
-      this.sheet.populateRow(user, this.metricsService.allLabs);
-    });
-    this.update();
   }
 
   configMainNav(nav: NavigatorProperties) {

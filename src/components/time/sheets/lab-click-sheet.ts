@@ -1,7 +1,7 @@
-import { Lo } from "../../../services/lo";
-import { UserMetric } from "../../../services/metrics-service";
+import { Lo } from "../../../services/course/lo";
 import { LabSheet } from "./lab-sheet";
 import { shallowScheme } from "./heat-map-colours";
+import { UserMetric } from "../../../services/events/event-definitions";
 
 export class LabClickSheet extends LabSheet {
   title = "Lab Page Views - Detailed";
@@ -12,10 +12,11 @@ export class LabClickSheet extends LabSheet {
       lab.los.forEach(step => {
         this.columnDefs.push({
           headerName: step.shortTitle,
-          width: 55,
+          width: 42,
           field: lab.title + step.shortTitle,
           suppressSizeToFit: true,
-          cellClassRules: shallowScheme
+          cellClassRules: shallowScheme,
+          menuTabs: []
         });
       });
     });

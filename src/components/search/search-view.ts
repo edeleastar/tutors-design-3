@@ -1,12 +1,12 @@
 import { autoinject } from "aurelia-framework";
-import { Course } from "../../services/course";
-import { searchHits } from "../../services/utils-search";
-import { extractPath } from "../../services/utils-search";
-import { findLo } from "../../services/utils-search";
-import { allLos } from "../../services/utils";
+import { Course } from "../../services/course/course";
+import { searchHits } from "../../services/utils/utils-search";
+import { extractPath } from "../../services/utils/utils-search";
+import { findLo } from "../../services/utils/utils-search";
+import { allLos } from "../../services/utils/utils";
 import environment from "../../environment";
 import { BaseView } from "../base/base-view";
-import { Lo } from "../../services/lo";
+import { Lo } from "../../services/course/lo";
 import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";
 /**
  * Search the labs for presence of user-input search term.

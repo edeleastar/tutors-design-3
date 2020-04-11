@@ -1,28 +1,29 @@
-import { CourseRepo } from "../../services/course-repo";
+import { CourseRepo } from "../../services/course/course-repo";
 import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";
-import { AuthService } from "../../services/auth-service";
+import { AuthService } from "../../services/authentication/auth-service";
 import { inject } from "aurelia-framework";
-import { Lo } from "../../services/lo";
+import { Lo } from "../../services/course/lo";
 import { Router } from "aurelia-router";
-import { AnalyticsService } from "../../services/analytics-service";
-import { Course } from "../../services/course";
-import { EventAggregator } from "aurelia-event-aggregator";
-import { MetricsService } from "../../services/metrics-service";
+import { Course } from "../../services/course/course";
+import { MetricsService } from "../../services/analytics/metrics-service";
+import { App } from "../../app";
+import { EventBus } from "../../services/events/event-bus";
+import { AnalyticsService } from "../../services/analytics/analytics-service";
 
 let currentLo: Lo = null;
 let currentRoute = "";
 let currentCourse: Course = null;
-let analyticsService: AnalyticsService = null;
+let eb: EventBus = null;
 
 const func = () => {
-  if (analyticsService && !document.hidden) {
-    analyticsService.logDuration(currentRoute, currentCourse, currentLo);
+  if (eb && !document.hidden) {
+    eb.emitLog(currentRoute, currentCourse, currentLo);
   }
 };
 
 setInterval(func, 30 * 1000);
 
-@inject(CourseRepo, NavigatorProperties, AuthService, Router, AnalyticsService, EventAggregator, MetricsService)
+@inject(CourseRepo, NavigatorProperties, AuthService, Router, EventBus, MetricsService, AnalyticsService, App)
 export class BaseView {
   show = false;
 
@@ -30,31 +31,35 @@ export class BaseView {
   navigatorProperties: NavigatorProperties;
   authService: AuthService;
   router: Router;
-  anaylticsService: AnalyticsService;
-  ea: EventAggregator;
+  eb: EventBus;
   metricsService: MetricsService;
+  anaylticsService : AnalyticsService;
   course: Course;
+  app : App;
 
   myKeypressCallback: any;
   pinBuffer = "";
   ignorePin = "";
+  instructorMode = false;
 
   constructor(
     courseRepo: CourseRepo,
     navigatorProperties: NavigatorProperties,
     authService: AuthService,
     router: Router,
-    analyticsService: AnalyticsService,
-    ea: EventAggregator,
-    metricsService: MetricsService
+    eb: EventBus,
+    metricsService: MetricsService,
+    analyticsService : AnalyticsService,
+    app: App
   ) {
     this.courseRepo = courseRepo;
     this.navigatorProperties = navigatorProperties;
     this.authService = authService;
     this.router = router;
-    this.anaylticsService = analyticsService;
-    this.ea = ea;
+    this.eb = eb;
     this.metricsService = metricsService;
+    this.anaylticsService = analyticsService;
+    this.app = app;
   }
 
   async init(path: string = "", lo: Lo = null) {
@@ -68,13 +73,13 @@ export class BaseView {
       this.navigatorProperties.init(this.courseRepo.course);
     }
     if (lo) {
-      this.anaylticsService.log(path, this.courseRepo.course, lo);
-      this.router.title = lo.title;
-      this.router.updateTitle();
       currentLo = lo;
       currentRoute = path;
       currentCourse = this.courseRepo.course;
-      analyticsService = this.anaylticsService;
+      eb = this.eb;
+      this.eb.emitLog(path, this.courseRepo.course, lo);
+      this.router.title = lo.title;
+      this.router.updateTitle();
     }
     this.configMainNav(this.navigatorProperties);
     this.autoNavProperties();
@@ -96,12 +101,13 @@ export class BaseView {
       this.pinBuffer = "";
       this.courseRepo.course.showAllLos();
       this.courseRepo.privelaged = true;
-      this.instructorModeEnabled()
+      this.instructorModeEnabled();
+      this.navigatorProperties.privelagedEnabled();
+      this.instructorMode = true;
     }
   }
 
-  instructorModeEnabled() {
-  }
+  instructorModeEnabled() {}
 
   configMainNav(nav: NavigatorProperties) {
     nav.clear();
@@ -123,7 +129,9 @@ export class BaseView {
   autoNavProperties() {
     this.navigatorProperties.companions.visible =
       this.navigatorProperties.companions.visible && this.navigatorProperties.companions.nav.length > 0;
-    this.navigatorProperties.profile.visible =
-      this.course.authLevel > 0 && this.course.walls.get("lab") != null && this.authService.isAuthenticated();
+    if (this.navigatorProperties.profile.visible) {
+      this.navigatorProperties.profile.visible =
+        this.course.authLevel > 0 && this.course.walls.get("lab") != null && this.authService.isAuthenticated();
+    }
   }
 }

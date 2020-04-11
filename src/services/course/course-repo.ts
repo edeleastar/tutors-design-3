@@ -2,8 +2,8 @@ import { HttpClient } from "aurelia-fetch-client";
 import { Course } from "./course";
 import { autoinject } from "aurelia-framework";
 import * as path from "path";
-import { findCourseUrls, lastSegment } from "./utils";
-import environment from "../environment";
+import { findCourseUrls, lastSegment } from "../utils/utils";
+import environment from "../../environment";
 
 @autoinject
 export class CourseRepo {

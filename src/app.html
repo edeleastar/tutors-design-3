@@ -1,8 +1,15 @@
 <template>
   <require from="./resources/elements/navigators/main-navigator"></require>
+  <require from="./resources/elements/navigators/live-navigator"></require>
   <require from="./resources/elements/navigators/side-navigator.html"></require>
   <require from="./app.css"></require>
-  <main-navigator></main-navigator>
+  <div if.bind="live">
+    <live-navigator></live-navigator>
+  </div>
+  <div else>
+    <main-navigator></main-navigator>
+  </div>
   <side-navigator course.one-way="courseRepo.course"></side-navigator>
   <router-view></router-view>
+
 </template>

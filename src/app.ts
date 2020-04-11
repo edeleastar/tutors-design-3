@@ -2,15 +2,22 @@ import { PLATFORM } from "aurelia-pal";
 import { Router, RouterConfiguration } from "aurelia-router";
 import environment from "./environment";
 import { autoinject } from "aurelia-framework";
-import { CourseRepo } from "./services/course-repo";
+import { CourseRepo } from "./services/course/course-repo";
 import { NavigatorProperties } from "./resources/elements/navigators/navigator-properties";
-import { AuthService } from "./services/auth-service";
+import { GoogleAnalytics } from "./services/analytics/google-analytics";
+import { AnalyticsService } from "./services/analytics/analytics-service";
+import { EventBus } from "./services/events/event-bus";
 
 @autoinject
 export class App {
   title = 'Tutors';
+  live = false;
 
-  constructor(private navigatorProperties: NavigatorProperties, private courseRepo : CourseRepo) {}
+  constructor(private navigatorProperties: NavigatorProperties,
+              private courseRepo : CourseRepo,
+              private ga: GoogleAnalytics,
+              private as: AnalyticsService,
+              private eb : EventBus) {}
 
   configureRouter(config: RouterConfiguration, router: Router) {
     config.title = 'Tutors';
@@ -30,6 +37,7 @@ export class App {
       { route: 'videos/*courseurl',         moduleId: PLATFORM.moduleName('./components/wall/wall-view'),        name: 'video',   title: 'Videos' },
       { route: 'search/*courseurl',         moduleId: PLATFORM.moduleName('./components/search/search-view'),    name: 'search',  title: 'Search' },
       { route: 'time/*courseurl/:metric',   moduleId: PLATFORM.moduleName('./components/time/tutors-time-view', "tutors-time"), name: 'time',    title: 'Tutors Time' },
+      { route: 'live/*courseurl',           moduleId: PLATFORM.moduleName('./components/time/tutors-live-view', "tutors-time"), name: 'live',    title: 'Tutors Live' },
       { route: 'authorize',                 moduleId: PLATFORM.moduleName('./components/auth/authorize'),        name: 'authorize' },
       { route: 'logout',                    moduleId: PLATFORM.moduleName('./components/auth/logout'),           name: 'logout',  }
     ]);
