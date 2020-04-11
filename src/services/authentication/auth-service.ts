@@ -5,7 +5,8 @@ import { EventEmitter } from "events";
 import { Course } from "../course/course";
 import environment from "../../environment";
 import { decrypt, encrypt } from "../utils/utils";
-import { EventBus, User } from "../event-bus";
+import { EventBus } from "../events/event-bus";
+import { User } from "../events/event-definitions";
 
 const authLevels = {
   course: 4,

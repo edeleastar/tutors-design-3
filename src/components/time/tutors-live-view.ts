@@ -4,8 +4,9 @@ import { BaseView } from "../base/base-view";
 import environment from "../../environment";
 import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";
 import { LabLiveSheet } from "./sheets/lab-live-sheet";
-import { CourseListener, User, UserMetric } from "../../services/event-bus";
+import { CourseListener } from "../../services/events/event-bus";
 import { Lo } from "../../services/course/lo";
+import { User, UserMetric } from "../../services/events/event-definitions";
 
 let liveView: TutorsLiveView = null;
 

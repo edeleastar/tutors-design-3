@@ -5,9 +5,9 @@ import environment from "../../environment";
 import { Course } from "../course/course";
 import { analyicsPageTitle } from "../utils/utils";
 import { EventAggregator } from "aurelia-event-aggregator";
-import { EventBus, InteractionListener, LoginListener, User } from "../event-bus";
+import { EventBus, InteractionListener, LoginListener } from "../events/event-bus";
 import { autoinject } from "aurelia-framework";
-
+import { User } from "../events/event-definitions";
 
 @autoinject
 export class AnalyticsService implements LoginListener, InteractionListener {
@@ -65,7 +65,7 @@ export class AnalyticsService implements LoginListener, InteractionListener {
     }
   }
 
-  statusUpdate (status : string) {}
+  statusUpdate(status: string) {}
 
   logout() {
     console.log("logout");

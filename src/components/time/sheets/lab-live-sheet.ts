@@ -1,7 +1,7 @@
 import { Lo } from "../../../services/course/lo";
 import { LabSheet } from "./lab-sheet";
 import { deepScheme, liveScheme } from "./heat-map-colours";
-import { User } from "../../../services/event-bus";
+import { User } from "../../../services/events/event-definitions";
 
 export class LabLiveSheet extends LabSheet {
   title = "Whos is Here?";

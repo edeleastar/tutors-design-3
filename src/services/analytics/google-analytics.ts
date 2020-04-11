@@ -2,8 +2,9 @@ import { Lo } from "../course/lo";
 import environment from "../../environment";
 import { Course } from "../course/course";
 import { analyicsPageTitle } from "../utils/utils";
-import { EventBus, InteractionListener, LoginListener, User } from "../event-bus";
+import { EventBus, InteractionListener, LoginListener } from "../events/event-bus";
 import { autoinject } from "aurelia-framework";
+import { User } from "../events/event-definitions";
 
 const initGTag = require("./utils-ga.js").initGTag;
 const trackEvent = require("./utils-ga.js").trackEvent;
@@ -40,5 +41,8 @@ export class GoogleAnalytics implements LoginListener, InteractionListener {
 
     trackTag(environment.ga, path, title, this.userId);
     trackEvent(environment.ga, this.courseBaseName, path, lo, this.userId);
+  }
+
+  statusUpdate(status: string) {
   }
 }

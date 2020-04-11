@@ -2,7 +2,8 @@ import { autoinject } from "aurelia-framework";
 import { NavigatorProperties } from "./navigator-properties";
 import { AnalyticsService } from "../../../services/analytics/analytics-service";
 import { EventAggregator } from "aurelia-event-aggregator";
-import { EventBus, LoginListener, User } from "../../../services/event-bus";
+import { EventBus, LoginListener } from "../../../services/events/event-bus";
+import { User } from "../../../services/events/event-definitions";
 
 @autoinject
 export class LiveNavigator implements LoginListener {

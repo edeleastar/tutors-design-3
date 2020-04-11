@@ -7,7 +7,7 @@ import { Router } from "aurelia-router";
 import { Course } from "../../services/course/course";
 import { MetricsService } from "../../services/analytics/metrics-service";
 import { App } from "../../app";
-import { EventBus } from "../../services/event-bus";
+import { EventBus } from "../../services/events/event-bus";
 import { AnalyticsService } from "../../services/analytics/analytics-service";
 
 let currentLo: Lo = null;

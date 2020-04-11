@@ -1,7 +1,7 @@
 import { Lo } from "../../../services/course/lo";
 import { LabSheet } from "./lab-sheet";
 import { shallowScheme } from "./heat-map-colours";
-import { UserMetric } from "../../../services/event-bus";
+import { UserMetric } from "../../../services/events/event-definitions";
 
 export class LabTimeSheet extends LabSheet {
   title = "Lab Time in Minutes - Detailed";

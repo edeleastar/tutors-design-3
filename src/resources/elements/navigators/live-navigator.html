@@ -7,10 +7,10 @@
     </div>
     <div class="uk-width-1-5@m  uk-padding-small">
       <div if.bind="onlineStatus">
-        <button click.trigger="statusChange()" class="uk-button uk-button-primary">Online</button>
+        <button click.trigger="statusChange()" class="uk-button uk-button-primary" uk-tooltip="title: Appearing Online; pos: bottom">Online</button>
       </div>
       <div else>
-        <button click.trigger="statusChange()" class="uk-button uk-button-danger" >Offline</button>
+        <button click.trigger="statusChange()" class="uk-button uk-button-danger" uk-tooltip="title: Appearing Offline; pos: bottom">Offline</button>
       </div>
     </div>
   </div>

@@ -4,10 +4,9 @@ import environment from "./environment";
 import { autoinject } from "aurelia-framework";
 import { CourseRepo } from "./services/course/course-repo";
 import { NavigatorProperties } from "./resources/elements/navigators/navigator-properties";
-import { AuthService } from "./services/authentication/auth-service";
 import { GoogleAnalytics } from "./services/analytics/google-analytics";
 import { AnalyticsService } from "./services/analytics/analytics-service";
-import { EventBus } from "./services/event-bus";
+import { EventBus } from "./services/events/event-bus";
 
 @autoinject
 export class App {

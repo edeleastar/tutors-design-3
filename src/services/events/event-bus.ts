@@ -1,100 +1,18 @@
 import { autoinject } from "aurelia-framework";
 import { EventAggregator } from "aurelia-event-aggregator";
-import { Course } from "./course/course";
-import { Lo } from "./course/lo";
+import { Course } from "../course/course";
+import { Lo } from "../course/lo";
+import {
+  LabUpdateEvent,
+  StatusUpdateEvent,
+  TopicUpdateEvent,
+  User,
+  UserMetric,
+  UserUpdate,
+  LoginEvent,
+  LogoutEvent, InteractionEvent
+} from "./event-definitions";
 
-export interface Metric {
-  id: string;
-  title: string;
-  count: number;
-  last: string;
-  duration: number;
-  metrics: Metric[];
-}
-
-export interface User {
-  userId: string;
-  email: string;
-  picture: string;
-  name: string;
-  nickname: string;
-  onlineStatus: string;
-}
-
-export interface UserMetric extends User {
-  title: string;
-  count: number;
-  last: string;
-  duration: number;
-  metrics: Metric[];
-  labActivity: Metric[];
-}
-
-export class LabUpdateEvent {
-  user: User;
-  lab: string;
-  constructor(user: User, lab: string) {
-    this.user = user;
-    this.lab = lab;
-  }
-}
-
-export class TopicUpdateEvent {
-  user: User;
-  topic: string;
-  constructor(user: User, topic: string) {
-    this.user = user;
-    this.topic = topic;
-  }
-}
-
-export class OnlineStatusEvent {
-  status = "online";
-  constructor(status: string) {
-    this.status = status;
-  }
-}
-
-export class UserUpdate {
-  user: UserMetric;
-  constructor(user) {
-    this.user = user;
-  }
-}
-
-export class StatusUpdateEvent {
-  status : string;
-  constructor(status : string) {
-    this.status = status;
-  }
-}
-
-class LoginEvent {
-  user: User;
-  courseUrl: string;
-  constructor(user, url: string) {
-    this.user = user;
-    this.courseUrl = url;
-  }
-}
-
-class LogoutEvent {
-  user: User;
-  constructor(user) {
-    this.user = user;
-  }
-}
-
-class InteractionEvent {
-  path: string;
-  course: Course;
-  lo: Lo;
-  constructor(path: string, course: Course, lo: Lo) {
-    this.path = path;
-    this.course = course;
-    this.lo = lo;
-  }
-}
 
 export interface LoginListener {
   login(user: User, url: string);

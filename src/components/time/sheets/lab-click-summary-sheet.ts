@@ -1,7 +1,7 @@
 import { Lo } from "../../../services/course/lo";
 import { LabSheet } from "./lab-sheet";
 import { deepScheme } from "./heat-map-colours";
-import { UserMetric } from "../../../services/event-bus";
+import { UserMetric } from "../../../services/events/event-bus";
 
 export class LabClickSummarySheet extends LabSheet {
   title = "Lab Page Views - Totals";

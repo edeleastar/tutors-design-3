@@ -8,8 +8,8 @@ import { LabClickSheet } from "./sheets/lab-click-sheet";
 import { LabTimeSheet } from "./sheets/lab-time-sheet";
 import { LabsTimeSummarySheet } from "./sheets/lab-time-summary-sheet";
 import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";
-import { UserMetric } from "../../services/event-bus";
 import { Lo } from "../../services/course/lo";
+import { UserMetric } from "../../services/events/event-definitions";
 
 export class TutorsTimeView extends BaseView {
   grid = null;

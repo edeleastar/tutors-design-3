@@ -2,8 +2,9 @@ import { Course } from "../course/course";
 import * as firebase from "firebase/app";
 import "firebase/database";
 import { Lo, Student } from "../course/lo";
-import { EventBus, User, Metric, UserMetric } from "../event-bus";
 import { autoinject } from "aurelia-framework";
+import { Metric, User, UserMetric } from "../events/event-definitions";
+import { EventBus } from "../events/event-bus";
 
 @autoinject
 export class MetricsService {
