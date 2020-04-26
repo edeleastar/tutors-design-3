@@ -4,6 +4,7 @@ import { Lo } from "../../services/course/lo";
 import { BaseView } from "../base/base-view";
 import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";
 const path = require("path");
+import 'showdown-highlight/node_modules/highlight.js/styles/railscasts.css'
 
 export class LabView extends BaseView {
   lab: Lo;

@@ -2,6 +2,9 @@ import { Aurelia } from "aurelia-framework";
 import environment from "./environment";
 import { PLATFORM } from "aurelia-pal";
 
+import 'uikit/dist/css/uikit.css';
+import 'uikit/dist/js/uikit.js';
+
 export function configure(aurelia: Aurelia) {
   aurelia.use
     .standardConfiguration()
