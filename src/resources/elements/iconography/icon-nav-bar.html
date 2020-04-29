@@ -3,9 +3,9 @@
 
   <div class="uk-card uk-card-default uk-padding-small">
     <ul class="uk-iconnav">
-      <div repeat.for="icon of nav">
+      <div repeat.for="i of nav">
         <li>
-          <a id="${icon.icon}" href="${icon.link}" target="${icon.target}" title="${icon.tip}" pos="bottom" uk-tooltip> <icon type="${icon.icon}" size="2x"></icon> </a>
+          <a id="${i.icon}" href="${i.link}" target="${i.target}" title="${i.tip}" pos="bottom" uk-tooltip> <icon type="${i.icon}" size="2x"></icon> </a>
         </li>
       </div>
     </ul>

@@ -1,5 +1,3 @@
-<template bindable="type, size, colour">
-  <span style="color:${iconStyle()}">
-    <font-awesome-icon icon.bind="icon(type)" size="${size}"></font-awesome-icon>
-  </span>
+<template bindable="type, size">
+  <font-awesome-icon class="icon-${type}" icon.bind="icon(type)" size="${size}"></font-awesome-icon>
 </template>
