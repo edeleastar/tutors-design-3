@@ -29,7 +29,7 @@ export class WallView extends BaseView {
     this.navigatorProperties.config(
       {
         titleCard: true,
-        parent: this.courseRepo.course.lo.properties.parent != null,
+        parent: true,
         profile: true,
         companions: false,
         walls: true,
