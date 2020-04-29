@@ -1,85 +1,16 @@
-import { iconColours } from "./styles";
+import { iconColours, faIcons } from "./styles";
 import { bindable } from "aurelia-framework";
-
-import {
-  faBook,
-  faSitemap,
-  faObjectGroup,
-  faFlask,
-  faFileArchive,
-  faGraduationCap,
-  faHome,
-  faTh,
-  faBars,
-  faFilm,
-  faBookmark,
-  faChalkboardTeacher,
-  faSearch,
-  faFilePdf,
-  faSignOutAlt,
-  faHistory,
-  faEye,
-  faClock,
-  faStopwatch,
-  faFileExcel,
-  faUserClock
-} from "@fortawesome/free-solid-svg-icons";
-
-import { faYoutube, faSlack, faGithub, faYoutubeSquare } from "@fortawesome/free-brands-svg-icons";
-import { faAddressCard } from "@fortawesome/free-regular-svg-icons/faAddressCard";
-import {faClock as farClock, faEye as farEye,} from "@fortawesome/free-regular-svg-icons";
 
 export class Icon {
   @bindable type: string;
   @bindable size: string;
-  @bindable colour: string;
-
-  FaIcons = {
-    course: faBook,
-    topic: faSitemap,
-    talk: faObjectGroup,
-    reference: faObjectGroup,
-    lab: faFlask,
-    archive: faFileArchive,
-    panelvideo: faYoutube,
-    video: faYoutube,
-    adobeconnect: faAddressCard,
-    slack: faSlack,
-    moodle: faGraduationCap,
-    github: faGithub,
-    youtube: faYoutubeSquare,
-    moduleHome: faHome,
-    programHome: faTh,
-    toc: faBars,
-    film: faFilm,
-    web: faBookmark,
-    unit: faBookmark,
-    tutors: faChalkboardTeacher,
-    search: faSearch,
-    pdf: faFilePdf,
-    logout : faSignOutAlt,
-    tutorsTime : faHistory,
-    labViewDetail : faEye,
-    labViewSummary : farEye,
-    labTimeDetail : faClock,
-    labTimeSummary : farClock,
-    timeExport : faFileExcel,
-    timeLive: faUserClock
-  };
-
+  colour: string;
 
   icon(type: string) {
-    return this.FaIcons[type];
+    return faIcons[type];
   }
 
   attached() {
-    this.colour = iconColours[this.type]
+    this.colour = iconColours[this.type];
   }
-  // iconStyle() {
-  //   let c = iconColours[this.type];
-  //   if (this.colour) {
-  //     c = this.colour;
-  //   }
-  //   return  c;
-  // }
 }
