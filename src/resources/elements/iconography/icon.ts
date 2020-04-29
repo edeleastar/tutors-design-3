@@ -67,15 +67,19 @@ export class Icon {
     timeLive: faUserClock
   };
 
+
   icon(type: string) {
     return this.FaIcons[type];
   }
 
-  iconStyle() {
-    let c = iconColours[this.type];
-    if (this.colour) {
-      c = this.colour;
-    }
-    return c;
+  attached() {
+    this.colour = iconColours[this.type]
   }
+  // iconStyle() {
+  //   let c = iconColours[this.type];
+  //   if (this.colour) {
+  //     c = this.colour;
+  //   }
+  //   return  c;
+  // }
 }
