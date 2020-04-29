@@ -4589,6 +4589,11 @@ he@1.2.x, he@^1.1.0:
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
 
+highlight.js@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-10.0.0.tgz#839b831198f0fa6b8dd534ff2cc701466e404c8b"
+  integrity sha512-KW/l+u4WQ45gvlma6RgDl6xZ0/iitBob23kwGCdQ5QTyQdWXjbWlmZJFUHEZXOtUhYOU3JygYcT5jL9RT8Htvw==
+
 highlight.js@^9.7.0:
   version "9.15.8"
   resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-9.15.8.tgz#f344fda123f36f1a65490e932cf90569e4999971"
@@ -8850,6 +8855,11 @@ uglify-js@^3.1.4:
   dependencies:
     commander "~2.20.0"
     source-map "~0.6.1"
+
+uikit@^3.4.2:
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/uikit/-/uikit-3.4.2.tgz#2e3d05d2e206e63c9b42a347927674117678acee"
+  integrity sha512-z5NH1s8sTMHjVQ+Exr2IKgPn/bG9f5PSK4HcTZaBlw3mF6f5UgefWIA3xKVsOtOeJSOQ2T8lk++59syRF5NwOw==
 
 unc-path-regex@^0.1.2:
   version "0.1.2"
