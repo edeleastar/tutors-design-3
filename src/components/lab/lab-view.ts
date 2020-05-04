@@ -9,41 +9,46 @@ export class LabView extends BaseView {
   lab: Lo;
   content = "";
   url = "";
-  currentChapter: Lo;
+  currentChapterShortTitle = "";
   navbarHtml = "";
   markdownParser = new MarkdownParser();
+  chaptersHtml = new Map<string, string>();
+  objectivesHtml = "";
 
   refreshav() {
     this.navbarHtml = "";
     this.lab.los.forEach(chapter => {
-      const active = chapter == this.currentChapter ? "class= uk-active" : "";
+      const active = chapter.shortTitle == this.currentChapterShortTitle ? "class= uk-active" : "";
       this.navbarHtml = this.navbarHtml.concat(
-        `<li ${active}> <a href="${environment.urlPrefix}lab/${this.url}/${chapter.shortTitle}"> ${
-          chapter.shortTitle
-        } </a> </li>`
+        `<li ${active}> <a href="${environment.urlPrefix}lab/${this.url}/${chapter.shortTitle}"> ${chapter.shortTitle} </a> </li>`
       );
     });
   }
 
-  async activate(params, route) {
+  async fecthLab() {
+    if (!this.lab) {
+      this.lab = await this.courseRepo.fetchLab(this.url);
+      this.objectivesHtml = this.markdownParser.parse(this.lab.los[0].contentMd, this.url)
+      this.lab.los.forEach(chapter => {
+        this.chaptersHtml.set(chapter.shortTitle, this.markdownParser.parse(chapter.contentMd, this.url))
+      })
+    }
+  }
+  async activate(params) {
     const lastSegment = params.laburl.substr(params.laburl.lastIndexOf("/") + 1);
-    let chapter: Lo = null;
     if (lastSegment.startsWith("book")) {
       this.url = params.laburl;
-      this.lab = await this.courseRepo.fetchLab(this.url);
-      this.currentChapter = this.lab.los[0];
+      await this.fecthLab();
+      this.currentChapterShortTitle = this.lab.los[0].shortTitle;
+      this.content = this.objectivesHtml;
     } else {
       this.url = path.dirname(params.laburl);
-      this.lab = await this.courseRepo.fetchLab(this.url);
-      this.currentChapter = this.lab.los.find(ch => ch.shortTitle == lastSegment);
+      await this.fecthLab();
+      this.currentChapterShortTitle = lastSegment;
+      this.content = this.chaptersHtml.get(lastSegment);
     }
-
     this.refreshav();
-    this.content = this.markdownParser.parse(this.currentChapter.contentMd, this.url);
-    const saveTitle = this.lab.title;
-    this.lab.title = this.currentChapter.shortTitle;
     super.init(`lab/${params.laburl}`, this.lab);
-    this.lab.title = saveTitle;
   }
 
   configMainNav(nav: NavigatorProperties) {
@@ -68,3 +73,4 @@ export class LabView extends BaseView {
     );
   }
 }
+
