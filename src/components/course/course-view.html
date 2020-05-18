@@ -1,11 +1,11 @@
 <template>
-  <require from="../../resources/elements/card-decks/card-deck.html"></require>
+  <require from="../../resources/elements/card-decks/card-deck"></require>
   <require from="../../resources/elements/card-decks/unit-deck.html"></require>
 
   <div if.bind="show">
     <div class="uk-container uk-padding-small">
-      <unit-deck if.bind="course.units.length>0" units.one-way="course.units"></unit-deck>
-      <card-deck los.one-way="course.standardLos"></card-deck>
+      <unit-deck if.bind="course.units.length>0" units.to-view="course.units"></unit-deck>
+      <card-deck los.to-view="course.standardLos"></card-deck>
     </div>
   </div>
 </template>
