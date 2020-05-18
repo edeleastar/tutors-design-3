@@ -1,0 +1,26 @@
+<template bindable="los">
+  <require from="./card.html"></require>
+
+  <div class="uk-child-width-1-4@s uk-flex uk-flex-center" uk-grid uk-height-match="target: div > .uk-card">
+    <div if.bind="los.one">
+      <div class="uk-card" uk-scrollspy="cls: uk-animation-slide-left; repeat: true">
+        <card lo.to-view="los.one"></card>
+      </div>
+    </div>
+    <div if.bind="los.two">
+      <div class="uk-card" uk-scrollspy="cls: uk-animation-slide-left; repeat: true">
+        <card lo.to-view="los.two"></card>
+      </div>
+    </div>
+    <div if.bind="los.three">
+      <div class="uk-card" uk-scrollspy="cls: uk-animation-slide-right; repeat: true">
+        <card lo.to-view="los.three"></card>
+      </div>
+    </div>
+    <div if.bind="los.four">
+      <div class="uk-card" uk-scrollspy="cls: uk-animation-slide-right; repeat: true">
+        <card lo.to-view="los.four"></card>
+      </div>
+    </div>
+  </div>
+</template>
