@@ -10,7 +10,7 @@ export function injectCourseUrl(lo: Lo, url) {
   if (lo.video) lo.video = lo.video.replace("{{COURSEURL}}", url);
   if (lo.pdf) lo.pdf = lo.pdf.replace("{{COURSEURL}}", url);
   if (lo.los) {
-    lo.los.forEach(lo => {
+    lo.los.forEach((lo) => {
       injectCourseUrl(lo, url);
     });
   }
@@ -50,12 +50,12 @@ export function lastSegment(url: string) {
 }
 
 export function getSortedUnits(los: Lo[]) {
-  const allUnits = los.filter(lo => lo.type == "unit");
+  const allUnits = los.filter((lo) => lo.type == "unit");
   for (let unit of allUnits) {
-    const panelVideos = unit.los.filter(lo => lo.type == "panelvideo");
-    const panelTalks = unit.los.filter(lo => lo.type == "paneltalk");
+    const panelVideos = unit.los.filter((lo) => lo.type == "panelvideo");
+    const panelTalks = unit.los.filter((lo) => lo.type == "paneltalk");
     const standardLos = unit.los.filter(
-      lo => lo.type !== "unit" && lo.type !== "panelvideo" && lo.type !== "paneltalk"
+      (lo) => lo.type !== "unit" && lo.type !== "panelvideo" && lo.type !== "paneltalk"
     );
     const sortedLos: Lo[] = [];
     sortedLos.push(...panelVideos);
@@ -68,7 +68,7 @@ export function getSortedUnits(los: Lo[]) {
 
 export function findLos(los: Lo[], lotype: string): Lo[] {
   let result: Lo[] = [];
-  los.forEach(lo => {
+  los.forEach((lo) => {
     if (lo.type === lotype) {
       result.push(lo);
     }
@@ -81,7 +81,7 @@ export function findLos(los: Lo[], lotype: string): Lo[] {
 
 export function findVideoLos(los: Lo[]): Lo[] {
   let result: Lo[] = [];
-  los.forEach(lo => {
+  los.forEach((lo) => {
     if (lo.video) {
       result.push(lo);
     }
@@ -126,13 +126,13 @@ export function analyicsPageTitle(courseId: string, course: Course, lo: Lo) {
 var key = CryptoJS.enc.Hex.parse("000102030405060708090a0b0c0d0e0f");
 var iv = CryptoJS.enc.Hex.parse("101112131415161718191a1b1c1d1e1f");
 
-export function encrypt (str: string) : string {
+export function encrypt(str: string): string {
   const ciphertext = CryptoJS.AES.encrypt(str, key, { iv: iv });
   const value = ciphertext.toString();
   return value;
 }
-export function decrypt (str: string) : string {
-  const raw = CryptoJS.AES.decrypt(str, key, {iv: iv});
+export function decrypt(str: string): string {
+  const raw = CryptoJS.AES.decrypt(str, key, { iv: iv });
   const value = raw.toString(CryptoJS.enc.Utf8);
   return value;
 }

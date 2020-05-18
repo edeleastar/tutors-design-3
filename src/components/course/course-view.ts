@@ -20,12 +20,12 @@ export class CourseView extends BaseView {
           companions: false,
           walls: false,
           tutorsTime: false,
-          toc: false
+          toc: false,
         },
         {
           title: this.course.lo.title,
           subtitle: this.courseRepo.course.lo.properties.credits,
-          img: this.course.lo.img
+          img: this.course.lo.img,
         }
       );
     } else {
@@ -37,7 +37,7 @@ export class CourseView extends BaseView {
           companions: true,
           walls: true,
           tutorsTime: false,
-          toc: true
+          toc: true,
         },
         {
           title: this.course.lo.title,
@@ -45,9 +45,13 @@ export class CourseView extends BaseView {
           img: this.course.lo.img,
           parentLink: this.courseRepo.course.lo.properties.parent,
           parentIcon: "programHome",
-          parentTip: "To programme home ..."
+          parentTip: "To programme home ...",
         }
       );
     }
+  }
+
+  determineActivationStrategy() {
+    return "replace";
   }
 }

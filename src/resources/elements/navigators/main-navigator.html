@@ -5,33 +5,35 @@
   <require from="../iconography/icon-nav-bar.html"></require>
   <require from="./toc-btn.html"></require>
 
-  <div class="uk-flex uk-flex-center uk-flex-middle uk-text-center uk-container-expand uk-padding-small" uk-grid>
-    <div if.bind="navigatorProperties.toc.visible">
-      <toc-btn></toc-btn>
-    </div>
-    <div class="uk-width-1-2@m  uk-card uk-card-default uk-padding-small uk-visible@m">
-      <title-card maintitle="${navigatorProperties.titleCard.title}" subtitle="${navigatorProperties.titleCard.subtitle}" img="${navigatorProperties.titleCard.img}" version="${navigatorProperties.version}"></title-card>
-    </div>
-<!--    <div class="uk-width-1-2@m  uk-card uk-card-default uk-text-center uk-padding-remove uk-hidden@m">-->
-<!--      <title-card-small maintitle="${navigatorProperties.title}" subtitle="${navigatorProperties.subtitle}" icon="${navigatorProperties.icon}"-->
-<!--                        colour="${navigatorProperties.iconColour}" version=${navigatorProperties.version}"></title-card-small>-->
-<!--    </div>-->
-    <div if.bind="navigatorProperties.parent.visible">
-      <a id="parent" href="${navigatorProperties.parent.link}">
-        <icon type="${navigatorProperties.parent.icon}" size="4x"></icon>
-      </a>
-    </div>
-    <div if.bind="navigatorProperties.companions.visible">
-      <icon-nav-bar nav.one-way="navigatorProperties.companions.nav"></icon-nav-bar>
-    </div>
-    <div if.bind="navigatorProperties.walls.visible">
-      <icon-nav-bar nav.one-way="navigatorProperties.walls.nav"></icon-nav-bar>
-    </div>
-    <div if.bind="navigatorProperties.tutorsTime.visible">
-      <icon-nav-bar nav.one-way="navigatorProperties.tutorsTime.nav"></icon-nav-bar>
-    </div>
-    <div if.bind="navigatorProperties.profile.visible">
-      <icon-nav-bar nav.one-way="navigatorProperties.profile.nav"></icon-nav-bar>
-    </div>
+  <div class="uk-flex uk-flex-center uk-flex-middle uk-text-center uk-container-expand uk-padding-small"
+    uk-scrollspy="cls: uk-animation-slide-top; repeat: true"" uk-grid>
+    <div if.bind=" navigatorProperties.toc.visible">
+    <toc-btn></toc-btn>
+  </div>
+  <div class="uk-width-1-2@m  uk-card uk-card-default uk-padding-small uk-visible@m">
+    <title-card maintitle="${navigatorProperties.titleCard.title}" subtitle="${navigatorProperties.titleCard.subtitle}"
+      img="${navigatorProperties.titleCard.img}" version="${navigatorProperties.version}"></title-card>
+  </div>
+  <!--    <div class="uk-width-1-2@m  uk-card uk-card-default uk-text-center uk-padding-remove uk-hidden@m">-->
+  <!--      <title-card-small maintitle="${navigatorProperties.title}" subtitle="${navigatorProperties.subtitle}" icon="${navigatorProperties.icon}"-->
+  <!--                        colour="${navigatorProperties.iconColour}" version=${navigatorProperties.version}"></title-card-small>-->
+  <!--    </div>-->
+  <div if.bind="navigatorProperties.parent.visible">
+    <a id="parent" href="${navigatorProperties.parent.link}">
+      <icon type="${navigatorProperties.parent.icon}" size="4x"></icon>
+    </a>
+  </div>
+  <div if.bind="navigatorProperties.companions.visible">
+    <icon-nav-bar nav.to-view="navigatorProperties.companions.nav"></icon-nav-bar>
+  </div>
+  <div if.bind="navigatorProperties.walls.visible">
+    <icon-nav-bar nav.to-view="navigatorProperties.walls.nav"></icon-nav-bar>
+  </div>
+  <div if.bind="navigatorProperties.tutorsTime.visible">
+    <icon-nav-bar nav.to-view="navigatorProperties.tutorsTime.nav"></icon-nav-bar>
+  </div>
+  <div if.bind="navigatorProperties.profile.visible">
+    <icon-nav-bar nav.to-view="navigatorProperties.profile.nav"></icon-nav-bar>
+  </div>
   </div>
 </template>
