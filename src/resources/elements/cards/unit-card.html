@@ -1,6 +1,7 @@
 <template>
   <require from="./card"></require>
   <require from="./video-card"></require>
+  <require from="./card-row.html"></require>
 
   <div class="uk-card uk-card-body uk-padding-small">
     <div class="uk-card-title unit-title"> ${unit.title} </div>
@@ -8,13 +9,9 @@
       <video-card lo.bind="video"></video-card>
     </div>
     <br>
-    <div class="uk-child-width-1-4@s uk-flex uk-flex-center" uk-grid uk-height-match="target: .uk-card">
-      <div repeat.for="lo of standardLos">
-        <div class="uk-card">
-          <card lo.one-way="lo" class="${unit.folder}"></card>
-        </div>
-      </div>
+    <div repeat.for="los of loRows">
+      <card-row los.to-view="los"></card-row>
+      <hr class="uk-divider-small">
     </div>
   </div>
-
 </template>
