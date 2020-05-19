@@ -14,10 +14,6 @@
     <title-card maintitle="${navigatorProperties.titleCard.title}" subtitle="${navigatorProperties.titleCard.subtitle}"
       img="${navigatorProperties.titleCard.img}" version="${navigatorProperties.version}"></title-card>
   </div>
-  <!--    <div class="uk-width-1-2@m  uk-card uk-card-default uk-text-center uk-padding-remove uk-hidden@m">-->
-  <!--      <title-card-small maintitle="${navigatorProperties.title}" subtitle="${navigatorProperties.subtitle}" icon="${navigatorProperties.icon}"-->
-  <!--                        colour="${navigatorProperties.iconColour}" version=${navigatorProperties.version}"></title-card-small>-->
-  <!--    </div>-->
   <div if.bind="navigatorProperties.parent.visible">
     <a id="parent" href="${navigatorProperties.parent.link}">
       <icon type="${navigatorProperties.parent.icon}" size="4x"></icon>
