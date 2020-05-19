@@ -22,7 +22,9 @@ import {
   faClock,
   faStopwatch,
   faFileExcel,
-  faUserClock
+  faUserClock,
+  faToggleOn,
+  faToggleOff,
 } from "@fortawesome/free-solid-svg-icons";
 
 export interface IconNav {
@@ -67,5 +69,7 @@ export const faIcons = {
   labTimeDetail: faClock,
   labTimeSummary: farClock,
   timeExport: faFileExcel,
-  timeLive: faUserClock
+  timeLive: faUserClock,
+  switchOn: faToggleOn,
+  switchOff: faToggleOff,
 };

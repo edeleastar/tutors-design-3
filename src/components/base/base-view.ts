@@ -33,9 +33,9 @@ export class BaseView {
   router: Router;
   eb: EventBus;
   metricsService: MetricsService;
-  anaylticsService : AnalyticsService;
+  anaylticsService: AnalyticsService;
   course: Course;
-  app : App;
+  app: App;
 
   myKeypressCallback: any;
   pinBuffer = "";
@@ -49,7 +49,7 @@ export class BaseView {
     router: Router,
     eb: EventBus,
     metricsService: MetricsService,
-    analyticsService : AnalyticsService,
+    analyticsService: AnalyticsService,
     app: App
   ) {
     this.courseRepo = courseRepo;
@@ -109,6 +109,10 @@ export class BaseView {
 
   instructorModeEnabled() {}
 
+  navSubtitle(subTitle: string) {
+    this.navigatorProperties.titleCard.subtitle = subTitle;
+  }
+
   configMainNav(nav: NavigatorProperties) {
     nav.clear();
     nav.config(
@@ -118,11 +122,11 @@ export class BaseView {
         profile: false,
         companions: false,
         walls: false,
-        tutorsTime: false
+        tutorsTime: false,
       },
       {
         title: "Tutors Tuition System",
-        subtitle: "Eamonn de Leastar, WIT Computing"
+        subtitle: "Eamonn de Leastar, WIT Computing",
       }
     );
   }

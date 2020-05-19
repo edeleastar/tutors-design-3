@@ -22,6 +22,14 @@ function removeLastDirectory(the_url) {
   return the_arr.join("/");
 }
 
+export function removeLeadingHashes(str: string): string {
+  if (str.includes("#")) {
+    const i = str.lastIndexOf("#");
+    str = str.substr(str.lastIndexOf("#") + 1);
+  }
+  return str;
+}
+
 export function findCourseUrls(labUrl: string): string[] {
   let topicUrl = removeLastDirectory(labUrl);
   if (path.basename(topicUrl).startsWith("unit") && topicUrl.includes("topic")) {

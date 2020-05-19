@@ -10,15 +10,15 @@ ul {
 }
 
 p {
-  line-height:20px;
-  margin:2px;
-  padding:2px;
+  line-height: 20px;
+  margin: 2px;
+  padding: 2px;
 }
 
 pre code {
   font-family: "Monaco", "Consolas", "Courier New";
   font-size: 100%;
-  line-height:18px;
+  line-height: 18px;
 }
 
 .lab img {
@@ -26,7 +26,9 @@ pre code {
   margin: 10px;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   border-bottom: thin solid black;
   margin-top: 1rem;
   margin-bottom: 0.2rem;
@@ -38,9 +40,28 @@ h1 {
 
 h2 {
   font-size: 110%;
-
 }
 
 h3 {
   font-size: 100%;
 }
+
+#left-col {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: #222;
+  width: 190px;
+  z-index: 1;
+}
+.bar-wrap {
+  padding: 2rem;
+}
+#right-col {
+  margin-left: 210px;
+}
+
+/* https://codepen.io/zzseba78/pen/YEMrvZ */
