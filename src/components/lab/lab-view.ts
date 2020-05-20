@@ -34,6 +34,7 @@ export class LabView extends BaseView {
 
   refreshav() {
     this.navbarHtml = "";
+    let step = "";
     this.lab.los.forEach((chapter, i) => {
       const active = chapter.shortTitle == this.currentChapterShortTitle ? "class= uk-active" : "";
       let title = "";
@@ -42,8 +43,11 @@ export class LabView extends BaseView {
       } else {
         title = chapter.shortTitle;
       }
+      if (this.vertical) {
+        step = `${i}:`;
+      }
       this.navbarHtml = this.navbarHtml.concat(
-        `<li ${active}> <a href="${environment.urlPrefix}lab/${this.url}/${chapter.shortTitle}"> ${i}: ${title} </a> </li>`
+        `<li ${active}> <a href="${environment.urlPrefix}lab/${this.url}/${chapter.shortTitle}"> ${step}${title} </a> </li>`
       );
     });
   }
