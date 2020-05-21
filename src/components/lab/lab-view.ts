@@ -19,7 +19,7 @@ export class LabView extends BaseView {
   chaptersTitles = new Map<string, string>();
   objectivesHtml = "";
 
-  vertical = false;
+  vertical = true;
 
   attached() {
     if (localStorage.labVertical) {
@@ -47,7 +47,7 @@ export class LabView extends BaseView {
         step = `${i}:`;
       }
       this.navbarHtml = this.navbarHtml.concat(
-        `<li ${active}> <a href="${environment.urlPrefix}lab/${this.url}/${chapter.shortTitle}"> ${step}${title} </a> </li>`
+        `<li ${active}> <a href="${environment.urlPrefix}lab/${this.url}/${chapter.shortTitle}"> ${step} ${title} </a> </li>`
       );
     });
   }
@@ -97,7 +97,7 @@ export class LabView extends BaseView {
         companions: false,
         walls: true,
         tutorsTime: false,
-        toc: true,
+        toc: false,
       },
       {
         title: this.lab.title,
