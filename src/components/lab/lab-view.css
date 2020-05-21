@@ -37,7 +37,7 @@ h1 {
   font-size: 160%;
   font-weight: bold;
   border-bottom: thin solid black;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.8rem;
 }
 
 h2 {
@@ -45,14 +45,14 @@ h2 {
   margin-top: 0.5rem;
   font-size: 140%;
   font-weight: bold;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
 }
 
 h3 {
   font-family: "Open Sans", "Helvetica", "Helvetica Neue", "Arial", sans-serif;
   margin-top: 0.3rem;
   font-size: 115%;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.4rem;
   font-weight: bold;
 }
 
