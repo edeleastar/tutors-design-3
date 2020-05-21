@@ -34,16 +34,10 @@ pre code {
 
 h1 {
   font-family: "Open Sans", "Helvetica", "Helvetica Neue", "Arial", sans-serif;
-  border-bottom: thin solid black;
-  font-weight: bold;
-}
-
-h1 {
-  font-family: "Open Sans", "Helvetica", "Helvetica Neue", "Arial", sans-serif;
   font-size: 160%;
   font-weight: bold;
   border-bottom: thin solid black;
-  margin-bottom: 0rem;
+  margin-bottom: 0.5rem;
 }
 
 h2 {
