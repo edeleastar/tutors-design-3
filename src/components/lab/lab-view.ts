@@ -19,7 +19,7 @@ export class LabView extends BaseView {
   chaptersTitles = new Map<string, string>();
   objectivesHtml = "";
 
-  vertical = false;
+  vertical = true;
 
   attached() {
     if (localStorage.labVertical) {
