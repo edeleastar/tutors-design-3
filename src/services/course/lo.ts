@@ -14,6 +14,7 @@ export interface Lo {
   title: string;
   img: string;
   video: string;
+  videolink: string;
   pdf: string;
   summary: string;
   contentMd: string;

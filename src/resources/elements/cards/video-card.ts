@@ -8,9 +8,16 @@ export class VideoCard {
   autoplay = false;
 
   videoid = "";
+  videolink = "";
+  native = false;
 
   attached() {
-    const parts = this.lo.video.split("/");
-    this.videoid = parts.pop() || parts.pop();
+    if (this.lo.videolink) {
+      this.native = true;
+      this.videolink = this.lo.videolink;
+    } else {
+      const parts = this.lo.video.split("/");
+      this.videoid = parts.pop() || parts.pop();
+    }
   }
 }
