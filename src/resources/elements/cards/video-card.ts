@@ -9,15 +9,25 @@ export class VideoCard {
 
   videoid = "";
   videolink = "";
-  native = false;
+
+  theoplayer = false;
+
+  playerSource = [
+    {
+      type: "application/x-mpegurl",
+      src: "",
+    },
+  ];
+
+  bind() {
+    if (this.lo.videolink) {
+      this.theoplayer = true;
+      this.playerSource[0].src = this.lo.videolink.replace("download", "m3u8");
+    }
+  }
 
   attached() {
-    if (this.lo.videolink) {
-      this.native = true;
-      this.videolink = this.lo.videolink;
-    } else {
-      const parts = this.lo.video.split("/");
-      this.videoid = parts.pop() || parts.pop();
-    }
+    const parts = this.lo.video.split("/");
+    this.videoid = parts.pop() || parts.pop();
   }
 }

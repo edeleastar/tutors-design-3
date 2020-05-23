@@ -13,17 +13,16 @@
       </div>
     </div>
     <div class="uk-card-media-top">
-      <div if.bind="native">
-        <!-- <theo-player source.bind="playerSource"></theo-player> -->
-        <video width="1920" controls>
+      <div if.bind="theoplayer">
+        <theo-player source.bind="playerSource"></theo-player>
+        <!-- <video width="1920" controls>
           <source src="${videolink}" type="video/mp4">
-        </video>
+        </video> -->
       </div>
       <div else>
         <iframe width="1920" height="1080" src="https://www.youtube.com/embed/${videoid}"
           allow="autoplay; encrypted-media" allowfullscreen uk-responsive></iframe>
       </div>
-
     </div>
   </div>
 </template>
