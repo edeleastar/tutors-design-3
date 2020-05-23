@@ -1,0 +1,12 @@
+<template bindable="topic">
+  <require from="./topic-navigator.html"></require>
+
+  <div class="uk-offcanvas-content">
+    <div id="topic-navigator" uk-offcanvas="flip:true; mode: reveal; overlay: true; esc-close:true;">
+      <div class="uk-offcanvas-bar">
+        <button class="uk-offcanvas-close" type="button" uk-close></button>
+        <topic-navigator topic.to-view="topic"></topic-navigator>
+      </div>
+    </div>
+  </div>
+</template>
