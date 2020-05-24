@@ -3,9 +3,17 @@
 
   <div class="uk-offcanvas-content">
     <div id="topic-navigator" uk-offcanvas="flip:true; mode: reveal; overlay: true; esc-close:true;">
-      <div class="uk-offcanvas-bar">
+      <div class="uk-offcanvas-bar uk-background-muted uk-padding-small">
         <button class="uk-offcanvas-close" type="button" uk-close></button>
-        <topic-navigator topic.to-view="topic"></topic-navigator>
+        <div class="uk-card uk-card-default uk-card-small uk-padding-small">
+          <div class="card-title"> ${topic.lo.title}</div>
+          <div class="uk-card-body">
+            <img src="${topic.lo.img}">
+          </div>
+          <div class="uk-card-footer uk-background-secondary">
+            <topic-navigator topic.to-view="topic"></topic-navigator>
+          </div>
+        </div>
       </div>
     </div>
   </div>
