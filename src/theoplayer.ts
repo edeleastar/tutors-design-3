@@ -1,12 +1,10 @@
 import { inject, inlineView, bindable } from "aurelia-framework";
-
+import environment from "environment";
 declare global {
   const THEOplayer: any;
 }
 
-@inlineView(
-  '<template><div ref=playerEl class="theoplayer-container video-js theoplayer-skin vjs-16-9 THEOplayer">'
-)
+@inlineView('<template><div ref=playerEl class="theoplayer-container video-js theoplayer-skin vjs-16-9 THEOplayer">')
 @inject(Element)
 export class TheoPlayer {
   @bindable
@@ -20,8 +18,7 @@ export class TheoPlayer {
   init() {
     this.player = new THEOplayer.Player(this.playerEl, {
       fluid: true,
-      libraryLocation:
-        "//cdn.myth.theoplayer.com/24abfd34-e8c7-48cf-9043-f1b3916b241d",
+      libraryLocation: `//cdn.myth.theoplayer.com/${environment.theoplayer}`,
     });
   }
 
