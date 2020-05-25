@@ -2,16 +2,17 @@ export default {
   debug: true,
   testing: true,
   pushState: true,
-  urlPrefix: '',
+  urlPrefix: "",
   auth0: {
-    clientId: 'AUTH0KEY',
-    domain: 'AUTH0DOMAIN',
-    redirectUri: 'APPURI'
+    clientId: "AUTH0KEY",
+    domain: "AUTH0DOMAIN",
+    redirectUri: "APPURI",
   },
   firebase: {
     apiKey: "FIREBASEKEY",
     databaseURL: "FIREBASEDBURL",
-    projectId: "FIREBASEPROJECTID"
+    projectId: "FIREBASEPROJECTID",
   },
-  ga : "GA_MEASUREMENT_ID"
+  ga: "GA_MEASUREMENT_ID",
+  theoplayer: "PLAYER_ID",
 };

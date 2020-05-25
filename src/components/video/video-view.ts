@@ -28,7 +28,7 @@ export class VideoView extends BaseView {
         companions: false,
         walls: true,
         tutorsTime: false,
-        toc: true
+        toc: true,
       },
       {
         title: this.lo.title,
@@ -36,7 +36,7 @@ export class VideoView extends BaseView {
         img: this.lo.img,
         parentLink: this.lo.parent.lo.route,
         parentIcon: "topic",
-        parentTip: "To parent topic ..."
+        parentTip: "To parent topic ...",
       }
     );
   }

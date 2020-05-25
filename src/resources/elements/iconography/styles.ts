@@ -25,6 +25,7 @@ import {
   faUserClock,
   faToggleOn,
   faToggleOff,
+  faAngleDoubleRight
 } from "@fortawesome/free-solid-svg-icons";
 
 export interface IconNav {
@@ -72,4 +73,5 @@ export const faIcons = {
   timeLive: faUserClock,
   switchOn: faToggleOn,
   switchOff: faToggleOff,
+  topicNavigator : faAngleDoubleRight
 };

@@ -5,6 +5,16 @@ export interface Student {
   github: string;
 }
 
+export interface VideoIdentifier {
+  service: string;
+  id: string;
+}
+
+export interface VideoIdentifiers {
+  videoid: string;
+  videoIds: VideoIdentifier[];
+}
+
 export interface Lo {
   properties: { [prop: string]: string };
   enrollment: { students: Student[] };
@@ -14,6 +24,7 @@ export interface Lo {
   title: string;
   img: string;
   video: string;
+  videoids?: VideoIdentifiers;
   pdf: string;
   summary: string;
   contentMd: string;
