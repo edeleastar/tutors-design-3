@@ -5,7 +5,7 @@
       "name": "Chrome",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:8080/#course/wit-hdip-comp-sci-2019.netlify.app",
+      "url": "http://localhost:8080/#course/wit-hdip-comp-sci-2020-programming.netlify.app",
       "webRoot": "${workspaceRoot}/src",
       "userDataDir": "${workspaceRoot}/.chrome",
       "sourceMapPathOverrides": {
