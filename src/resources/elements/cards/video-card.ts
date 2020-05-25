@@ -20,9 +20,14 @@ export class VideoCard {
   ];
 
   bind() {
-    if (this.lo.videolink) {
-      this.theoplayer = true;
-      this.playerSource[0].src = this.lo.videolink.replace("download", "m3u8");
+    if (this.lo.videoids) {
+      if (this.lo.videoids.videoIds.length > 0) {
+        if (this.lo.videoids.videoIds[this.lo.videoids.videoIds.length - 1].service === "heanet") {
+          this.theoplayer = true;
+          let id = this.lo.videoids.videoIds[this.lo.videoids.videoIds.length - 1].id;
+          this.playerSource[0].src = `https://media.heanet.ie/m3u8/${id}`;
+        }
+      }
     }
   }
 
