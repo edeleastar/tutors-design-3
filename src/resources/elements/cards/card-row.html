@@ -7,8 +7,13 @@
         <card lo.to-view="los.one"></card>
       </div>
     </div>
-    <div if.bind="los.two">
+    <div if.bind="los.two && los.three">
       <div class="uk-card" uk-scrollspy="cls: uk-animation-slide-left; repeat: true">
+        <card lo.to-view="los.two"></card>
+      </div>
+    </div>
+    <div if.bind="los.two && !los.three">
+      <div class="uk-card" uk-scrollspy="cls: uk-animation-slide-right; repeat: true">
         <card lo.to-view="los.two"></card>
       </div>
     </div>
