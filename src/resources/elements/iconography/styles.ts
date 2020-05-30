@@ -1,6 +1,11 @@
 import { faYoutube, faSlack, faGithub, faYoutubeSquare } from "@fortawesome/free-brands-svg-icons";
 import { faAddressCard } from "@fortawesome/free-regular-svg-icons/faAddressCard";
-import { faClock as farClock, faEye as farEye } from "@fortawesome/free-regular-svg-icons";
+import {
+  faClock as farClock,
+  faEye as farEye,
+  faCircle,
+  faArrowAltCircleDown,
+} from "@fortawesome/free-regular-svg-icons";
 import {
   faBook,
   faSitemap,
@@ -25,7 +30,11 @@ import {
   faUserClock,
   faToggleOn,
   faToggleOff,
-  faAngleDoubleRight
+  faAngleDoubleRight,
+  faMinusCircle,
+  faPlusCircle,
+  faArrowAltCircleUp,
+  faArrowCircleDown,
 } from "@fortawesome/free-solid-svg-icons";
 
 export interface IconNav {
@@ -73,5 +82,9 @@ export const faIcons = {
   timeLive: faUserClock,
   switchOn: faToggleOn,
   switchOff: faToggleOff,
-  topicNavigator : faAngleDoubleRight
+  topicNavigator: faAngleDoubleRight,
+  zoomOut: faMinusCircle,
+  zoomIn: faPlusCircle,
+  up: faArrowAltCircleUp,
+  down: faArrowAltCircleDown,
 };
