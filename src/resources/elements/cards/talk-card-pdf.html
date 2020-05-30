@@ -2,26 +2,42 @@
   <require from="./talk-card-pdf.css"></require>
   <require from="../iconography/icon"></require>
 
-  <div class="top-bar">
-    <button id="previous" click.delegate="previousPage()" class="btn">
-      <icon type="down" size="1x"></icon>
-    </button>
-    <button id="next" click.delegate="nextPage()" class="btn">
-      <icon type="up" size="1x"></icon>
-    </button>
-    <span class="page-info">
-      <span id="pageNumber"></span>
-    </span>
-    <button id="zoomin" click.delegate="zoomin()">
-      <icon type="zoomIn" size="1x"></icon>
-    </button>
-    <button id="zoomout" click.delegate="zoomout()">
-      <icon type="zoomOut" size="1x"></icon>
-    </button>
-    <span id="zoompercent" class="zoompercent">${zoompercent}</span>
-    <!-- <button id="search">
-      <icon type="search" size="1x"></icon>
-    </button> -->
+  <div class="uk-card uk-card-default uk-box-shadow-xlarge uk-animation-fade">
+    <div class="uk-card-header">
+      <div uk-grid>
+        <div class="uk-width-expand@m">
+          <div class="card-title"> ${lo.title} <a href="${lo.pdf}" target="_blank">
+              <icon type="pdf" size="lg"></icon>
+            </a></div>
+        </div>
+        <div>
+          <icon type="${lo.type}" size="2x"></icon>
+        </div>
+      </div>
+    </div>
+    <div class="uk-card-body  uk-padding-remove">
+      <div class="top-bar">
+        <button id="previous" click.delegate="previousPage()" class="btn">
+          <icon type="down" size="1x"></icon>
+        </button>
+        <button id="next" click.delegate="nextPage()" class="btn">
+          <icon type="up" size="1x"></icon>
+        </button>
+        <span class="page-info">
+          <span id="pageNumber"></span>
+        </span>
+        <button id="zoomin" click.delegate="zoomin()">
+          <icon type="zoomIn" size="1x"></icon>
+        </button>
+        <button id="zoomout" click.delegate="zoomout()">
+          <icon type="zoomOut" size="1x"></icon>
+        </button>
+        <span id="zoompercent" class="zoompercent">${zoompercent}</span>
+        <!-- <button id="search">
+          <icon type="search" size="1x"></icon>
+        </button> -->
+      </div>
+      <canvas id="pdf_canvas" ref="pdf_canvas"></canvas>
+    </div>
   </div>
-  <canvas id="pdf_canvas" ref="pdf_canvas"></canvas>
 </template>
