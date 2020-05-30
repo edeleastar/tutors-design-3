@@ -9,7 +9,6 @@
   padding: 0.5rem;
 }
 
-#search,
 #zoomin,
 #zoomout,
 .page-info,
@@ -27,7 +26,6 @@ span.zoompercent,
   opacity: 0.9;
 }
 
-#search,
 #zoomin,
 .page-info,
 span.zoompercent {
