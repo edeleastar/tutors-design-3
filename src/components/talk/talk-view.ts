@@ -15,6 +15,10 @@ export class TalkView extends BaseView {
     super.init(`talk/${params.courseUrl}/${params.talkid}`, this.lo);
   }
 
+  determineActivationStrategy() {
+    return "replace";
+  }
+
   configMainNav(nav: NavigatorProperties) {
     this.navigatorProperties.config(
       {
@@ -24,7 +28,7 @@ export class TalkView extends BaseView {
         companions: false,
         walls: true,
         tutorsTime: false,
-        toc: true
+        toc: true,
       },
       {
         title: this.lo.title,
@@ -32,7 +36,7 @@ export class TalkView extends BaseView {
         img: this.lo.img,
         parentLink: this.lo.parent.lo.route,
         parentIcon: "topic",
-        parentTip: "To parent topic ..."
+        parentTip: "To parent topic ...",
       }
     );
   }
