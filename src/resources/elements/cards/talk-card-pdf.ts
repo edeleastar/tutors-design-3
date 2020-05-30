@@ -18,10 +18,12 @@ export class TalkCardPdf {
   doc = {};
   canvas: HTMLCanvasElement;
   context: CanvasRenderingContext2D;
+  status = "";
 
   constructor() {}
 
   bind() {
+    this.status = "Loading pdf ...";
     this.url = this.lo.pdf;
     this.initialize();
   }
@@ -32,6 +34,7 @@ export class TalkCardPdf {
     this.maxPage = this.doc.numPages;
     console.log("Number pages : " + this.maxPage);
     this.getPage(this.doc, this.currentPage);
+    this.status = "";
   };
 
   nextPage = async function () {

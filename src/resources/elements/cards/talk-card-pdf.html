@@ -6,9 +6,15 @@
     <div class="uk-card-header">
       <div uk-grid>
         <div class="uk-width-expand@m">
-          <div class="card-title"> ${lo.title} <a href="${lo.pdf}" target="_blank">
+          <div class="card-title">
+            ${lo.title} <a href="${lo.pdf}" target="_blank">
               <icon type="pdf" size="lg"></icon>
-            </a></div>
+            </a>
+
+          </div>
+        </div>
+        <div>
+          <span class="uk-text-large">${status}</span>
         </div>
         <div>
           <icon type="${lo.type}" size="2x"></icon>
@@ -37,7 +43,8 @@
           <icon type="search" size="1x"></icon>
         </button> -->
       </div>
-      <canvas id="pdf_canvas" ref="pdf_canvas"></canvas>
+      <canvas id="pdf_canvas" ref="pdf_canvas">
+      </canvas>
     </div>
   </div>
 </template>
