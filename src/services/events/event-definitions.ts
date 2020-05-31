@@ -54,8 +54,8 @@ export class UserUpdate {
 }
 
 export class StatusUpdateEvent {
-  status : string;
-  constructor(status : string) {
+  status: string;
+  constructor(status: string) {
     this.status = status;
   }
 }
@@ -84,5 +84,12 @@ export class InteractionEvent {
     this.path = path;
     this.course = course;
     this.lo = lo;
+  }
+}
+
+export class KeyEvent {
+  key: string;
+  constructor(key: string) {
+    this.key = key;
   }
 }
