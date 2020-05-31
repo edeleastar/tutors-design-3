@@ -1,10 +1,12 @@
 import { pdfjsWorker } from "pdfjs-dist/build/pdf.worker.entry";
 import { bindable } from "aurelia-framework";
 import { Lo } from "../../../services/course/lo";
+import { autoinject } from "aurelia-framework";
+import { EventBus, KeyListener } from "../../../services/events/event-bus";
 
 let pdfjsLib = require("pdfjs-dist");
-
-export class TalkCardPdf {
+@autoinject
+export class TalkCardPdf implements KeyListener {
   @bindable
   lo: Lo;
 
@@ -20,7 +22,17 @@ export class TalkCardPdf {
   context: CanvasRenderingContext2D;
   status = "";
 
-  constructor() {}
+  constructor(private eb: EventBus) {
+    this.eb.observerKeyPress(this);
+  }
+
+  keyPress(key: string) {
+    if (key == "ArrowDown" || key == "ArrowRight") {
+      this.nextPage();
+    } else if (key == "ArrowUp" || key == "ArrowLeft") {
+      this.previousPage();
+    }
+  }
 
   bind() {
     this.status = "Loading pdf ...";
