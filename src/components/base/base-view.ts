@@ -1,3 +1,4 @@
+import { EventBus } from "./../../services/events/event-bus";
 import { CourseRepo } from "../../services/course/course-repo";
 import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";
 import { AuthService } from "../../services/authentication/auth-service";
@@ -38,6 +39,7 @@ export class BaseView {
   app: App;
 
   myKeypressCallback: any;
+
   pinBuffer = "";
   ignorePin = "";
   instructorMode = false;
@@ -85,7 +87,7 @@ export class BaseView {
     this.autoNavProperties();
 
     this.myKeypressCallback = this.keypressInput.bind(this);
-    window.addEventListener("keypress", this.myKeypressCallback, false);
+    window.addEventListener("keydown", this.myKeypressCallback, false);
     if (this.courseRepo.course.lo.properties.ignorepin) {
       this.ignorePin = "" + this.courseRepo.course.lo.properties.ignorepin;
     }
@@ -96,6 +98,7 @@ export class BaseView {
   }
 
   keypressInput(e) {
+    this.eb.emitKey(e.key);
     this.pinBuffer = this.pinBuffer.concat(e.key);
     if (this.pinBuffer === this.ignorePin) {
       this.pinBuffer = "";
@@ -104,6 +107,7 @@ export class BaseView {
       this.instructorModeEnabled();
       this.navigatorProperties.privelagedEnabled();
       this.instructorMode = true;
+      this.eb.emitInstructorModeUpdate(true, this.courseRepo.course.lo.los);
     }
   }
 

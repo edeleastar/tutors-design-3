@@ -1,0 +1,39 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.top-bar {
+  background: black;
+  color: white;
+  padding: 0.5rem;
+}
+
+#zoomin,
+#zoomout,
+.page-info,
+span.zoompercent,
+.btn {
+  background: rgb(207, 198, 212);
+  color: #fff;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 0.2rem 2rem;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+#zoomin,
+.page-info,
+span.zoompercent {
+  margin-left: 1rem;
+}
+
+.error {
+  background: orangered;
+  color: #fff;
+  padding: 1rem;
+}

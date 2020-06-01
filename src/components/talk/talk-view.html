@@ -1,6 +1,7 @@
 <template>
   <require from="./talk-view.css"></require>
   <require from="../../resources/elements/cards/talk-card.html"></require>
+  <require from="../../resources/elements/cards/talk-card-pdf"></require>
   <require from="../../resources/elements/navigators/side-topic-navigator.html"></require>
   <require from="../../resources/elements/navigators/topic-btn.html"></require>
 
@@ -9,6 +10,8 @@
     <div class="uk-grid uk-padding-small">
       <div class="uk-width-expand">
         <talk-card lo.to-view="lo"></talk-card>
+        <!-- <talk-card-pdf lo.to-view="lo">
+          </talk-card> -->
       </div>
       <div class="uk-width-auto uk-animation-slide-right">
         <topic-btn></topic-btn>
