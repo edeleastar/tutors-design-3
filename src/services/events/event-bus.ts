@@ -13,6 +13,7 @@ import {
   LogoutEvent,
   InteractionEvent,
   KeyEvent,
+  InstructorMode,
 } from "./event-definitions";
 import { emitKeypressEvents } from "readline";
 
@@ -21,21 +22,24 @@ export interface KeyListener {
 }
 
 export interface LoginListener {
-  login(user: User, url: string);
-  statusUpdate(status: string);
-  logout();
+  login(user: User, url: string): void;
+  statusUpdate(status: string): void;
+  logout(): void;
 }
 
 export interface InteractionListener {
-  log(path: string, course: Course, lo: Lo);
+  log(path: string, course: Course, lo: Lo): void;
 }
 
 export interface CourseListener {
-  labUpdate(user: User, labTitle: string);
-  topicUpdate(user: User, topicTitle: string);
-  loggedInUserUpdate(user: UserMetric);
+  labUpdate(user: User, labTitle: string): void;
+  topicUpdate(user: User, topicTitle: string): void;
+  loggedInUserUpdate(user: UserMetric): void;
 }
 
+export interface InstructorModeListener {
+  instructorModeUpdate(mode: boolean, los: Lo[]): void;
+}
 @autoinject
 export class EventBus {
   constructor(private ea: EventAggregator) {}
@@ -70,6 +74,10 @@ export class EventBus {
 
   emitLoggedinUserUpdate(user: UserMetric) {
     this.ea.publish(new UserUpdate(user));
+  }
+
+  emitInstructorModeUpdate(mode: boolean, los: Lo[]) {
+    this.ea.publish(new InstructorMode(mode, los));
   }
 
   observeLogin(listener: LoginListener) {
@@ -108,6 +116,12 @@ export class EventBus {
   observerKeyPress(listener: KeyListener) {
     this.ea.subscribe(KeyEvent, (event) => {
       listener.keyPress(event.key);
+    });
+  }
+
+  observeInstructorMode(listener: InstructorModeListener) {
+    this.ea.subscribe(InstructorMode, (event) => {
+      listener.instructorModeUpdate(event.mode, event.los);
     });
   }
 }

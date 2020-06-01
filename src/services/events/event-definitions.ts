@@ -93,3 +93,12 @@ export class KeyEvent {
     this.key = key;
   }
 }
+
+export class InstructorMode {
+  mode: boolean;
+  los: Lo[];
+  constructor(mode: boolean, los: Lo[]) {
+    this.mode = mode;
+    this.los = los;
+  }
+}
