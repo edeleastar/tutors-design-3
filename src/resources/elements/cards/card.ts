@@ -1,13 +1,17 @@
-import { Lo } from '../../../services/course/lo';
-import { bindable } from 'aurelia-framework';
+import { Lo } from "../../../services/course/lo";
+import { bindable } from "aurelia-framework";
 
 export class Card {
   @bindable
   lo: Lo;
+  target = "_self";
 
   attached() {
+    if (this.lo.type == "web") {
+      this.target = "_blank";
+    }
     if (this.lo.route.endsWith("error: missing talk")) {
-      this.lo.properties = {disable:"true"}
+      this.lo.properties = { disable: "true" };
     }
   }
 }
