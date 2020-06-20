@@ -18,6 +18,7 @@ export class TutorsTimeView extends BaseView implements InstructorModeListener {
   user: UserMetric;
   users = new Map<string, UserMetric>();
   allLabs: Lo[] = [];
+  instructorModeOn = false;
 
   gridOptions: GridOptions = {
     animateRows: true,
@@ -52,18 +53,20 @@ export class TutorsTimeView extends BaseView implements InstructorModeListener {
     this.sheet.populateRow(this.user, this.allLabs);
   }
 
-  async instructorModeUpdate(mode: boolean, los: Lo[]): void {
-    //this.populateSheet();
-    if (this.users.size == 0) {
-      this.users = await this.metricsService.fetchAllUsers(this.course);
-      if (this.course.hasEnrollment()) {
-        this.users = this.metricsService.filterUsers(this.users, this.course.getStudents());
+  async instructorModeUpdate(mode: boolean, los: Lo[]) {
+    if (!this.instructorModeOn) {
+      this.instructorModeOn = true;
+      if (this.users.size == 0) {
+        this.users = await this.metricsService.fetchAllUsers(this.course);
+        if (this.course.hasEnrollment()) {
+          this.users = this.metricsService.filterUsers(this.users, this.course.getStudents());
+        }
       }
+      this.users.forEach((user, id) => {
+        this.sheet.populateRow(user, this.allLabs);
+      });
+      this.update();
     }
-    this.users.forEach((user, id) => {
-      this.sheet.populateRow(user, this.allLabs);
-    });
-    this.update();
   }
 
   loggedInUserUpdate(user: UserMetric) {
