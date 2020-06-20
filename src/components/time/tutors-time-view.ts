@@ -2,19 +2,18 @@ import "ag-grid-enterprise";
 import { GridOptions } from "ag-grid-community";
 import { BaseView } from "../base/base-view";
 import { LabSheet } from "./sheets/lab-sheet";
-import { LabClickSummarySheet } from "./sheets/lab-click-summary-sheet";
+import { LabCountSheet } from "./sheets/lab-count-sheet";
 import environment from "../../environment";
-import { LabClickSheet } from "./sheets/lab-click-sheet";
-import { LabTimeSheet } from "./sheets/lab-time-sheet";
-import { LabsTimeSummarySheet } from "./sheets/lab-time-summary-sheet";
 import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";
 import { Lo } from "../../services/course/lo";
 import { UserMetric } from "../../services/events/event-definitions";
+import { InstructorModeListener } from "services/events/event-bus";
 
-export class TutorsTimeView extends BaseView {
+export class TutorsTimeView extends BaseView implements InstructorModeListener {
+
   grid = null;
   sheets: Map<string, LabSheet> = new Map();
-  sheet: LabSheet = null;
+  sheet = new LabCountSheet()
   email: string;
   user: UserMetric;
   users = new Map<string, UserMetric>();
@@ -34,25 +33,14 @@ export class TutorsTimeView extends BaseView {
     }
   };
 
-  initMap() {
-    if (this.sheets.size == 0) {
-      this.sheets.set("viewsummary", new LabClickSummarySheet());
-      this.sheets.set("viewdetail", new LabClickSheet());
-      this.sheets.set("timesummary", new LabsTimeSummarySheet());
-      this.sheets.set("timedetail", new LabTimeSheet());
-    }
-  }
-
   async activate(params, subtitle: string) {
-    this.initMap();
+    this.eb.observeInstructorMode(this);
     await this.courseRepo.fetchCourse(params.courseurl);
     this.course = this.courseRepo.course;
     this.allLabs = this.course.walls.get("lab");
     if (params.metric === "export") {
       this.grid.api.exportDataAsExcel();
-    } else {
-      this.sheet = this.sheets.get(params.metric);
-    }
+    } 
     super.init(`time/${params.courseurl}`);
     this.sheet.clear(this.grid);
     this.sheet.populateCols(this.course.walls.get("lab"));
@@ -60,28 +48,21 @@ export class TutorsTimeView extends BaseView {
     if (this.authService.isAuthenticated()) {
       this.email = this.authService.getUserEmail();
     }
-    this.populateSheet();
+    if (!this.user) this.user = await this.metricsService.fetchUser(this.course, this.email);
+    this.sheet.populateRow(this.user, this.allLabs);
   }
 
-  instructorModeEnabled() {
-    this.populateSheet();
-  }
-
-  async populateSheet() {
-    if (this.courseRepo.privelaged == false) {
-      if (!this.user) this.user = await this.metricsService.fetchUser(this.course, this.email);
-      this.sheet.populateRow(this.user, this.allLabs);
-    } else {
-      if (this.users.size == 0) {
-        this.users = await this.metricsService.fetchAllUsers(this.course);
-        if (this.course.hasEnrollment()) {
-          this.users = this.metricsService.filterUsers(this.users, this.course.getStudents());
-        }
+  async instructorModeUpdate(mode: boolean, los: Lo[]): void {
+    //this.populateSheet();
+    if (this.users.size == 0) {
+      this.users = await this.metricsService.fetchAllUsers(this.course);
+      if (this.course.hasEnrollment()) {
+        this.users = this.metricsService.filterUsers(this.users, this.course.getStudents());
       }
-      this.users.forEach((user, id) => {
-        this.sheet.populateRow(user, this.allLabs);
-      });
     }
+    this.users.forEach((user, id) => {
+      this.sheet.populateRow(user, this.allLabs);
+    });
     this.update();
   }
 
@@ -108,9 +89,8 @@ export class TutorsTimeView extends BaseView {
         titleCard: true,
         parent: true,
         profile: true,
-        companions: false,
-        walls: false,
-        tutorsTime: true
+        companions: true,
+        walls: true,
       },
       {
         title: this.sheet.title,

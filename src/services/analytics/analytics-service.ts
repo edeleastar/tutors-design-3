@@ -87,20 +87,20 @@ export class AnalyticsService implements LoginListener, InteractionListener {
     }
   }
 
-  logDuration(path: string, course: Course, lo: Lo) {
-    if (this.userEmail) {
-      this.courseBaseName = course.url.substr(0, course.url.indexOf("."));
-      this.firebaseIdRoot = `${this.courseBaseName}/usage`;
-      this.firebaseEmailRoot = `${this.courseBaseName}/users/${this.userEmailSanitised}`;
-      let node = "";
-      if (lo.type !== "course") {
-        node = path.replace(course.url, "");
-        node = node.substr(node.indexOf("//") + 2, node.length);
-        node = node.replace(/[`#$.\[\]]/gi, "*");
-      }
-      this.incrementDuration(node, lo.title);
-    }
-  }
+  // logDuration(path: string, course: Course, lo: Lo) {
+  //   if (this.userEmail) {
+  //     this.courseBaseName = course.url.substr(0, course.url.indexOf("."));
+  //     this.firebaseIdRoot = `${this.courseBaseName}/usage`;
+  //     this.firebaseEmailRoot = `${this.courseBaseName}/users/${this.userEmailSanitised}`;
+  //     let node = "";
+  //     if (lo.type !== "course") {
+  //       node = path.replace(course.url, "");
+  //       node = node.substr(node.indexOf("//") + 2, node.length);
+  //       node = node.replace(/[`#$.\[\]]/gi, "*");
+  //     }
+  //     this.incrementDuration(node, lo.title);
+  //   }
+  // }
 
   logSearch(term: string, path: string, course: Course, lo: Lo) {
     this.courseBaseName = course.url.substr(0, course.url.indexOf("."));

@@ -40,10 +40,10 @@ export class NavigatorProperties {
     visible: true
   };
 
-  tutorsTime = {
-    nav: [],
-    visible: false
-  };
+  // tutorsTime = {
+  //   nav: [],
+  //   visible: false
+  // };
 
   profile = {
     nav: [],
@@ -59,7 +59,7 @@ export class NavigatorProperties {
     this.parent.visible = navBars.parent;
     this.companions.visible = navBars.companions;
     this.walls.visible = navBars.walls;
-    this.tutorsTime.visible = navBars.tutorsTime;
+   // this.tutorsTime.visible = navBars.tutorsTime;
     this.profile.visible = navBars.profile;
     this.toc.visible = navBars.toc;
 
@@ -85,7 +85,7 @@ export class NavigatorProperties {
   }
 
   clear() {
-    this.companions.nav = this.profile.nav = this.tutorsTime.nav = this.walls.nav = this.companions.nav = [];
+    this.companions.nav = this.profile.nav = this.walls.nav = this.companions.nav = [];
   }
 
   createWallBar(course: Course) {
@@ -124,41 +124,41 @@ export class NavigatorProperties {
   }
 
   createTimeSheets(course: Course) {
-    this.tutorsTime.nav = [];
-    this.tutorsTime.nav.push({
-      link: `${environment.urlPrefix}time/${this.url}/viewsummary`,
-      icon: "labViewSummary",
-      tip: "Views by Lab"
-    });
-    this.tutorsTime.nav.push({
-      link: `${environment.urlPrefix}time/${this.url}/timesummary`,
-      icon: "labTimeSummary",
-      tip: "Minutes by lab"
-    });
-    this.tutorsTime.nav.push({
-      link: `${environment.urlPrefix}live/${this.url}/`,
-      icon: "timeLive",
-      tip: "See who is doing labs right now",
-      target: "_blank"
-    });
+ //   this.tutorsTime.nav = [];
+    // this.tutorsTime.nav.push({
+    //   link: `${environment.urlPrefix}time/${this.url}/viewsummary`,
+    //   icon: "labViewSummary",
+    //   tip: "Views by Lab"
+    // });
+    // this.tutorsTime.nav.push({
+    //   link: `${environment.urlPrefix}time/${this.url}/timesummary`,
+    //   icon: "labTimeSummary",
+    //   tip: "Minutes by lab"
+    // });
+    // this.tutorsTime.nav.push({
+    //   link: `${environment.urlPrefix}live/${this.url}/`,
+    //   icon: "timeLive",
+    //   tip: "See who is doing labs right now",
+    //   target: "_blank"
+    // });
   }
 
   privelagedEnabled() {
-    this.tutorsTime.nav.push({
-      link: `${environment.urlPrefix}time/${this.url}/viewdetail`,
-      icon: "labViewDetail",
-      tip: "Views by Lab Step"
-    });
-    this.tutorsTime.nav.push({
-      link: `${environment.urlPrefix}time/${this.url}/timedetail`,
-      icon: "labTimeDetail",
-      tip: "Minutes by Lab Step"
-    });
-    this.tutorsTime.nav.push({
-      link: `${environment.urlPrefix}time/${this.url}/export`,
-      icon: "timeExport",
-      tip: "Export to Excel"
-    });
+    // this.tutorsTime.nav.push({
+    //   link: `${environment.urlPrefix}time/${this.url}/viewdetail`,
+    //   icon: "labViewDetail",
+    //   tip: "Views by Lab Step"
+    // });
+    // this.tutorsTime.nav.push({
+    //   link: `${environment.urlPrefix}time/${this.url}/timedetail`,
+    //   icon: "labTimeDetail",
+    //   tip: "Minutes by Lab Step"
+    // });
+    // this.tutorsTime.nav.push({
+    //   link: `${environment.urlPrefix}time/${this.url}/export`,
+    //   icon: "timeExport",
+    //   tip: "Export to Excel"
+    // });
   }
 
   createProfileBar(isPortfolio: boolean) {
@@ -168,6 +168,12 @@ export class NavigatorProperties {
       link: `${environment.urlPrefix}time/${this.url}/viewsummary`,
       icon: "tutorsTime",
       tip: "Tutors Time"
+    });
+    this.profile.nav.push({
+      link: `${environment.urlPrefix}live/${this.url}/`,
+      icon: "timeLive",
+      tip: "See who is doing labs right now",
+      target: "_blank"
     });
     this.profile.nav.push({ link: `/logout`, icon: "logout", tip: "Logout form Tutors" });
     if (this.profile.visible) {

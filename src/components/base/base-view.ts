@@ -1,4 +1,3 @@
-import { EventBus } from "./../../services/events/event-bus";
 import { CourseRepo } from "../../services/course/course-repo";
 import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";
 import { AuthService } from "../../services/authentication/auth-service";
