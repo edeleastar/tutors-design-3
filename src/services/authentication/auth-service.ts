@@ -84,8 +84,9 @@ export class AuthService {
   }
 
   setSession(authResult) {
-    // 6 hour token
-    let expiresAt = JSON.stringify(authResult.expiresIn * 3000 + new Date().getTime());
+    const hour = 3600000;
+    const expireAtTime = hour *24*7 + new Date().getTime()
+    let expiresAt = JSON.stringify(expireAtTime);
     localStorage.setItem("access_token", authResult.accessToken);
     localStorage.setItem("id_token", authResult.idToken);
     localStorage.setItem("expires_at", expiresAt);

@@ -89,6 +89,7 @@ export class TutorsTimeView extends BaseView implements InstructorModeListener {
   configMainNav(nav: NavigatorProperties) {
     this.navigatorProperties.config(
       {
+        toc:true,
         titleCard: true,
         parent: true,
         profile: true,

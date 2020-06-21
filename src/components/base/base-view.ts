@@ -104,7 +104,6 @@ export class BaseView {
       this.courseRepo.course.showAllLos();
       this.courseRepo.privelaged = true;
       this.instructorModeEnabled();
-      this.navigatorProperties.privelagedEnabled();
       this.instructorMode = true;
       this.eb.emitInstructorModeUpdate(true, this.courseRepo.course.lo.los);
     }
