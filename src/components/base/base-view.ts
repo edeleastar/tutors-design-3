@@ -1,4 +1,3 @@
-import { EventBus } from "./../../services/events/event-bus";
 import { CourseRepo } from "../../services/course/course-repo";
 import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";
 import { AuthService } from "../../services/authentication/auth-service";
@@ -105,7 +104,6 @@ export class BaseView {
       this.courseRepo.course.showAllLos();
       this.courseRepo.privelaged = true;
       this.instructorModeEnabled();
-      this.navigatorProperties.privelagedEnabled();
       this.instructorMode = true;
       this.eb.emitInstructorModeUpdate(true, this.courseRepo.course.lo.los);
     }

@@ -114,7 +114,6 @@ export class TutorsLiveView extends BaseView implements CourseListener {
         profile: true,
         companions: false,
         walls: false,
-        tutorsTime: true,
         toc: true
       },
       {
