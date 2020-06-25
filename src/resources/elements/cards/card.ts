@@ -7,7 +7,7 @@ export class Card {
   target = "_self";
 
   attached() {
-    if (this.lo.type == "web") {
+    if (this.lo.type == "web" && !this.lo.route.startsWith("course")) {
       this.target = "_blank";
     }
     if (this.lo.route.endsWith("error: missing talk")) {
