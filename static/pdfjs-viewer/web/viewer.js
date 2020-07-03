@@ -1801,7 +1801,7 @@ const PDFViewerApplication = {
 exports.PDFViewerApplication = PDFViewerApplication;
 let validateFileURL;
 {
-    const HOSTED_VIEWER_ORIGINS = ["null", "http://mozilla.github.io", "https://mozilla.github.io", "http://localhost:8080", "https://tutors-design.netlify.app", "https://tutors-design-dev.netlify.app"];
+    const HOSTED_VIEWER_ORIGINS = ["null", "http://mozilla.github.io", "https://mozilla.github.io", "http://localhost:8080", "https://tutors-design.netlify.app", "https://tutors-design-dev.netlify.app", "https://tutors-design-prod.netlify.app"];
 
   validateFileURL = function (file) {
     if (file === undefined) {
