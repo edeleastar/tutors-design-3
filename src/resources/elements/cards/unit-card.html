@@ -2,7 +2,7 @@
   <require from="./card"></require>
   <require from="./video-card"></require>
   <require from="./card-row.html"></require>
-  <require from="./talk-card.html"></require>
+  <require from="./talk-card-pdf"></require>
 
 
   <div class="uk-card uk-card-body uk-padding-small">
@@ -11,8 +11,7 @@
       <video-card lo.bind="video"></video-card>
     </div>
     <div repeat.for="talk of panelTalks">
-      <talk-card lo.bind="talk">
-      </talk-card>
+      <talk-card-pdf lo.bind="talk"></talk-card-pdf>
     </div>
     <br>
     <div repeat.for="los of loRows">
