@@ -1,7 +1,9 @@
+import { LoginEvent, User } from "./../../../services/events/event-definitions";
 import environment from "../../../environment";
 import { AuthService } from "../../../services/authentication/auth-service";
 import { autoinject } from "aurelia-framework";
 import { Course } from "../../../services/course/course";
+import { EventBus, LoginListener } from "services/events/event-bus";
 const readerVersion = require("../../../../package.json").version;
 
 interface Properties {
@@ -9,10 +11,10 @@ interface Properties {
 }
 
 @autoinject
-export class NavigatorProperties {
+export class NavigatorProperties implements LoginListener {
   version = "hello";
   toc = {
-    visible: true
+    visible: true,
   };
 
   titleCard = {
@@ -20,41 +22,45 @@ export class NavigatorProperties {
     subtitle: "",
     img: "",
     version: "",
-    visible: true
+    visible: true,
   };
 
   parent = {
     link: "",
     icon: "",
     tip: "",
-    visible: true
+    visible: true,
   };
 
   companions = {
     nav: [],
-    visible: true
+    visible: true,
   };
 
   walls = {
     nav: [],
-    visible: true
+    visible: true,
   };
 
   profile = {
     nav: [],
-    visible: false
+    visible: false,
   };
 
   url = "";
 
-  constructor(private authService: AuthService) {}
+  constructor(private eb: EventBus, private authService: AuthService) {}
+
+  user: User;
+  courseUrl: string;
+  isPortfolio = false;
 
   config(navBars, params) {
     this.titleCard.visible = navBars.titleCard;
     this.parent.visible = navBars.parent;
     this.companions.visible = navBars.companions;
     this.walls.visible = navBars.walls;
-   // this.tutorsTime.visible = navBars.tutorsTime;
+    // this.tutorsTime.visible = navBars.tutorsTime;
     this.profile.visible = navBars.profile;
     this.toc.visible = navBars.toc;
 
@@ -67,6 +73,7 @@ export class NavigatorProperties {
   }
 
   init(course: Course) {
+    this.isPortfolio = course.isPortfolio();
     this.version = `${readerVersion} (${course.lo.version})`;
     if (course.url !== this.url) {
       this.url = course.url;
@@ -90,7 +97,7 @@ export class NavigatorProperties {
     this.walls.nav.push({
       link: `${environment.urlPrefix}search/${this.url}`,
       icon: "search",
-      tip: "Search this course"
+      tip: "Search this course",
     });
   }
 
@@ -104,7 +111,7 @@ export class NavigatorProperties {
       this.companions.nav.push({
         link: properties["youtube"],
         icon: "youtube",
-        tip: "to youtube channel for this module"
+        tip: "to youtube channel for this module",
       });
     this.companions.visible = this.companions.nav.length > 0;
   }
@@ -113,30 +120,45 @@ export class NavigatorProperties {
     return {
       link: `${environment.urlPrefix}/${type}s/${this.url}`,
       icon: type,
-      tip: `all ${type}'s in this module`
+      tip: `all ${type}'s in this module`,
     };
   }
 
-  createProfileBar(isPortfolio: boolean) {
-    this.profile.nav = [];
+  login(user: User, url: string): void {
+    this.initProfile();
+  }
+  statusUpdate(status: string): void {}
+  logout(): void {}
 
+  initProfile() {
+    this.profile.nav = [];
+    if (this.authService.isAuthenticated()) {
+      this.profile.nav.push({
+        link: `https://tutors-metrics.netlify.app/time/${this.url}/${this.authService.getUserId()}`,
+        icon: "tutorsTime",
+        tip: "Tutors Time",
+        target: "_blank",
+      });
+    }
     this.profile.nav.push({
-      link: `${environment.urlPrefix}time/${this.url}/viewsummary`,
-      icon: "tutorsTime",
-      tip: "Tutors Time"
-    });
-    this.profile.nav.push({
-      link: `${environment.urlPrefix}live/${this.url}/`,
+      link: `https://tutors-metrics.netlify.app/live/${this.url}/`,
       icon: "timeLive",
       tip: "See who is doing labs right now",
-      target: "_blank"
+      target: "_blank",
     });
     this.profile.nav.push({ link: `/logout`, icon: "logout", tip: "Logout form Tutors" });
     if (this.profile.visible) {
       this.profile.visible = this.authService.isAuthenticated();
-      if (isPortfolio === true) {
+      if (this.isPortfolio === true) {
         this.profile.visible = false;
       }
+    }
+  }
+  createProfileBar(isPortfolio: boolean) {
+    if (this.authService.hasId()) {
+      this.initProfile();
+    } else {
+      this.eb.observeLogin(this);
     }
   }
 }

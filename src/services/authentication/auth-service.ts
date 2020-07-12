@@ -1,4 +1,4 @@
-import { WebAuth, Auth0DecodedHash } from "auth0-js";
+import { WebAuth } from "auth0-js";
 import { autoinject } from "aurelia-framework";
 import { Router } from "aurelia-router";
 import { EventEmitter } from "events";
@@ -108,6 +108,19 @@ export class AuthService {
   getUserEmail() {
     const user = this.fromLocalStorage();
     return user.email;
+  }
+
+  hasId(): boolean {
+    const id = localStorage.getItem("id");
+    if (id) {
+      return true;
+    }
+    return false;
+  }
+
+  getUserId() {
+    const user = this.fromLocalStorage();
+    return user.userId;
   }
 
   toLocalStorage(user: User) {

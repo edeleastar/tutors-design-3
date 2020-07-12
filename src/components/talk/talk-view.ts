@@ -15,9 +15,9 @@ export class TalkView extends BaseView {
     super.init(`talk/${params.courseUrl}/${params.talkid}`, this.lo);
   }
 
-  determineActivationStrategy() {
-    return "replace";
-  }
+  // determineActivationStrategy() {
+  //   return "replace";
+  // }
 
   configMainNav(nav: NavigatorProperties) {
     this.navigatorProperties.config(

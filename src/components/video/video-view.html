@@ -1,17 +1,16 @@
 <template>
   <require from="../../resources/elements/cards/video-card"></require>
-  <require from="../../resources/elements/navigators/side-topic-navigator.html"></require>
-  <require from="../../resources/elements/navigators/topic-btn.html"></require>
+  <require from="../../resources/elements/cards/topic-navigator-card.html"></require>
 
   <div if.bind="show">
-
-    <div class="uk-grid uk-padding-small">
-      <side-topic-navigator topic.to-view="lo.parent"></side-topic-navigator>
-      <div class="uk-width-expand">
-        <video-card lo.to-view="lo"></video-card>
-      </div>
-      <div class="uk-width-auto uk-animation-slide-right">
-        <topic-btn></topic-btn>
+    <div class="uk-container-expand uk-margin-medium-top uk-margin-medium-left uk-margin-medium-right">
+      <div uk-grid uk-flex uk-flex-center>
+        <div class="uk-width-expand@m">
+          <video-card lo.to-view="lo"></video-card>
+        </div>
+        <div class="uk-width-1-5@m uk-flex uk-grid">
+          <topic-navigator-card topic.to-view="lo.parent"></topic-navigator-card>
+        </div>
       </div>
     </div>
   </div>
