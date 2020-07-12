@@ -12,6 +12,7 @@
 # Ref: https://github.com/github/gitignore/blob/master/Global/Linux.gitignore
 .DS_STORE
 Thumbs.db
+stats.json
 
 # Editors
 #
